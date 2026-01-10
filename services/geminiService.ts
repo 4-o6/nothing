@@ -4,7 +4,14 @@ import { Itinerary, Place } from "../types";
 // NOTE: In a real app, strict error handling for missing API keys is essential.
 // We assume process.env.API_KEY is available as per instructions.
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// We check if the key exists to prevent immediate runtime crashes (White Screen of Death)
+// if the environment variable is missing in deployment.
+const apiKey = process.env.API_KEY || "";
+if (!apiKey) {
+  console.warn("API Key is missing. Check your environment variables.");
+}
+
+const ai = new GoogleGenAI({ apiKey });
 
 export const generateSustainableItinerary = async (
   days: number,
