@@ -6,7 +6,19 @@ export const InteractiveMap: React.FC = () => {
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [showList, setShowList] = useState(true);
 
+  // Default Mysore Coordinates
+  const [mapCenter, setMapCenter] = useState({ lat: 12.3050, lng: 76.6550 });
+
   const selectedPlace = HIDDEN_GEMS.find(p => p.id === selectedPlaceId);
+
+  const handlePlaceClick = (id: string) => {
+    setSelectedPlaceId(id);
+    const place = HIDDEN_GEMS.find(p => p.id === id);
+    if (place && place.lat && place.lng) {
+        setMapCenter({ lat: place.lat, lng: place.lng });
+    }
+    if (window.innerWidth < 768) setShowList(false);
+  };
 
   const handleNavigate = (uri?: string) => {
     if (uri) {
@@ -27,7 +39,7 @@ export const InteractiveMap: React.FC = () => {
         <div className="p-4 bg-stone-900 text-white flex justify-between items-center">
           <div>
             <h2 className="font-serif font-bold text-lg">Mysuru Gems</h2>
-            <p className="text-xs text-stone-400">Select a location to view details</p>
+            <p className="text-xs text-stone-400">Select a location to view on map</p>
           </div>
           <button onClick={() => setShowList(false)} className="md:hidden text-white">
             <X className="w-5 h-5" />
@@ -38,10 +50,7 @@ export const InteractiveMap: React.FC = () => {
           {HIDDEN_GEMS.map((place) => (
             <button
               key={place.id}
-              onClick={() => {
-                setSelectedPlaceId(place.id);
-                if (window.innerWidth < 768) setShowList(false);
-              }}
+              onClick={() => handlePlaceClick(place.id)}
               className={`w-full text-left p-4 border-b border-stone-100 hover:bg-stone-50 transition-colors flex items-start gap-3 ${selectedPlaceId === place.id ? 'bg-amber-50 border-l-4 border-l-amber-500' : ''}`}
             >
               <div className="w-16 h-16 bg-stone-200 rounded-lg overflow-hidden flex-shrink-0">
@@ -72,7 +81,7 @@ export const InteractiveMap: React.FC = () => {
            </button>
         )}
 
-        {/* Live OpenStreetMap Embed */}
+        {/* Live OpenStreetMap Embed - dynamically updating via key/src */}
         <div className="w-full h-full">
             <iframe 
                 width="100%" 
@@ -81,11 +90,11 @@ export const InteractiveMap: React.FC = () => {
                 scrolling="no" 
                 marginHeight={0} 
                 marginWidth={0} 
-                src="https://www.openstreetmap.org/export/embed.html?bbox=76.6200,12.2800,76.6800,12.3300&layer=mapnik&marker=12.3050,76.6550" 
+                // We add a small bounding box calculation for the view or just center the marker
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCenter.lng-0.03},${mapCenter.lat-0.03},${mapCenter.lng+0.03},${mapCenter.lat+0.03}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`} 
                 style={{ border: 0 }}
                 title="Mysore Map"
             ></iframe>
-            {/* Note: This is a general view of Mysore. Specific pins are shown in the sidebar list due to iframe limitations without JS API */}
         </div>
 
         {/* Selected Details Overlay (Bottom) */}

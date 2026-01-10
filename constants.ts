@@ -149,6 +149,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Somnathpur',
     rating: 4.8,
     coordinates: { top: '85%', left: '80%' },
+    lat: 12.2750,
+    lng: 77.0300,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Somnathpur+Chennakeshava+Temple'
   },
   {
@@ -161,6 +163,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'KRS Backwaters',
     rating: 4.7,
     coordinates: { top: '15%', left: '10%' },
+    lat: 12.3900,
+    lng: 76.5700,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Blue+Lagoon+KRS+Backwaters'
   },
   {
@@ -173,6 +177,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'KRS Backwaters',
     rating: 4.9,
     coordinates: { top: '12%', left: '15%' },
+    lat: 12.3800,
+    lng: 76.5800,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Venugopala+Swamy+Temple+KRS'
   },
   {
@@ -185,6 +191,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Chamundi Hill Road',
     rating: 4.5,
     coordinates: { top: '65%', left: '75%' },
+    lat: 12.2980,
+    lng: 76.6650,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Gowri+Sand+Museum+Mysore'
   },
   {
@@ -197,6 +205,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Nazarbad',
     rating: 4.6,
     coordinates: { top: '50%', left: '60%' },
+    lat: 12.3020,
+    lng: 76.6680,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Karanji+Lake+Mysore'
   },
   {
@@ -209,6 +219,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Datta Peetham',
     rating: 4.8,
     coordinates: { top: '75%', left: '30%' },
+    lat: 12.2880,
+    lng: 76.6600,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Shuka+Vana+Mysore'
   },
   {
@@ -221,6 +233,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'KRS Road',
     rating: 4.7,
     coordinates: { top: '35%', left: '40%' },
+    lat: 12.3150,
+    lng: 76.6450,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Railway+Museum'
   },
   {
@@ -233,6 +247,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Metagalli',
     rating: 4.6,
     coordinates: { top: '20%', left: '30%' },
+    lat: 12.3450,
+    lng: 76.6300,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=GRS+Fantasy+Park+Mysore'
   },
   {
@@ -245,6 +261,8 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'Mysore-Madikeri Hwy',
     rating: 4.8,
     coordinates: { top: '10%', left: '20%' },
+    lat: 12.3500,
+    lng: 76.6000,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Payana+Vintage+Car+Museum+Mysore'
   }
 ];

@@ -67,7 +67,7 @@ export const Explore: React.FC = () => {
         {aiResults && (
           <div className="mb-16 bg-white rounded-2xl p-8 shadow-sm border border-stone-100 animate-fade-in">
             <h3 className="text-lg font-bold text-stone-900 mb-4 flex items-center gap-2">
-              <span className="w-2 h-8 bg-amber-500 rounded-full"></span>
+              <span className="w-2 h-8 bg-amber-50 rounded-full"></span>
               AI Recommendations
             </h3>
             <div className="prose prose-stone max-w-none mb-6">
@@ -78,12 +78,18 @@ export const Explore: React.FC = () => {
             {aiResults.chunks && aiResults.chunks.length > 0 && (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {aiResults.chunks.map((chunk, idx) => {
-                  const mapData = chunk.web || chunk.maps; // Usually maps for location queries
+                  // The API returns 'web' or 'maps' in the chunk.
+                  const mapData = chunk.web || chunk.maps; 
                   if (!mapData) return null;
+                  
+                  // Safe URI extraction. Maps grounding might use googleMapsUri or uri.
+                  const uri = mapData.uri || mapData.googleMapsUri || "#";
+                  const title = mapData.title || "View on Map";
+
                   return (
                     <a 
                       key={idx}
-                      href={mapData.uri}
+                      href={uri}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-amber-500 hover:bg-amber-50 transition-colors group"
@@ -92,7 +98,7 @@ export const Explore: React.FC = () => {
                         <MapPin className="w-4 h-4" />
                       </div>
                       <div className="overflow-hidden">
-                        <p className="text-sm font-semibold text-stone-900 truncate">{mapData.title}</p>
+                        <p className="text-sm font-semibold text-stone-900 truncate">{title}</p>
                         <p className="text-xs text-stone-500 flex items-center gap-1">
                           View on Maps <ExternalLink className="w-3 h-3" />
                         </p>

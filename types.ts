@@ -9,7 +9,9 @@ export interface Place {
   location: string;
   rating?: number;
   googleMapsUri?: string;
-  coordinates?: { top: string; left: string }; // For the map pins
+  coordinates?: { top: string; left: string }; // For static image maps
+  lat?: number; // For interactive maps
+  lng?: number; // For interactive maps
 }
 
 export interface Artisan {
