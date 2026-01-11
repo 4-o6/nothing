@@ -67,7 +67,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Benne Masala Dosa',
     rating: 4.9,
     location: 'Nazarbad',
-    imageUrl: 'https://picsum.photos/id/493/800/600',
+    imageUrl: 'https://media-assets.swiggy.com/swiggy/image/upload/f_auto,q_auto,fl_lossy/ljxuoins3rrbkseksywj',
     priceRange: '₹'
   },
   {
