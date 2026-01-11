@@ -290,7 +290,7 @@ export const ARTISANS: Artisan[] = [
     name: 'Smt. Radha',
     craft: 'Mysore Traditional Painting',
     story: 'Specializing in the "Mysore Style" involving unique gesso work and authentic 24K gold foil. Her paintings are noted for their attention to detail and traditional narratives.',
-    imageUrl: 'https://mapacademy.io/wp-content/uploads/2024/08/mysore-painting-7s.jpg',
+    imageUrl: 'https://www.artisera.com/cdn/shop/products/07.3_7c1e73ec-c12e-49c1-9c7c-0c4402d1b568_2048x2048.jpg?v=1632391590',
     location: 'Jaganmohan Palace Area, Mysuru',
     visitable: true,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Traditional+Painting+Workshops',
@@ -305,7 +305,7 @@ export const BOOKING_ITEMS: BookingItem[] = [
     type: 'hotel',
     price: '₹8,500/night',
     rating: 4.6,
-    imageUrl: 'https://picsum.photos/id/1040/800/600',
+    imageUrl: 'https://www.lalithamahalpalace.co.in/wp-content/uploads/2018/03/dayview-1-800x533.jpg',
     description: 'Experience royalty in this shimmering white palace built by the Maharaja in 1931.',
     features: ['Heritage', 'Royal Suite', 'Pool']
   },
@@ -315,7 +315,7 @@ export const BOOKING_ITEMS: BookingItem[] = [
     type: 'hotel',
     price: '₹7,200/night',
     rating: 4.8,
-    imageUrl: 'https://picsum.photos/id/431/800/600',
+    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/232840359.jpg?k=3d639c2ea9eb765b73e83f6d60d2b5daab6f96d6c847127e8b0a3eacaab535da&o=',
     description: 'Modern luxury located next to the race course with breathtaking views of Chamundi Hills.',
     features: ['Luxury', 'Spa', 'Swimming Pool']
   },
@@ -325,7 +325,7 @@ export const BOOKING_ITEMS: BookingItem[] = [
     type: 'hotel',
     price: '₹5,500/night',
     rating: 4.5,
-    imageUrl: 'https://picsum.photos/id/238/800/600',
+    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/598109812.jpg?k=75302664a0f4a2a7da810cdba84953d1f0a6d296081f0f79267188586c79c6ca&o=',
     description: 'Palatial architecture meeting modern comforts in the heart of the city.',
     features: ['Landscaped Gardens', 'Fine Dining']
   },
@@ -335,7 +335,7 @@ export const BOOKING_ITEMS: BookingItem[] = [
     type: 'hotel',
     price: '₹3,500/night',
     rating: 4.3,
-    imageUrl: 'https://picsum.photos/id/111/800/600',
+    imageUrl: 'https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_1020,q_auto,w_2000/hotelier-images/c1/d4/5a55b9dbfce216c66a28af4dc7b4960fb23bb983e2038795b07cef15914f.jpeg',
     description: 'Elegant boutique hotel offering a blend of classic charm and contemporary amenities.',
     features: ['City Center', 'Banquet']
   },
