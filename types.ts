@@ -22,6 +22,8 @@ export interface Artisan {
   imageUrl: string;
   location: string;
   visitable: boolean;
+  googleMapsUri: string;
+  contactPhone: string;
 }
 
 export interface Restaurant {

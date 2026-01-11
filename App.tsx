@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Explore } from './components/Explore';
@@ -17,6 +18,11 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Scroll to top on view change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentView]);
+
   // Success login
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -31,7 +37,6 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setCurrentView(AppView.HOME);
-    // Optionally redirect to login, but staying on Home as guest is better UX
   };
 
   const renderView = () => {
@@ -75,8 +80,6 @@ const App: React.FC = () => {
     }
   };
 
-  // If view is LOGIN, we render it full screen without Navbar (or with it, but usually login is standalone)
-  // To allow navigating back from Login easily, we could include Navbar, but Login component is designed as full page.
   if (currentView === AppView.LOGIN) {
     return <Login onLogin={handleLoginSuccess} onSkip={handleSkipLogin} />;
   }

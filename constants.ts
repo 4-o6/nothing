@@ -1,3 +1,4 @@
+
 import { Place, Artisan, BookingItem, TourPackage, Restaurant } from './types';
 
 export const HERO_IMAGES = [
@@ -140,20 +141,6 @@ export const RESTAURANTS: Restaurant[] = [
 
 export const HIDDEN_GEMS: Place[] = [
   {
-    id: '1',
-    name: 'Somnathpur Chennakeshava Temple',
-    description: 'A stunning 13th-century Hoysala temple known for its intricate stone carvings and stellar architecture.',
-    category: 'temple',
-    imageUrl: 'https://www.mysoretourism.org.in/images/v2/places-to-visit/somnathpur-temple-chennakesava-temple-header-mysore-tourism.jpg',
-    crowdLevel: 'low',
-    location: 'Somnathpur',
-    rating: 4.8,
-    coordinates: { top: '85%', left: '80%' },
-    lat: 12.2750,
-    lng: 77.0300,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Somnathpur+Chennakeshava+Temple'
-  },
-  {
     id: '2',
     name: 'Blue Lagoon',
     description: 'A hidden island-like spot in the KRS backwaters, offering crystal clear waters and a perfect picnic spot.',
@@ -238,20 +225,6 @@ export const HIDDEN_GEMS: Place[] = [
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Railway+Museum'
   },
   {
-    id: '8',
-    name: 'GRS Fantasy Park',
-    description: 'An exhilarating water and amusement park offering a fun-filled day for families and thrill-seekers.',
-    category: 'culture',
-    imageUrl: 'https://res.cloudinary.com/dyiffrkzh/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_center,h_518,q_auto,w_660/v1699007164/bbj/wdtocwrsod6n9kdg8cb3.jpg',
-    crowdLevel: 'high',
-    location: 'Metagalli',
-    rating: 4.6,
-    coordinates: { top: '20%', left: '30%' },
-    lat: 12.3450,
-    lng: 76.6300,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=GRS+Fantasy+Park+Mysore'
-  },
-  {
     id: '9',
     name: 'Payana Vintage Car Museum',
     description: 'A spectacular collection of vintage automobiles and motorcycles, showcasing the evolution of transport in a modern architectural setting.',
@@ -272,28 +245,56 @@ export const ARTISANS: Artisan[] = [
     id: 'a1',
     name: 'Shri. Nanjundaiah',
     craft: 'Rosewood Inlay',
-    story: 'Inheriting the craft from his grandfather, Nanjundaiah has been creating portraits of the Maharajas for over 40 years.',
-    imageUrl: 'https://picsum.photos/id/339/400/400',
-    location: 'Tilak Nagar',
-    visitable: true
+    story: 'Inheriting the craft from his grandfather, Nanjundaiah has been creating portraits of the Maharajas for over 40 years. He uses locally sourced rosewood and ethically acquired bone/synthetic materials to create breathtaking landscapes.',
+    imageUrl: 'https://www.gitagged.com/wp-content/uploads/2023/10/MRI-001-ELEPHANT-02-2-441x662.jpg',
+    location: 'Tilak Nagar, Mysuru',
+    visitable: true,
+    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Rosewood+Inlay+Tilak+Nagar+Mysore',
+    contactPhone: '+91 94480 11111'
   },
   {
     id: 'a2',
-    name: 'Lakshmi Devi',
+    name: 'Smt. Lakshmi Devi',
     craft: 'Mysore Silk Weaving',
-    story: 'One of the few remaining independent weavers running a home-based loom, keeping the pure zari tradition alive.',
-    imageUrl: 'https://picsum.photos/id/343/400/400',
-    location: 'Ramanagara Border',
-    visitable: true
+    story: 'One of the few remaining independent weavers running a home-based loom in the Agrahara area. She specializes in pure zari silk sarees that take weeks of meticulous labor to complete.',
+    imageUrl: 'https://mysorepattu.com/cdn/shop/files/WhatsAppImage2025-02-21at20.18.24_58e271cf.jpg?v=1749037920&width=1946',
+    location: 'Agrahara, Mysuru',
+    visitable: true,
+    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Silk+Weavers+Agrahara',
+    contactPhone: '+91 94480 22222'
   },
   {
     id: 'a3',
-    name: 'Raghupathi Bhat',
+    name: 'Shri. Raghupathi Bhat',
     craft: 'Ganjifa Art',
-    story: 'A master of the detailed Ganjifa cards, formerly played by royalty. He teaches workshops on weekends.',
-    imageUrl: 'https://picsum.photos/id/128/400/400',
-    location: 'Srirampura',
-    visitable: true
+    story: 'A master of the detailed Ganjifa cards, formerly played by royalty. His work is recognized by the Guinness Book of World Records. He hosts workshops to keep this dying Mughal-era art form alive.',
+    imageUrl: 'https://cdn.shopify.com/s/files/1/0576/0391/5966/files/16_480x480.jpg?v=1632369107',
+    location: 'Srirampura, Mysuru',
+    visitable: true,
+    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Ganjifa+Art+Raghupathi+Bhat+Mysore',
+    contactPhone: '+91 94480 33333'
+  },
+  {
+    id: 'a4',
+    name: 'Sandalwood Carvers Guild',
+    craft: 'Sandalwood Sculpture',
+    story: 'Represented by a collective of masters near Jaganmohan Palace, these artisans carve deities and intricate fans from the fragrant wood Mysore is world-famous for.',
+    imageUrl: 'https://www.memeraki.com/cdn/shop/products/Maa-Durga-Sandalwood-Miniature-Artwork-by-Om-Prakash-1_900x.jpg?v=1726057132',
+    location: 'Medar Block, Mysuru',
+    visitable: true,
+    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Sandalwood+Carving+Mysore+Palace+Area',
+    contactPhone: '+91 94480 44444'
+  },
+  {
+    id: 'a5',
+    name: 'Smt. Radha',
+    craft: 'Mysore Traditional Painting',
+    story: 'Specializing in the "Mysore Style" involving unique gesso work and authentic 24K gold foil. Her paintings are noted for their attention to detail and traditional narratives.',
+    imageUrl: 'https://mapacademy.io/wp-content/uploads/2024/08/mysore-painting-7s.jpg',
+    location: 'Jaganmohan Palace Area, Mysuru',
+    visitable: true,
+    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Traditional+Painting+Workshops',
+    contactPhone: '+91 94480 55555'
   }
 ];
 
