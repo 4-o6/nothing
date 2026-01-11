@@ -12,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
     <div className="relative bg-stone-900 text-white overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="https://picsum.photos/id/1040/1920/1080"
+          src="https://s7ap1.scene7.com/is/image/incredibleindia/sri-nandi-temple-mysuru-karnataka-1-attr-hero?qlt=82&ts=1742178245295"
           alt="Mysore Palace Architecture"
           className="w-full h-full object-cover opacity-30"
         />

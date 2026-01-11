@@ -2,7 +2,7 @@
 import { Place, Artisan, BookingItem, TourPackage, Restaurant } from './types';
 
 export const HERO_IMAGES = [
-  "https://picsum.photos/id/1040/1200/600",
+  "https://s7ap1.scene7.com/is/image/incredibleindia/sri-nandi-temple-mysuru-karnataka-1-attr-hero?qlt=82&ts=1742178245295",
   "https://picsum.photos/id/106/1200/600",
   "https://picsum.photos/id/338/1200/600",
 ];
