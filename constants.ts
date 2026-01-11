@@ -78,7 +78,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Button Idli & Coffee',
     rating: 4.7,
     location: 'Ballal Circle',
-    imageUrl: 'https://picsum.photos/id/429/800/600',
+    imageUrl: 'https://b.zmtcdn.com/data/reviews_photos/aeb/07a326d8ad5c69d2dc36ee971d16caeb_1612531767.jpg',
     priceRange: '₹₹'
   },
   {
@@ -89,7 +89,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Wood-fired Pizza',
     rating: 4.6,
     location: 'RTO Circle',
-    imageUrl: 'https://picsum.photos/id/431/800/600',
+    imageUrl: 'https://images.happycow.net/venues/1024/16/56/hcmp165690_788042.jpeg',
     priceRange: '₹₹₹'
   },
   {
@@ -100,7 +100,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Mutton Pulao',
     rating: 4.8,
     location: 'Mandi Mohalla',
-    imageUrl: 'https://picsum.photos/id/292/800/600',
+    imageUrl: 'https://b.zmtcdn.com/data/reviews_photos/953/16e92ce3c1a055a372f7b78e1e34a953_1554769284.jpg',
     priceRange: '₹₹'
   },
   {
@@ -111,7 +111,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Kebabs & Biryani',
     rating: 4.5,
     location: 'Kalidasa Road',
-    imageUrl: 'https://picsum.photos/id/835/800/600',
+    imageUrl: 'https://b.zmtcdn.com/data/dish_photos/2c3/774054f763dcff5759b1abafba9922c3.jpeg',
     priceRange: '₹₹₹'
   },
   {
@@ -122,7 +122,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Anjal Fry & Crab Ghee Roast',
     rating: 4.7,
     location: 'Contour Road',
-    imageUrl: 'https://picsum.photos/id/425/800/600',
+    imageUrl: 'https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/cdwhmave/f5618a25-59a6-40ab-86e2-b5655ccf3f56.jpg',
     priceRange: '₹₹₹'
   },
   {
@@ -133,7 +133,7 @@ export const RESTAURANTS: Restaurant[] = [
     specialty: 'Train Theme Dining',
     rating: 4.4,
     location: 'Hebbal',
-    imageUrl: 'https://picsum.photos/id/225/800/600',
+    imageUrl: 'https://b.zmtcdn.com/data/reviews_photos/8af/5f37767156cb664c01adfe9856f328af_1684904602.jpg',
     priceRange: '₹₹₹'
   }
 ];
