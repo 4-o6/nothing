@@ -43,14 +43,14 @@ export const Impact: React.FC = () => {
                 </p>
              </div>
              <div className="bg-stone-200 rounded-2xl h-64 md:h-80 overflow-hidden relative">
-                <img src="https://picsum.photos/id/1040/800/600" className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700" alt="Crowded palace" />
+                <img src="https://bxmysuru.com/wp-content/uploads/2022/01/bxmysuru-palace.jpg" className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700" alt="Crowded palace" />
                 <div className="absolute inset-0 bg-black/10"></div>
              </div>
           </div>
 
            <div className="grid md:grid-cols-2 gap-12 items-center">
              <div className="order-2 md:order-1 bg-stone-200 rounded-2xl h-64 md:h-80 overflow-hidden relative">
-                <img src="https://picsum.photos/id/339/800/600" className="w-full h-full object-cover" alt="Artisan working" />
+                <img src="https://bxmysuru.com/wp-content/uploads/2022/01/brindavan.jpg" className="w-full h-full object-cover" alt="Artisan working" />
                 <div className="absolute inset-0 bg-amber-900/10"></div>
              </div>
              <div className="order-1 md:order-2">
