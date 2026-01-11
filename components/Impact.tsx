@@ -43,7 +43,7 @@ export const Impact: React.FC = () => {
                 </p>
              </div>
              <div className="bg-stone-200 rounded-2xl h-64 md:h-80 overflow-hidden relative">
-                <img src="https://bxmysuru.com/wp-content/uploads/2022/01/bxmysuru-palace.jpg" className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700" alt="Crowded palace" />
+                <img src="https://www.mysoretourism.org.in/images/v2/places-to-visit/mysore-maharaja-palace-header-mysore-tourism.jpg" className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700" alt="Crowded palace" />
                 <div className="absolute inset-0 bg-black/10"></div>
              </div>
           </div>
