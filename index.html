@@ -19,6 +19,7 @@
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Merriweather', serif;
+        line-height: 1.1;
       }
       
       ::selection {
@@ -26,61 +27,34 @@
         color: white;
       }
 
-      /* Snappy, Intuitive Animations */
+      /* Transitions & Animations */
+      .animate-app-reveal {
+        animation: appReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
       @keyframes appReveal {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
       }
-      .animate-app-reveal {
-        animation: appReveal 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+
+      .btn-primary {
+        @apply bg-amber-600 hover:bg-amber-500 text-white font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-amber-900/20;
+      }
+      
+      .btn-secondary {
+        @apply bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2;
       }
 
-      @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-      }
-      .animate-slide-up {
-        animation: slideUp 0.4s cubic-bezier(0.3, 1, 0.3, 1) forwards;
-      }
-
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      .animate-fade-in {
-        animation: fadeIn 0.3s ease-out forwards;
-      }
-
-      /* Transitions */
-      .card-lift {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .card-lift:active {
-        transform: scale(0.97);
-      }
-      @media (min-width: 768px) {
-        .card-lift:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-        }
-      }
-
-      .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-      }
-      .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-      }
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
       .hero-gradient {
         background: linear-gradient(to bottom, #0c0c0c 0%, transparent 40%, transparent 70%, #0c0c0c 100%);
       }
 
       .glass-card {
-        background: rgba(20, 20, 20, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(20, 20, 20, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
     </style>
