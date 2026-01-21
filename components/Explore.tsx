@@ -162,6 +162,7 @@ export const Explore: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
