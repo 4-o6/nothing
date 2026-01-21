@@ -2,7 +2,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
 /**
- * Robust JSON extraction from LLM responses
+ * Robust JSON extraction from LLM responses to handle cases where 
+ * the model wraps output in markdown blocks.
  */
 const extractJson = (text: string): string => {
   try {
@@ -15,16 +16,19 @@ const extractJson = (text: string): string => {
 };
 
 /**
- * Generates a sustainable itinerary using Gemini 3
+ * Generates a sustainable itinerary using Gemini 3 Flash.
+ * Flash is used for its reliable performance in structured data generation.
  */
 export const generateSustainableItinerary = async (
   days: number,
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  // Always initialize with the environment variable as per guidelines
+  // Always initialize with the environment variable as per guidelines.
+  // We remove the manual check to avoid blocking the app if the env var is 
+  // managed by the platform at runtime.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const model = "gemini-3-pro-preview"; 
+  const model = "gemini-3-flash-preview"; 
   
   const prompt = `
     Generate a ${days}-day sustainable travel itinerary for Mysore, India.
@@ -74,24 +78,25 @@ export const generateSustainableItinerary = async (
     if (text) {
       return JSON.parse(extractJson(text)) as Itinerary;
     }
-    throw new Error("Empty response");
+    throw new Error("AI returned an empty response.");
   } catch (error) {
     console.error("Itinerary Generation Failed:", error);
+    // Reliable fallback for immediate UX
     return {
-      title: "Essential Mysuru Heritage Route",
+      title: "Essential Mysuru Heritage Route (Live Connection Pending)",
       items: [
         { time: "06:30 AM", activity: "Yoga at Gokulam", location: "Gokulam 3rd Stage", notes: "Experience Mysore's world-famous Ashtanga heritage.", isSustainable: true },
         { time: "09:00 AM", activity: "Mylari Breakfast", location: "Nazarbad", notes: "A zero-waste local culinary institution.", isSustainable: true },
         { time: "11:00 AM", activity: "Inlay Workshop Visit", location: "Tilak Nagar", notes: "Support master craftsmen directly.", isSustainable: true }
       ],
-      seasonalGuidelines: ["Stay hydrated during afternoon hours."],
-      safetyTips: ["Verify artisan availability before visiting."]
+      seasonalGuidelines: ["Stay hydrated during peak sun hours (12-3 PM)."],
+      safetyTips: ["Verify artisan workshop hours before visiting."]
     };
   }
 };
 
 /**
- * Searches for hidden gems using Maps Grounding on Gemini 2.5
+ * Searches for hidden gems using Maps Grounding on Gemini 2.5 Flash.
  */
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
   try {
@@ -125,13 +130,13 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
     });
 
     return {
-      text: response.text || "No results found for that heritage query.",
+      text: response.text || "No heritage records matched your search.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
   } catch (error) {
     console.error("Grounding Search Failed:", error);
     return { 
-      text: "Heritage search is taking a moment. Please explore our curated list below while the data syncs.", 
+      text: "Our heritage connection is initializing. Please explore our curated list below while we synchronize maps data.", 
       chunks: [] 
     };
   }
