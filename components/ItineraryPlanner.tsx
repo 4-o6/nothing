@@ -22,13 +22,14 @@ export const ItineraryPlanner: React.FC = () => {
   };
 
   const handleGenerate = async () => {
+    if (interests.length === 0) return;
     setLoading(true);
     try {
       const result = await generateSustainableItinerary(days, interests, groupType);
       setItinerary(result);
     } catch (error) {
       console.error(error);
-      alert("Heritage database is busy. Please try again in a moment.");
+      alert("Unable to reach the heritage network. Using local cached data.");
     } finally {
       setLoading(false);
     }
@@ -56,7 +57,6 @@ export const ItineraryPlanner: React.FC = () => {
           <div className="space-y-8">
             {itinerary.items.map((item, idx) => (
               <div key={idx} className="group relative pl-8 sm:pl-12 pb-12 last:pb-0">
-                {/* Timeline Line */}
                 <div className="absolute left-0 top-0 bottom-0 w-px bg-stone-800 group-last:h-4"></div>
                 <div className="absolute left-[-4px] top-0 w-2 h-2 rounded-full bg-amber-600 ring-4 ring-amber-600/10"></div>
                 
@@ -87,7 +87,7 @@ export const ItineraryPlanner: React.FC = () => {
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="bg-stone-900/40 border border-white/5 p-8 rounded-[2.5rem]">
-                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest"><Info className="w-4 h-4 text-amber-600" /> Seasonal Tips</h4>
+                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest font-serif"><Info className="w-4 h-4 text-amber-600" /> Seasonal Tips</h4>
                 <ul className="space-y-3">
                   {itinerary.seasonalGuidelines?.map((tip, i) => (
                     <li key={i} className="text-xs text-stone-500 font-light flex items-start gap-3">
@@ -97,7 +97,7 @@ export const ItineraryPlanner: React.FC = () => {
                 </ul>
              </div>
              <div className="bg-stone-900/40 border border-white/5 p-8 rounded-[2.5rem]">
-                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest"><ShieldCheck className="w-4 h-4 text-green-600" /> Sustainable Safety</h4>
+                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest font-serif"><ShieldCheck className="w-4 h-4 text-green-600" /> Sustainable Safety</h4>
                 <ul className="space-y-3">
                   {itinerary.safetyTips?.map((tip, i) => (
                     <li key={i} className="text-xs text-stone-500 font-light flex items-start gap-3">
@@ -118,23 +118,23 @@ export const ItineraryPlanner: React.FC = () => {
       
       <div className="max-w-4xl mx-auto relative z-10 animate-app-reveal">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">AI Route Planner</h2>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 tracking-tight">AI Route Planner</h2>
           <p className="text-stone-500 text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Generate an itinerary focused on <span className="text-amber-500 italic">impact</span>. Our model prioritizes local artisans and quiet heritage spots over congested commercial zones.
+            Design a journey focused on <span className="text-amber-500 italic">local impact</span>. Our models prioritize silent heritage over congested commercial zones.
           </p>
         </div>
 
-        <div className="bg-[#141414] border border-white/10 rounded-[3rem] p-8 md:p-14 shadow-2xl">
+        <div className="bg-[#141414] border border-white/10 rounded-[3rem] p-8 md:p-14 shadow-2xl shadow-black/50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div className="space-y-6">
               <div>
                 <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest block mb-4">Journey Duration</label>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-3">
                   {[1, 2, 3, 5, 7].map(num => (
                     <button 
                       key={num}
                       onClick={() => setDays(num)}
-                      className={`w-12 h-12 rounded-2xl font-black text-xs transition-all ${days === num ? 'bg-amber-600 text-white' : 'bg-white/5 text-stone-500 hover:bg-white/10'}`}
+                      className={`w-14 h-14 rounded-2xl font-black text-xs transition-all ${days === num ? 'bg-amber-600 text-white shadow-xl shadow-amber-900/40' : 'bg-white/5 text-stone-500 hover:bg-white/10'}`}
                     >
                       {num}D
                     </button>
@@ -149,7 +149,7 @@ export const ItineraryPlanner: React.FC = () => {
                     <button 
                       key={type}
                       onClick={() => setGroupType(type)}
-                      className={`py-3 px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all text-left ${groupType === type ? 'bg-amber-600/10 text-amber-500 border border-amber-600/30' : 'bg-white/5 text-stone-500 border border-transparent'}`}
+                      className={`py-4 px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all text-left border ${groupType === type ? 'bg-amber-600/10 text-amber-500 border-amber-600/30' : 'bg-white/5 text-stone-500 border-transparent'}`}
                     >
                       {type}
                     </button>
@@ -165,7 +165,7 @@ export const ItineraryPlanner: React.FC = () => {
                   <button 
                     key={interest}
                     onClick={() => toggleInterest(interest)}
-                    className={`px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${interests.includes(interest) ? 'bg-white text-black' : 'bg-white/5 text-stone-600 border border-white/5 hover:border-white/20'}`}
+                    className={`px-5 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${interests.includes(interest) ? 'bg-white text-black border-white' : 'bg-white/5 text-stone-600 border-white/5 hover:border-white/20'}`}
                   >
                     {interest}
                   </button>
@@ -181,15 +181,15 @@ export const ItineraryPlanner: React.FC = () => {
           >
             {loading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" /> Calibrating Sustainable Route...
+                <Loader2 className="w-5 h-5 animate-spin" /> Synchronizing Heritage Data...
               </>
             ) : (
-              <>Generate Personalized Plan <ArrowRight className="w-5 h-5" /></>
+              <>Generate Personalized Route <ArrowRight className="w-5 h-5" /></>
             )}
           </button>
           
           {interests.length === 0 && !loading && (
-             <p className="text-center mt-6 text-[10px] font-bold text-amber-500/60 uppercase tracking-widest animate-pulse">Select at least one heritage focus to begin</p>
+             <p className="text-center mt-6 text-[10px] font-bold text-amber-500 uppercase tracking-widest animate-pulse">Select at least one heritage focus to begin</p>
           )}
         </div>
       </div>

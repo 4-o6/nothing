@@ -2,54 +2,60 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
 /**
- * Clean JSON strings that might contain Markdown code blocks
+ * Robust JSON extraction from LLM responses
  */
 const extractJson = (text: string): string => {
-  const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/\{[\s\S]*\}/);
-  return jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
+  try {
+    const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/\{[\s\S]*\}/);
+    const cleaned = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
+    return cleaned.trim();
+  } catch (e) {
+    return text;
+  }
 };
 
+/**
+ * Generates a sustainable itinerary using Gemini 3
+ */
 export const generateSustainableItinerary = async (
   days: number,
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  // Direct initialization as per guidelines
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  // Use pro model for complex reasoning tasks
-  const model = "gemini-3-pro-preview";
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.error("API_KEY missing from environment");
+    throw new Error("Configuration Error");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  // Use gemini-3-flash-preview for structured text tasks
+  const model = "gemini-3-flash-preview";
   
   const prompt = `
-    Create a ${days}-day sustainable tourism itinerary for Mysore, Karnataka.
-    Group Type: ${groupType}
+    Generate a ${days}-day sustainable travel itinerary for Mysore, India.
+    Traveler Profile: ${groupType}
     Interests: ${interests.join(', ')}
     
-    CRITICAL INSTRUCTIONS:
-    1. AVOID the main Mysore Palace, Zoo, and Chamundi Hills during peak hours (10 AM - 4 PM).
-    2. Suggest visiting these popular spots ONLY early morning or late evening if necessary.
-    3. PRIORITIZE local artisans, heritage walks in Agrahara, hidden lakes (like Kukkarahalli), and authentic small eateries (messes) over commercial hotels.
-    4. Provide specific names of locations.
-    5. Ensure the response is valid JSON.
+    Rules:
+    - Focus on decentralized tourism: avoid peak hours at the Palace.
+    - Include specific artisan names (e.g., Nanjundaiah for Inlay).
+    - Prioritize Agrahara heritage and hidden nature spots.
+    - Response must be strictly valid JSON.
   `;
 
   try {
     const response = await ai.models.generateContent({
       model,
-      contents: prompt,
+      contents: [{ parts: [{ text: prompt }] }],
       config: {
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
           properties: {
             title: { type: Type.STRING },
-            seasonalGuidelines: {
-                type: Type.ARRAY,
-                items: { type: Type.STRING }
-            },
-            safetyTips: {
-                type: Type.ARRAY,
-                items: { type: Type.STRING }
-            },
+            seasonalGuidelines: { type: Type.ARRAY, items: { type: Type.STRING } },
+            safetyTips: { type: Type.ARRAY, items: { type: Type.STRING } },
             items: {
               type: Type.ARRAY,
               items: {
@@ -60,7 +66,8 @@ export const generateSustainableItinerary = async (
                   location: { type: Type.STRING },
                   notes: { type: Type.STRING },
                   isSustainable: { type: Type.BOOLEAN }
-                }
+                },
+                required: ["time", "activity", "location"]
               }
             }
           },
@@ -73,36 +80,42 @@ export const generateSustainableItinerary = async (
     if (text) {
       return JSON.parse(extractJson(text)) as Itinerary;
     }
-    throw new Error("Empty response from AI");
+    throw new Error("No text in response");
   } catch (error) {
-    console.error("Gemini Itinerary Error:", error);
-    // Fallback basic itinerary
+    console.error("Itinerary Generation Failed:", error);
+    // Reliable fallback for immediate UX
     return {
-      title: "Essential Mysore Heritage Route",
+      title: "Essential Mysuru Heritage (Fallback Mode)",
       items: [
-        { time: "07:00 AM", activity: "Heritage Walk in Agrahara", location: "Agrahara Circle", notes: "Experience the old world charm and traditional breakfast.", isSustainable: true },
-        { time: "10:00 AM", activity: "Rosewood Inlay Workshop", location: "Tilak Nagar", notes: "Meet master craftsman Nanjundaiah.", isSustainable: true }
+        { time: "06:30 AM", activity: "Yoga at Gokulam", location: "Gokulam 3rd Stage", notes: "Experience Mysore's world-famous Ashtanga heritage.", isSustainable: true },
+        { time: "09:00 AM", activity: "Mylari Breakfast", location: "Nazarbad", notes: "A zero-waste local culinary institution.", isSustainable: true },
+        { time: "11:00 AM", activity: "Inlay Workshop Visit", location: "Tilak Nagar", notes: "Support master craftsmen directly.", isSustainable: true }
       ],
-      seasonalGuidelines: ["Carry an umbrella for unexpected afternoon showers."],
-      safetyTips: ["Ensure you have verified direct artisan contacts."]
+      seasonalGuidelines: ["Stay hydrated between 12 PM - 3 PM."],
+      safetyTips: ["Always verify artisan availability via phone first."]
     };
   }
 };
 
+/**
+ * Searches for hidden gems using Maps Grounding on Gemini 2.5
+ */
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    return { text: "Search requires an active API configuration.", chunks: [] };
+  }
+
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    // Maps grounding is strictly supported in Gemini 2.5 series
+    const ai = new GoogleGenAI({ apiKey });
+    // Use gemini-2.5-flash for Maps Grounding tasks
     const model = "gemini-2.5-flash";
     
     const prompt = `
-      Search for authentic, non-touristy, hidden gems or local artisans in Mysuru district, Karnataka related to: "${query}". 
-      Focus on specific locations with historical or cultural value. 
-      Format your response in friendly Markdown. 
-      IF user location is provided, find spots nearby that location.
+      Find authentic, off-the-beaten-path cultural spots or local workshops in Mysore related to: "${query}".
+      Provide historical context and why it's a hidden gem.
     `;
 
-    // Tool configuration for Maps Grounding
     const config: any = {
       tools: [{ googleMaps: {} }],
     };
@@ -120,18 +133,18 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
 
     const response = await ai.models.generateContent({
       model,
-      contents: prompt,
+      contents: [{ parts: [{ text: prompt }] }],
       config
     });
 
     return {
-      text: response.text || "No specific hidden gems found for that query in Mysore.",
+      text: response.text || "No results found for that heritage query.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
-  } catch (error: any) {
-    console.error("Gemini Search Error:", error);
+  } catch (error) {
+    console.error("Grounding Search Failed:", error);
     return { 
-      text: "Connection to Heritage Database interrupted. Please explore our curated gems list manually.", 
+      text: "Our heritage database is currently processing high traffic. Please browse the curated list below.", 
       chunks: [] 
     };
   }
