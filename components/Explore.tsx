@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
 import { searchHiddenGems } from '../services/geminiService';
@@ -9,22 +9,25 @@ export const Explore: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
+  const searchTimeoutRef = useRef<number | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim() || isSearching) return;
     
     setIsSearching(true);
+    setAiResults(null);
+    
     try {
       let location = undefined;
       if (navigator.geolocation) {
         try {
           const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 2000 });
           });
           location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         } catch (locErr) {
-          console.debug("Geolocation skipped");
+          console.debug("Location services timed out");
         }
       }
 
@@ -32,7 +35,6 @@ export const Explore: React.FC = () => {
       setAiResults(results);
     } catch (error) {
       console.error(error);
-      setAiResults({ text: "Heritage node connection initializing. If search fails, please check your network or refresh.", chunks: [] });
     } finally {
       setIsSearching(false);
     }
@@ -67,7 +69,6 @@ export const Explore: React.FC = () => {
                 {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
-            <div className="absolute -inset-1 bg-amber-600/5 blur-2xl -z-10 group-focus-within:bg-amber-600/10 transition-all"></div>
           </form>
           
           {aiResults && (
@@ -104,7 +105,6 @@ export const Explore: React.FC = () => {
                )}
             </div>
           )}
-          <p className="text-center mt-6 text-[9px] font-black text-stone-700 uppercase tracking-[0.4em]">Heritage Neural Network • Secure Key Required</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -154,7 +154,6 @@ export const Explore: React.FC = () => {
               >
                 <Navigation className="w-4 h-4 sm:w-5 sm:h-5" /> NAVIGATE IN MAPS
               </button>
-              <div className="pb-8"></div>
             </div>
           </div>
         </div>

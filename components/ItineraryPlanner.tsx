@@ -33,8 +33,9 @@ export const ItineraryPlanner: React.FC = () => {
   };
 
   const handleGenerate = async () => {
-    if (interests.length === 0) return;
+    if (interests.length === 0 || loading) return;
     setLoading(true);
+    setItinerary(null);
     try {
       const result = await generateSustainableItinerary(days, interests, groupType);
       setItinerary(result);
@@ -88,7 +89,6 @@ export const ItineraryPlanner: React.FC = () => {
                     <div className="flex items-center gap-2 bg-stone-900/50 px-3 py-1.5 rounded-lg border border-white/5">
                       <MapPin className="w-3.5 h-3.5 text-amber-600" /> {item.location}
                     </div>
-                    {/* Access duration directly now that types are corrected */}
                     {item.duration && (
                       <div className="flex items-center gap-2 bg-stone-900/50 px-3 py-1.5 rounded-lg border border-white/5">
                         <Clock className="w-3.5 h-3.5 text-blue-500" /> {item.duration}
@@ -103,7 +103,6 @@ export const ItineraryPlanner: React.FC = () => {
                       <Leaf className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                       <div>
                         <div className="text-[9px] font-black text-green-500 uppercase tracking-[0.2em] mb-1">Sustainable Impact</div>
-                        {/* Access impactReason directly now that types are corrected */}
                         <p className="text-xs text-stone-500 leading-relaxed font-light">{item.impactReason || "This activity directly benefits local families and preserves Mysuru's tangible heritage."}</p>
                       </div>
                     </div>
