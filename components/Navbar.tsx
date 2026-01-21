@@ -86,7 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button className="px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-white flex items-center gap-2 bg-white/5 border border-white/5 transition-all">
                 Discovery <ChevronDown className="w-3.5 h-3.5 group-hover/menu:rotate-180 transition-transform" />
               </button>
-              <div className="absolute top-full right-0 mt-4 w-60 opacity-0 translate-y-3 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300">
+              {/* Gap fix: Changed mt-4 to pt-4 to bridge the gap between button and menu so hover isn't lost */}
+              <div className="absolute top-full right-0 pt-4 w-60 opacity-0 translate-y-3 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300">
                 <div className="bg-[#181818] border border-white/10 rounded-3xl p-3 shadow-[0_30px_60px_rgba(0,0,0,0.8)] backdrop-blur-3xl">
                   {secondaryItems.map((item) => (
                     <button
