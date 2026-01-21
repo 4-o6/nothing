@@ -1,4 +1,5 @@
 
+
 export interface Place {
   id: string;
   name: string;
@@ -44,6 +45,10 @@ export interface ItineraryItem {
   location: string;
   notes: string;
   isSustainable: boolean;
+  // Added optional fields for AI grounding and heritage impact tracking
+  duration?: string;
+  category?: string;
+  impactReason?: string;
 }
 
 export interface Itinerary {

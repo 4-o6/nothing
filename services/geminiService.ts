@@ -1,9 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
-/**
- * Robust JSON extraction for LLM responses
- */
 const extractJson = (text: string): string => {
   try {
     const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/\{[\s\S]*\}/);
@@ -14,10 +11,6 @@ const extractJson = (text: string): string => {
   }
 };
 
-/**
- * Resolves the API key. 
- * Prioritizes process.env.API_KEY (Vercel) but falls back to the manual selector if empty.
- */
 const getActiveApiKey = async (): Promise<string> => {
   const envKey = process.env.API_KEY;
   if (envKey && envKey.length > 10) return envKey;
@@ -32,12 +25,8 @@ const getActiveApiKey = async (): Promise<string> => {
   return process.env.API_KEY || "";
 };
 
-/**
- * Handles API errors by checking for missing entities and prompting for a key reset.
- */
 const handleApiError = (error: any) => {
   console.error("Gemini API Error:", error);
-  // If the key is invalid or expired, trigger the selection dialog
   if (error?.message?.includes("API key not valid") || error?.message?.includes("Requested entity was not found")) {
     if (typeof window !== 'undefined' && (window as any).aistudio?.openSelectKey) {
       (window as any).aistudio.openSelectKey();
@@ -45,9 +34,6 @@ const handleApiError = (error: any) => {
   }
 };
 
-/**
- * Generates a sustainable itinerary using Gemini 3 Pro for complex reasoning.
- */
 export const generateSustainableItinerary = async (
   days: number,
   interests: string[],
@@ -59,16 +45,18 @@ export const generateSustainableItinerary = async (
     const model = "gemini-3-pro-preview"; 
     
     const prompt = `
-      Generate a ${days}-day sustainable travel itinerary for Mysore, India.
-      Traveler Profile: ${groupType}
-      Interests: ${interests.join(', ')}
+      Create a high-quality, authentic ${days}-day sustainable travel itinerary for Mysore (Mysuru), India.
+      Target Audience: ${groupType}
+      Core Interests: ${interests.join(', ')}
       
-      Focus on decentralized tourism:
-      - Suggest specific artisan workshops (Inlay, Silk, Ganjifa).
-      - Include nature spots like Blue Lagoon or Karanji Lake.
-      - Prioritize Agrahara heritage walks over commercial malls.
+      MANDATORY DECENTRALIZATION RULES:
+      - AVOID: Generic malls, commercial food chains, or standard crowded palace timings (11am-4pm).
+      - FOCUS: "Living Museum" heritage. Suggest specific districts: Agrahara (weavers), Tilak Nagar (inlay artisans), Gokulam (yoga/slow life), and Mandi Mohalla (heritage culinary).
+      - ARTISANS: Suggest specific activities like "Watch Ganjifa art creation" or "Visit a silk weaver's home loom".
+      - HIDDEN GEMS: Include spots like Venugopala Swamy Temple (KRS backwaters), Blue Lagoon, or heritage Agrahara walks.
+      - SUSTAINABILITY: Explain WHY an activity is sustainable (e.g., direct support to craft, low carbon footprint).
       
-      Return valid JSON only.
+      RESPONSE FORMAT: Strict JSON only.
     `;
 
     const response = await ai.models.generateContent({
@@ -88,12 +76,15 @@ export const generateSustainableItinerary = async (
                 type: Type.OBJECT,
                 properties: {
                   time: { type: Type.STRING },
+                  duration: { type: Type.STRING, description: "Estimated time to spend, e.g., '2 Hours'" },
+                  category: { type: Type.STRING, description: "One of: artisan, food, nature, culture, relaxation" },
                   activity: { type: Type.STRING },
                   location: { type: Type.STRING },
                   notes: { type: Type.STRING },
-                  isSustainable: { type: Type.BOOLEAN }
+                  isSustainable: { type: Type.BOOLEAN },
+                  impactReason: { type: Type.STRING, description: "Brief explanation of how this helps local communities" }
                 },
-                required: ["time", "activity", "location"]
+                required: ["time", "activity", "location", "category"]
               }
             }
           },
@@ -108,22 +99,47 @@ export const generateSustainableItinerary = async (
     throw new Error("Empty response");
   } catch (error) {
     handleApiError(error);
+    // Enhanced Fallback with more detail
     return {
-      title: "Essential Heritage Trail",
+      title: "Agrahara & Artisan Heritage Trail",
       items: [
-        { time: "07:00 AM", activity: "Yoga at Gokulam", location: "Gokulam", notes: "Experience Mysore's world-famous yoga culture.", isSustainable: true },
-        { time: "09:30 AM", activity: "Mylari Dosa", location: "Nazarbad", notes: "Visit the original heritage eatery.", isSustainable: true },
-        { time: "11:30 AM", activity: "Rosewood Inlay Visit", location: "Tilak Nagar", notes: "Support local master artisans.", isSustainable: true }
+        { 
+          time: "06:30 AM", 
+          duration: "2 Hours",
+          category: "culture",
+          activity: "Heritage Yoga at Gokulam", 
+          location: "Gokulam 3rd Stage", 
+          notes: "Visit a traditional Shala to witness the world-famous Ashtanga heritage without commercial interference.", 
+          isSustainable: true,
+          impactReason: "Supports the traditional Guru-Shishya parampara of Mysuru."
+        },
+        { 
+          time: "09:30 AM", 
+          duration: "1 Hour",
+          category: "food",
+          activity: "Traditional Breakfast at Mylari", 
+          location: "Nazarbad", 
+          notes: "Eat at a century-old, family-run institution that uses traditional recipes and local sourcing.", 
+          isSustainable: true,
+          impactReason: "Zero-waste cooking practices and supporting local food heritage."
+        },
+        { 
+          time: "11:30 AM", 
+          duration: "2.5 Hours",
+          category: "artisan",
+          activity: "Rosewood Inlay Home-Studio Visit", 
+          location: "Tilak Nagar", 
+          notes: "Visit master craftsmen like Nanjundaiah to see the rhythmic tapping of wood inlay creation.", 
+          isSustainable: true,
+          impactReason: "Direct financial support to artisan families without middlemen."
+        }
       ],
-      seasonalGuidelines: ["Carry water for the warm afternoons."],
-      safetyTips: ["Ask for artisan permission before filming."]
+      seasonalGuidelines: ["Check for local festival dates which may change artisan availability."],
+      safetyTips: ["Always ask permission before photographing independent artisans."]
     };
   }
 };
 
-/**
- * Searches for hidden gems using Maps Grounding on Gemini 2.5 Flash.
- */
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
   try {
     const apiKey = await getActiveApiKey();
@@ -132,7 +148,7 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
     
     const prompt = `
       Identify authentic, off-the-beaten-path cultural spots or local artisan studios in Mysore for: "${query}".
-      Explain the heritage value of each.
+      Explain the heritage value of each. Focus on decentralization: places away from the main Palace gates.
     `;
 
     const config: any = {
