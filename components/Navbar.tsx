@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Map, Compass, Users, Leaf, Menu, X, ShoppingBag, MapPinned, LogIn, LogOut, Ticket, UtensilsCrossed } from 'lucide-react';
 import { AppView } from '../types';
 
@@ -11,7 +11,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, isAuthenticated, setView, onLogout, onLoginClick }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { id: AppView.HOME, label: 'Home', icon: <Map className="w-4 h-4" /> },
@@ -24,26 +24,38 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, isAuthenticated, se
     { id: AppView.PLANNER, label: 'Planner', icon: <Leaf className="w-4 h-4" /> },
   ];
 
+  const handleNavigate = (view: AppView) => {
+    setView(view);
+    setIsOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    setView(AppView.HOME);
+    setIsOpen(false);
+  };
+
   return (
-    <nav className="sticky top-0 z-50 bg-stone-900/95 backdrop-blur-sm text-stone-100 border-b border-stone-800 shadow-lg">
+    <nav className="sticky top-0 z-50 bg-stone-900 text-stone-100 border-b border-stone-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center cursor-pointer" onClick={() => setView(AppView.HOME)}>
-            <div className="flex-shrink-0 flex flex-col justify-center">
+          {/* Brand/Logo */}
+          <div className="flex items-center cursor-pointer" onClick={handleLogoClick}>
+            <div className="flex-shrink-0 flex flex-col justify-center overflow-hidden">
               <span className="text-xl font-bold font-serif text-amber-500 leading-none">MysuruUnveiled</span>
               <span className="text-[10px] text-stone-400 font-sans tracking-widest uppercase mt-0.5">Beyond the Palace</span>
             </div>
           </div>
           
+          {/* Desktop Navigation */}
           <div className="hidden lg:block">
             <div className="ml-10 flex items-baseline space-x-2 xl:space-x-4">
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setView(item.id)}
+                  onClick={() => handleNavigate(item.id)}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
                     currentView === item.id
-                      ? 'bg-amber-600 text-white'
+                      ? 'bg-amber-600 text-white shadow-md'
                       : 'text-stone-300 hover:bg-stone-800 hover:text-white'
                   }`}
                 >
@@ -70,37 +82,39 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, isAuthenticated, se
             </div>
           </div>
           
-          <div className="-mr-2 flex lg:hidden">
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-stone-400 hover:text-white hover:bg-stone-700 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-stone-400 hover:text-white hover:bg-stone-800 focus:outline-none transition-colors"
+              aria-expanded={isOpen}
             >
+              <span className="sr-only">Open main menu</span>
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </div>
 
+      {/* Mobile Menu Content */}
       {isOpen && (
-        <div className="lg:hidden bg-stone-900 border-b border-stone-800">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="lg:hidden absolute top-16 inset-x-0 bg-stone-900 border-b border-stone-800 shadow-2xl animate-fade-in">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 max-h-[calc(100vh-4rem)] overflow-y-auto">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  setView(item.id);
-                  setIsOpen(false);
-                }}
-                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 ${
+                onClick={() => handleNavigate(item.id)}
+                className={`block w-full text-left px-4 py-3 rounded-lg text-base font-medium flex items-center gap-3 transition-colors ${
                   currentView === item.id
                     ? 'bg-amber-600 text-white'
-                    : 'text-stone-300 hover:bg-stone-700 hover:text-white'
+                    : 'text-stone-300 hover:bg-stone-800 hover:text-white'
                 }`}
               >
                 {item.icon}
                 {item.label}
               </button>
             ))}
+            
             <div className="pt-4 mt-2 border-t border-stone-800">
               {isAuthenticated ? (
                  <button
@@ -108,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, isAuthenticated, se
                     onLogout();
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-stone-700 hover:text-red-300"
+                  className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-base font-medium text-red-400 hover:bg-stone-800 hover:text-red-300 transition-colors"
                 >
                   <LogOut className="w-4 h-4" /> Logout
                 </button>
@@ -118,9 +132,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, isAuthenticated, se
                     onLoginClick();
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-amber-500 hover:bg-stone-700 hover:text-amber-400"
+                  className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-base font-medium text-amber-500 hover:bg-stone-800 hover:text-amber-400 transition-colors"
                 >
-                   <LogIn className="w-4 h-4" /> Login
+                   <LogIn className="w-4 h-4" /> Login to Profile
                 </button>
               )}
             </div>
