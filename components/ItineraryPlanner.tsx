@@ -1,78 +1,57 @@
-import React, { useState } from 'react';
-import { generateSustainableItinerary } from '../services/geminiService';
-import { Itinerary } from '../types';
-import { Loader2, Calendar, Users, Heart, CheckCircle, Leaf, Lock } from 'lucide-react';
+import React from 'react';
+import { LayoutDashboard, Lock, ArrowLeft, Cpu, Database, Network } from 'lucide-react';
 
 export const ItineraryPlanner: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [itinerary, setItinerary] = useState<Itinerary | null>(null);
-  const [days, setDays] = useState(2);
-  const [groupType, setGroupType] = useState('Couple');
-  const [interests, setInterests] = useState<string[]>([]);
-
-  const interestOptions = ['Heritage', 'Artisans', 'Food', 'Nature', 'Spirituality'];
-
-  const toggleInterest = (interest: string) => {
-    setInterests(prev => 
-      prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
-    );
-  };
-
-  const handleGenerate = async () => {
-    // Planner disabled - showing Coming Soon instead
-    return;
-  };
-
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-[#0c0c0c] text-stone-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        
-        {/* Coming Soon Overlay */}
-        <div className="absolute inset-0 z-50 bg-[#0c0c0c]/70 backdrop-blur-sm flex flex-col items-center justify-center text-center px-6 rounded-[3rem] border-2 border-dashed border-amber-600/30 mb-20 animate-app-reveal">
-           <div className="w-24 h-24 bg-amber-600/10 rounded-full flex items-center justify-center mb-8 border border-amber-600/20 shadow-[0_0_50px_rgba(217,119,6,0.1)]">
-              <Lock className="w-10 h-10 text-amber-500 animate-pulse" />
+    <div className="min-h-screen pt-32 pb-20 bg-[#0c0c0c] text-stone-200 overflow-hidden relative">
+      
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/5 rounded-full blur-[120px]"></div>
+        <div className="absolute top-0 left-0 w-full h-full opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #444 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        <div className="text-center mb-16 animate-app-reveal">
+           <div className="w-20 h-20 bg-[#141414] border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-amber-600/20 to-transparent"></div>
+              <Cpu className="w-8 h-8 text-amber-500 relative z-10 animate-pulse" />
            </div>
-           <h2 className="text-4xl sm:text-5xl font-serif font-black text-white mb-6">Planner Syncing.</h2>
-           <p className="text-stone-400 max-w-md text-lg font-light leading-relaxed mb-10">
-              Our sustainable travel engine is being calibrated for Mysuru's upcoming festival season. <br/><span className="text-amber-500 font-black uppercase tracking-widest text-xs mt-4 block">Coming Soon in Early 2026</span>
+           
+           <h2 className="text-4xl md:text-6xl font-serif font-black text-white mb-6 tracking-tight">System Calibration.</h2>
+           <p className="text-stone-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
+             Our <span className="text-amber-500 font-bold">Sustainable Heritage Neural Network</span> is currently indexing local artisan schedules for the upcoming Dussehra season.
            </p>
-           <button 
+        </div>
+
+        {/* Dashboard Status Mocks */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 animate-app-reveal" style={{ animationDelay: '0.2s' }}>
+          {[
+            { icon: <Database className="w-4 h-4" />, label: "Dataset Sync", status: "88% Complete" },
+            { icon: <Network className="w-4 h-4" />, label: "Artisan Node", status: "Active Connection" },
+            { icon: <Lock className="w-4 h-4" />, label: "Security", status: "Protected" }
+          ].map((item, i) => (
+            <div key={i} className="bg-[#141414] border border-white/5 p-6 rounded-[2rem] flex flex-col items-center gap-3">
+               <div className="text-stone-600 mb-1">{item.icon}</div>
+               <div className="text-[10px] font-black uppercase tracking-widest text-stone-500">{item.label}</div>
+               <div className="text-[11px] font-bold text-amber-600">{item.status}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col items-center gap-8 animate-app-reveal" style={{ animationDelay: '0.4s' }}>
+          <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-full flex items-center gap-4">
+             <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Global Status:</span>
+             <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">UNDER DEVELOPMENT</span>
+          </div>
+
+          <button 
              onClick={() => window.history.back()}
-             className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-white transition-all"
-           >
-             Go Back to Gems
-           </button>
-        </div>
-
-        <div className="text-center mb-16 animate-fade-in-up blur-md pointer-events-none opacity-40">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-white tracking-tight">Smart Sustainable Planner</h2>
-          <p className="text-lg font-light text-stone-400 max-w-2xl mx-auto leading-relaxed">
-            Get a personalized plan that avoids peak crowds and supports the local economy.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-10 items-start blur-md pointer-events-none opacity-20">
-          {/* Controls Placeholder */}
-          <div className="p-8 rounded-[2.5rem] shadow-2xl border bg-[#141414] border-stone-800/50 md:col-span-1">
-            <div className="space-y-8">
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 text-stone-500">
-                  <Calendar className="w-4 h-4" /> Duration (Days)
-                </label>
-                <div className="w-full h-1.5 bg-stone-800 rounded-lg"></div>
-              </div>
-              <button className="w-full py-5 bg-stone-800 text-stone-500 rounded-2xl font-black text-sm uppercase tracking-widest">
-                Create My Plan
-              </button>
-            </div>
-          </div>
-
-          {/* Results Area Placeholder */}
-          <div className="md:col-span-2">
-            <div className="h-full min-h-[450px] flex flex-col items-center justify-center border-2 border-dashed rounded-[3rem] p-12 border-stone-800 bg-[#111]/30 text-stone-600">
-              <Leaf className="w-16 h-16 mb-6 opacity-10" />
-            </div>
-          </div>
+             className="group flex items-center gap-3 px-10 py-5 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
+            Return to Explorations
+          </button>
         </div>
       </div>
     </div>

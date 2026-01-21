@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
-import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, Lock } from 'lucide-react';
-import { searchHiddenGems } from '../services/geminiService';
+import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, Lock, Cpu } from 'lucide-react';
 
 export const Explore: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
   const [selectedGem, setSelectedGem] = useState<Place | null>(null);
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Logic kept but we'll show Coming Soon for search
-    return;
-  };
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] pt-24 sm:pt-32 pb-24 sm:pb-32">
@@ -22,40 +12,41 @@ export const Explore: React.FC = () => {
         <div className="text-center mb-12 sm:mb-20 animate-app-reveal">
           <h2 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-4 sm:mb-6 tracking-tight">Hidden Gems</h2>
           <p className="text-stone-500 max-w-2xl mx-auto text-base sm:text-xl font-light leading-relaxed">
-            Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by AI and heritage data.
+            Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by heritage data.
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto mb-16 sm:mb-24 animate-app-reveal relative">
-          <div className="absolute inset-0 bg-[#0c0c0c]/60 backdrop-blur-[2px] z-10 rounded-3xl flex items-center justify-center border border-amber-600/20 shadow-2xl overflow-hidden group cursor-not-allowed">
-             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-600/5 to-transparent animate-pulse"></div>
-             <div className="flex flex-col items-center gap-3 relative z-20">
-                <div className="bg-amber-600/20 p-3 rounded-2xl border border-amber-600/30">
-                  <Lock className="w-5 h-5 text-amber-500" />
+        {/* Premium AI Search Mockup */}
+        <div className="max-w-3xl mx-auto mb-16 sm:mb-24 animate-app-reveal group">
+          <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-r from-stone-900 via-amber-900/20 to-stone-900 border border-white/5 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+            <div className="flex items-center bg-[#0c0c0c] rounded-[2.3rem] px-6 py-4 md:py-6 overflow-hidden relative">
+              
+              {/* Animation Layer */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-600/5 to-transparent animate-[shimmer_3s_infinite] opacity-30"></div>
+              
+              <div className="flex items-center gap-4 flex-1">
+                <Search className="w-6 h-6 text-stone-700" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black text-stone-600 uppercase tracking-[0.3em] mb-1">AI Heritage Engine</span>
+                  <span className="text-stone-500 text-sm font-medium italic">Scanning historical datasets...</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500 mb-1">AI Heritage Engine</p>
-                  <p className="text-stone-300 font-bold text-sm">COMING SOON</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-stone-900/80 rounded-full border border-white/5">
+                   <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                   <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest">CALIBRATING</span>
                 </div>
-             </div>
+                <div className="bg-stone-900 p-3 rounded-2xl border border-white/10 text-stone-400 group-hover:text-amber-500 transition-colors">
+                  <Lock className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+            
+            {/* Soft shadow glow */}
+            <div className="absolute -inset-1 bg-amber-600/5 blur-2xl -z-10 group-hover:bg-amber-600/10 transition-all"></div>
           </div>
-          
-          <form className="bg-white/5 p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl border border-white/10 flex items-center shadow-2xl opacity-40">
-            <Search className="w-5 h-5 sm:w-6 sm:h-6 text-stone-600 ml-4 sm:ml-5 hidden sm:block" />
-            <input
-              disabled
-              type="text"
-              placeholder="Search unseen Mysuru..."
-              className="flex-1 bg-transparent px-4 sm:px-5 py-3 sm:py-4.5 text-white outline-none placeholder-stone-700 text-sm sm:text-base font-medium"
-            />
-            <button 
-              disabled
-              className="bg-amber-600/50 text-white/50 px-5 sm:px-8 py-3 sm:py-4.5 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest flex items-center gap-2 sm:gap-3"
-            >
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">DISCOVER</span>
-            </button>
-          </form>
+          <p className="text-center mt-6 text-[9px] font-black text-stone-700 uppercase tracking-[0.4em]">Heritage Neural Network Online • Beta Access Early 2026</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -89,7 +80,7 @@ export const Explore: React.FC = () => {
         <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in" onClick={() => setSelectedGem(null)}>
           <div className="bg-[#141414] w-full max-w-2xl rounded-t-[2rem] sm:rounded-[3rem] overflow-hidden border-t sm:border border-white/10 animate-app-reveal" onClick={e => e.stopPropagation()}>
             <div className="h-64 sm:h-72 relative">
-              <img src={selectedGem.imageUrl} className="w-full h-full object-cover" />
+              <img src={selectedGem.imageUrl} alt={selectedGem.name} className="w-full h-full object-cover" />
               <button onClick={() => setSelectedGem(null)} className="absolute top-5 sm:top-6 right-5 sm:right-6 p-2 sm:p-3 bg-black/50 text-white rounded-full hover:bg-black transition-colors"><X className="w-5 h-5 sm:w-6 sm:h-6" /></button>
             </div>
             <div className="p-8 sm:p-14">
@@ -100,6 +91,7 @@ export const Explore: React.FC = () => {
               <h3 className="text-2xl sm:text-4xl font-serif font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">{selectedGem.name}</h3>
               <p className="text-stone-500 text-base sm:text-lg font-light leading-relaxed mb-8 sm:mb-10">{selectedGem.description}</p>
               <button 
+                // Fix: Corrected variable name from selectedPlace to selectedGem
                 onClick={() => window.open(selectedGem.googleMapsUri, '_blank')}
                 className="w-full bg-amber-600 hover:bg-amber-500 text-white h-14 sm:h-16 rounded-xl sm:rounded-2xl font-black text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 sm:gap-4 shadow-2xl transition-all active:scale-95"
               >
