@@ -17,19 +17,18 @@ import { ChevronRight, Mail, Phone, MapPin } from 'lucide-react';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   // Scroll to top on view change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
 
-  // Success login
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     setCurrentView(AppView.HOME);
   };
 
-  // Skip login / Guest mode
   const handleSkipLogin = () => {
     setCurrentView(AppView.HOME);
   };
@@ -37,6 +36,10 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setCurrentView(AppView.HOME);
+  };
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   const renderView = () => {
@@ -50,9 +53,9 @@ const App: React.FC = () => {
               onStart={() => setCurrentView(AppView.EXPLORE)} 
               onImpact={() => setCurrentView(AppView.IMPACT)}
             />
-            <div className="py-16 bg-white">
+            <div className={`py-16 ${theme === 'dark' ? 'bg-[#0c0c0c]' : 'bg-white'}`}>
               <div className="max-w-7xl mx-auto px-4 text-center">
-                <p className="text-stone-500 italic font-serif text-xl">
+                <p className={`italic font-serif text-xl ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>
                   "Mysore is not just a palace. It is a living museum of crafts, cuisine, and culture waiting to be explored."
                 </p>
               </div>
@@ -60,21 +63,21 @@ const App: React.FC = () => {
           </>
         );
       case AppView.EXPLORE:
-        return <Explore />;
+        return <Explore theme={theme} />;
       case AppView.PACKAGES:
-        return <Packages />;
+        return <Packages theme={theme} />;
       case AppView.MAP:
-        return <InteractiveMap />;
+        return <InteractiveMap theme={theme} />;
       case AppView.PLANNER:
-        return <ItineraryPlanner />;
+        return <ItineraryPlanner theme={theme} />;
       case AppView.BOOKINGS:
-        return <Bookings />;
+        return <Bookings theme={theme} />;
       case AppView.ARTISANS:
-        return <Artisans />;
+        return <Artisans theme={theme} />;
       case AppView.FOOD:
-        return <FoodGuide />;
+        return <FoodGuide theme={theme} />;
       case AppView.IMPACT:
-        return <Impact />;
+        return <Impact theme={theme} />;
       default:
         return <Hero onStart={() => setCurrentView(AppView.EXPLORE)} onImpact={() => setCurrentView(AppView.IMPACT)} />;
     }
@@ -85,30 +88,32 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0c0c0c] text-stone-200' : 'bg-stone-50 text-stone-900'}`}>
       <Navbar 
         currentView={currentView} 
         setView={setCurrentView} 
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout} 
         onLoginClick={() => setCurrentView(AppView.LOGIN)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
       <main className="animate-fade-in">
         {renderView()}
       </main>
       
-      <footer className="bg-stone-900 text-stone-500 py-16 border-t border-stone-800">
+      <footer className={`${theme === 'dark' ? 'bg-[#111] border-stone-800' : 'bg-stone-100 border-stone-200'} py-16 border-t`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
           <div>
-            <h4 className="text-stone-100 font-bold mb-2 text-2xl serif">MysuruUnveiled</h4>
+            <h4 className={`${theme === 'dark' ? 'text-stone-100' : 'text-stone-900'} font-bold mb-2 text-2xl serif`}>MysuruUnveiled</h4>
             <p className="mb-6 text-xs uppercase tracking-widest text-amber-600 font-bold">Beyond the Palace</p>
-            <p className="leading-relaxed mb-6 text-stone-400">
+            <p className={`leading-relaxed mb-6 ${theme === 'dark' ? 'text-stone-400' : 'text-stone-600'}`}>
               Decentralizing tourism to preserve heritage and empower locals. We help you discover the soul of the city while supporting the hands that build it.
             </p>
           </div>
           
           <div>
-            <h4 className="text-stone-100 font-bold mb-6 text-lg">Quick Links</h4>
+            <h4 className={`${theme === 'dark' ? 'text-stone-100' : 'text-stone-900'} font-bold mb-6 text-lg`}>Quick Links</h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
               {[
                 { label: 'Meet Artisans', view: AppView.ARTISANS },
@@ -121,9 +126,9 @@ const App: React.FC = () => {
                 <li 
                   key={idx} 
                   onClick={() => setCurrentView(link.view)} 
-                  className="cursor-pointer text-stone-400 hover:text-amber-500 transition-colors flex items-center group"
+                  className={`cursor-pointer transition-colors flex items-center group ${theme === 'dark' ? 'text-stone-400 hover:text-amber-500' : 'text-stone-600 hover:text-amber-600'}`}
                 >
-                  <ChevronRight className="w-3 h-3 mr-2 text-stone-600 group-hover:text-amber-500 transition-colors" />
+                  <ChevronRight className="w-3 h-3 mr-2 text-stone-400 group-hover:text-amber-500" />
                   <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
                 </li>
               ))}
@@ -131,33 +136,33 @@ const App: React.FC = () => {
           </div>
           
           <div>
-            <h4 className="text-stone-100 font-bold mb-6 text-lg">Connect</h4>
+            <h4 className={`${theme === 'dark' ? 'text-stone-100' : 'text-stone-900'} font-bold mb-6 text-lg`}>Connect</h4>
             <div className="space-y-4">
-              <a href="mailto:info@mysuruunveiled.com" className="flex items-start gap-3 hover:text-white transition-colors group">
-                <div className="mt-0.5 w-8 h-8 rounded bg-stone-800 flex items-center justify-center group-hover:bg-amber-900/30 transition-colors">
+              <a href="mailto:info@mysuruunveiled.com" className={`flex items-start gap-3 transition-colors group ${theme === 'dark' ? 'text-stone-400 hover:text-white' : 'text-stone-600 hover:text-stone-900'}`}>
+                <div className={`${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-200'} mt-0.5 w-8 h-8 rounded flex items-center justify-center transition-colors`}>
                   <Mail className="w-4 h-4 text-amber-500" />
                 </div>
                 <div>
-                  <span className="block text-xs text-stone-400 mb-0.5">Email Us</span>
+                  <span className={`block text-xs mb-0.5 ${theme === 'dark' ? 'text-stone-500' : 'text-stone-400'}`}>Email Us</span>
                   info@mysuruunveiled.com
                 </div>
               </a>
-              <a href="tel:+919900000000" className="flex items-start gap-3 hover:text-white transition-colors group">
-                 <div className="mt-0.5 w-8 h-8 rounded bg-stone-800 flex items-center justify-center group-hover:bg-amber-900/30 transition-colors">
+              <a href="tel:+919900000000" className={`flex items-start gap-3 transition-colors group ${theme === 'dark' ? 'text-stone-400 hover:text-white' : 'text-stone-600 hover:text-stone-900'}`}>
+                 <div className={`${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-200'} mt-0.5 w-8 h-8 rounded flex items-center justify-center transition-colors`}>
                   <Phone className="w-4 h-4 text-amber-500" />
                 </div>
                 <div>
-                  <span className="block text-xs text-stone-400 mb-0.5">Call Us</span>
+                  <span className={`block text-xs mb-0.5 ${theme === 'dark' ? 'text-stone-500' : 'text-stone-400'}`}>Call Us</span>
                   +91 99000 00000
                 </div>
               </a>
               <div className="flex items-start gap-3">
-                 <div className="mt-0.5 w-8 h-8 rounded bg-stone-800 flex items-center justify-center">
+                 <div className={`${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-200'} mt-0.5 w-8 h-8 rounded flex items-center justify-center`}>
                   <MapPin className="w-4 h-4 text-amber-500" />
                 </div>
                 <div>
-                  <span className="block text-xs text-stone-400 mb-0.5">Visit Us</span>
-                  <p className="leading-snug text-stone-500">
+                  <span className={`block text-xs mb-0.5 ${theme === 'dark' ? 'text-stone-500' : 'text-stone-400'}`}>Visit Us</span>
+                  <p className={`leading-snug ${theme === 'dark' ? 'text-stone-500' : 'text-stone-600'}`}>
                     Vidyavardhaka College of Engineering,<br/> 
                     P.B. No.206, Gokulam III Stage,<br/>
                     Mysuru, Karnataka 570002
@@ -167,7 +172,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center text-xs text-stone-600">
+        <div className={`max-w-7xl mx-auto px-4 mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center text-xs ${theme === 'dark' ? 'border-stone-800 text-stone-600' : 'border-stone-200 text-stone-500'}`}>
           <p>&copy; 2026 MysuruUnveiled.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <span className="cursor-pointer hover:text-stone-400">Privacy Policy</span>
