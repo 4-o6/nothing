@@ -5,20 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MysuruUnveiled: Beyond the Palace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --amber-glow: rgba(245, 158, 11, 0.1);
+      }
       body {
         font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+        background-color: #0c0c0c;
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Merriweather', serif;
       }
+      
+      ::selection {
+        background: #d97706;
+        color: white;
+      }
+
+      /* Custom Animations */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in-up {
+        animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fadeIn 1.5s ease-out forwards;
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0px); }
+      }
+      .animate-float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      @keyframes radar {
+        0% { transform: scale(1); opacity: 0.4; }
+        100% { transform: scale(3); opacity: 0; }
+      }
+      .animate-radar {
+        animation: radar 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      /* Transitions */
+      .card-lift {
+        transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .card-lift:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 18px 36px -18px var(--amber-glow);
+      }
+
       .scrollbar-hide::-webkit-scrollbar {
           display: none;
       }
       .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
+      }
+
+      /* Smooth entrance for backgrounds */
+      .hero-gradient {
+        background: linear-gradient(to bottom, #0c0c0c 0%, transparent 40%, transparent 60%, #0c0c0c 100%),
+                    linear-gradient(to right, #0c0c0c 0%, transparent 50%);
       }
     </style>
   <script type="importmap">
@@ -35,7 +95,7 @@
 }
 </script>
 </head>
-  <body class="bg-stone-50 text-stone-900 antialiased">
+  <body class="bg-[#0c0c0c] text-stone-200 antialiased">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

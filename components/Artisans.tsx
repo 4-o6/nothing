@@ -1,84 +1,74 @@
-
 import React, { useState } from 'react';
 import { ARTISANS } from '../constants';
-import { MapPin, UserCheck, Navigation, Phone, MessageSquare, X, Info } from 'lucide-react';
+import { MapPin, UserCheck, Navigation, Phone, MessageSquare, X, Info, Sparkles } from 'lucide-react';
 import { Artisan } from '../types';
 
 export const Artisans: React.FC = () => {
   const [selectedContact, setSelectedContact] = useState<Artisan | null>(null);
 
-  const handleDirections = (uri: string) => {
-    window.open(uri, '_blank');
-  };
-
-  const handleContactClick = (artisan: Artisan) => {
-    setSelectedContact(artisan);
-  };
-
-  const closeContactModal = () => {
-    setSelectedContact(null);
-  };
-
-  const sanitizePhone = (phone: string) => {
-    return phone.replace(/[^0-9+]/g, '');
-  };
-
   return (
-    <div className="min-h-screen bg-stone-50 py-12 relative">
+    <div className="min-h-screen bg-[#0c0c0c] py-24 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/5 rounded-full blur-[150px] pointer-events-none"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-stone-900 mb-6">Guardians of Heritage</h2>
-          <p className="text-stone-600 max-w-2xl mx-auto text-lg">
-            Meet the master craftsmen of Mysore. Visiting them directly ensures 100% of your money supports their livelihood and keeps the art alive.
+        <div className="text-center mb-24 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-widest mb-6 border border-amber-500/20">
+            <Sparkles className="w-3 h-3" /> DIRECT IMPACT
+          </div>
+          <h2 className="text-5xl md:text-7xl font-serif font-bold text-white mb-8">Guardians of Heritage</h2>
+          <p className="text-stone-400 max-w-2xl mx-auto text-xl font-light leading-relaxed">
+            By visiting these masters directly, you ensure that 100% of your contribution stays within the local artisan ecosystem.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {ARTISANS.map((artisan) => (
-            <div key={artisan.id} className="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-500 group flex flex-col">
-              <div className="aspect-w-16 aspect-h-9 w-full h-64 overflow-hidden relative">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {ARTISANS.map((artisan, i) => (
+            <div 
+              key={artisan.id} 
+              className="group bg-[#141414] rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl flex flex-col card-lift"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <div className="h-72 w-full overflow-hidden relative">
                 <img 
                   src={artisan.imageUrl} 
                   alt={artisan.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-amber-600 text-[10px] font-bold px-2 py-0.5 rounded text-white uppercase tracking-widest">{artisan.craft}</span>
-                  </div>
-                  <h3 className="text-2xl font-serif font-bold leading-tight">{artisan.name}</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent"></div>
+                <div className="absolute bottom-6 left-8 right-8 text-white">
+                  <span className="bg-amber-600 text-[9px] font-black px-3 py-1 rounded-full text-white uppercase tracking-[0.2em] mb-3 inline-block shadow-lg">{artisan.craft}</span>
+                  <h3 className="text-3xl font-serif font-bold leading-tight">{artisan.name}</h3>
                 </div>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
-                <p className="text-stone-600 mb-6 text-sm leading-relaxed italic border-l-2 border-amber-200 pl-4 flex-1">
+              <div className="p-10 flex-1 flex flex-col">
+                <p className="text-stone-400 mb-8 text-base leading-relaxed font-light italic border-l-2 border-amber-900/30 pl-6 flex-1">
                   {artisan.story}
                 </p>
                 
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center text-xs font-medium text-stone-500">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5 text-amber-500" />
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center text-xs font-black text-stone-500 uppercase tracking-widest">
+                    <MapPin className="w-4 h-4 mr-2 text-amber-500" />
                     {artisan.location}
                   </div>
                   {artisan.visitable && (
-                    <span className="flex items-center text-[10px] font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-full border border-green-100 uppercase tracking-tighter">
-                      <UserCheck className="w-3 h-3 mr-1" /> Open for Visits
+                    <span className="text-[9px] font-black text-green-500 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20 uppercase tracking-tighter">
+                      OPEN STUDIO
                     </span>
                   )}
                 </div>
                 
-                <div className="grid grid-cols-2 gap-3 mt-auto">
+                <div className="grid grid-cols-2 gap-4">
                   <button 
-                    onClick={() => handleDirections(artisan.googleMapsUri)}
-                    className="flex items-center justify-center gap-2 bg-amber-600 text-white py-3 rounded-xl text-sm font-bold hover:bg-amber-700 transition-colors shadow-lg shadow-amber-900/10 active:scale-95"
+                    onClick={() => window.open(artisan.googleMapsUri, '_blank')}
+                    className="flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white py-4 rounded-2xl font-black text-sm transition-all active:scale-95"
                   >
-                    <Navigation className="w-4 h-4" /> Directions
+                    <Navigation className="w-4 h-4" /> NAVIGATE
                   </button>
                   <button 
-                    onClick={() => handleContactClick(artisan)}
-                    className="flex items-center justify-center gap-2 border border-stone-200 text-stone-700 py-3 rounded-xl text-sm font-bold hover:bg-stone-50 transition-colors active:scale-95"
+                    onClick={() => setSelectedContact(artisan)}
+                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-stone-300 py-4 rounded-2xl font-black text-sm border border-white/5 transition-all active:scale-95"
                   >
-                    <Phone className="w-4 h-4" /> Contact
+                    <Phone className="w-4 h-4" /> CONTACT
                   </button>
                 </div>
               </div>
@@ -86,79 +76,70 @@ export const Artisans: React.FC = () => {
           ))}
         </div>
 
-        {/* Impact Section */}
-        <div className="mt-24 bg-stone-900 rounded-[2.5rem] p-10 md:p-16 text-white text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-600/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+        {/* Impact Section Polished */}
+        <div className="mt-32 bg-[#141414] rounded-[4rem] p-16 md:p-24 text-white text-center relative overflow-hidden border border-white/5 shadow-inner">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/5 rounded-full blur-[150px] -mr-64 -mt-64"></div>
           
-          <div className="relative z-10">
-            <h3 className="text-3xl md:text-4xl font-serif font-bold mb-10">Direct Impact Architecture</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <div className="text-5xl font-bold text-amber-500 mb-3">100%</div>
-                <p className="text-stone-300 text-sm font-medium">Direct payment to artisans. Zero intermediary commission.</p>
-              </div>
-              <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                 <div className="text-5xl font-bold text-amber-500 mb-3">40%</div>
-                 <p className="text-stone-300 text-sm font-medium">Reduction in traffic congestion near the Palace Heritage Zone.</p>
-              </div>
-              <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                 <div className="text-5xl font-bold text-amber-500 mb-3">500+</div>
-                 <p className="text-stone-300 text-sm font-medium">Independent craft households directly supported by this platform.</p>
-              </div>
+          <div className="relative z-10 animate-fade-in-up">
+            <h3 className="text-4xl md:text-5xl font-serif font-bold mb-12">Our Sustainable Architecture</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {[
+                { label: "Direct-to-Artisan Payment", value: "100%", desc: "We take zero commissions from our local masters." },
+                { label: "Palace Zone Congestion reduction", value: "40%", desc: "Distributing tourism footfall across outer hubs." },
+                { label: "Households Supported", value: "500+", desc: "Independently verified local craft families." }
+              ].map((stat, i) => (
+                <div key={i} className="p-10 bg-white/5 rounded-[2.5rem] border border-white/5 backdrop-blur-xl">
+                  <div className="text-6xl font-black text-amber-500 mb-4">{stat.value}</div>
+                  <div className="text-white text-lg font-bold mb-2">{stat.label}</div>
+                  <p className="text-stone-500 text-sm font-light leading-relaxed">{stat.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Contact Modal */}
+      {/* Contact Modal Polished */}
       {selectedContact && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-900/80 backdrop-blur-sm animate-fade-in"
-          onClick={closeContactModal}
+          className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in"
+          onClick={() => setSelectedContact(null)}
         >
           <div 
-            className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl relative animate-slide-up"
+            className="bg-[#1c1c1c] w-full max-w-sm rounded-[3rem] overflow-hidden shadow-2xl relative border border-white/5 animate-slide-up"
             onClick={e => e.stopPropagation()}
           >
-            <button 
-              onClick={closeContactModal}
-              className="absolute top-5 right-5 p-2 bg-stone-100 hover:bg-stone-200 text-stone-500 rounded-full transition-colors"
-            >
+            <button onClick={() => setSelectedContact(null)} className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 text-stone-400 rounded-full transition-colors">
               <X className="w-5 h-5" />
             </button>
             
-            <div className="p-8 text-center">
-              <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Phone className="w-10 h-10 text-amber-600" />
+            <div className="p-10 text-center">
+              <div className="w-24 h-24 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-amber-500/20">
+                <Phone className="w-10 h-10 text-amber-500" />
               </div>
-              <h4 className="text-2xl font-serif font-bold text-stone-900 mb-1">Contact Artisan</h4>
-              <p className="text-stone-500 text-sm mb-6">{selectedContact.name} • {selectedContact.craft}</p>
+              <h4 className="text-3xl font-serif font-bold text-white mb-2">{selectedContact.name}</h4>
+              <p className="text-amber-600 text-xs font-black uppercase tracking-widest mb-8">{selectedContact.craft} Master</p>
               
-              <div className="bg-stone-50 p-4 rounded-2xl mb-8 border border-stone-100">
-                <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">Direct Line</p>
-                <p className="text-xl font-mono font-bold text-stone-900">{selectedContact.contactPhone}</p>
+              <div className="bg-stone-900 rounded-3xl p-6 mb-8 border border-white/5 shadow-inner">
+                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">Verified Direct Line</p>
+                <p className="text-2xl font-mono font-black text-white">{selectedContact.contactPhone}</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <a 
-                  href={`tel:${sanitizePhone(selectedContact.contactPhone)}`}
-                  className="w-full bg-amber-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-amber-700 transition-all shadow-lg shadow-amber-900/10"
+                  href={`tel:${selectedContact.contactPhone.replace(/[^0-9+]/g, '')}`}
+                  className="w-full bg-amber-600 hover:bg-amber-500 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-amber-900/20"
                 >
-                  <Phone className="w-5 h-5" /> Call Now
+                  <Phone className="w-5 h-5" /> CALL NOW
                 </a>
                 <a 
-                  href={`https://wa.me/${sanitizePhone(selectedContact.contactPhone)}`}
+                  href={`https://wa.me/${selectedContact.contactPhone.replace(/[^0-9+]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full border border-stone-200 text-stone-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-stone-50 transition-all"
+                  className="w-full bg-white/5 hover:bg-white/10 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 border border-white/5 transition-all"
                 >
-                  <MessageSquare className="w-5 h-5 text-green-600" /> WhatsApp Message
+                  <MessageSquare className="w-5 h-5 text-green-500" /> WHATSAPP
                 </a>
-              </div>
-              
-              <div className="mt-8 flex items-center justify-center gap-2 text-[10px] text-stone-400 font-bold uppercase tracking-widest bg-stone-50 py-2 rounded-full">
-                <Info className="w-3 h-3" /> Artisan supports direct UPI payments
               </div>
             </div>
           </div>
