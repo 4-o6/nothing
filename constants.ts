@@ -161,8 +161,8 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'KRS Backwaters',
     rating: 4.9,
-    lat: 12.4223,
-    lng: 76.5644,
+    lat: 12.4173,
+    lng: 76.5624,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Venugopala+Swamy+Temple+KRS'
   },
   {
@@ -187,8 +187,8 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'Nazarbad',
     rating: 4.6,
-    lat: 12.3020,
-    lng: 76.6690,
+    lat: 12.3023,
+    lng: 76.6688,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Karanji+Lake+Mysore'
   },
   {
@@ -201,7 +201,7 @@ export const HIDDEN_GEMS: Place[] = [
     location: 'SGS Ashram',
     rating: 4.8,
     lat: 12.2818,
-    lng: 76.6644,
+    lng: 76.6645,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Shuka+Vana+Mysore'
   },
   {
@@ -213,7 +213,7 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'KRS Road',
     rating: 4.7,
-    lat: 12.3174,
+    lat: 12.3175,
     lng: 76.6465,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Railway+Museum'
   },
@@ -226,8 +226,8 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'low',
     location: 'Bangalore-Mysore Hwy',
     rating: 4.8,
-    lat: 12.3917,
-    lng: 76.6800,
+    lat: 12.4042,
+    lng: 76.6974,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Payana+Vintage+Car+Museum+Mysore'
   }
 ];

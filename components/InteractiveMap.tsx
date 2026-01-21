@@ -26,14 +26,15 @@ export const InteractiveMap: React.FC = () => {
 
   // Construct OSM embed string with marker
   const getMapSrc = () => {
-    // Zoom levels: 0.005 is approximately 500m across
-    const zoomLevel = 0.005; 
-    const minLon = mapCenter.lng - zoomLevel;
-    const minLat = mapCenter.lat - zoomLevel;
-    const maxLon = mapCenter.lng + zoomLevel;
-    const maxLat = mapCenter.lat + zoomLevel;
+    // Zoom levels: 0.008 is a good balance for seeing the landmark context clearly
+    const delta = 0.008; 
+    const minLon = mapCenter.lng - delta;
+    const minLat = mapCenter.lat - delta;
+    const maxLon = mapCenter.lng + delta;
+    const maxLat = mapCenter.lat + delta;
     
     const bbox = `${minLon},${minLat},${maxLon},${maxLat}`;
+    // layer=mapnik and marker are standard for OpenStreetMap embeds
     return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`;
   };
 
