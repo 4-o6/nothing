@@ -117,9 +117,9 @@ export const Packages: React.FC = () => {
         </div>
       </div>
 
-      {/* Checkout & More Info Modal */}
+      {/* Checkout & More Info Modal - Updated z-index to z-[250] to clear Navbar */}
       {selectedPackage && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 bg-black/95 backdrop-blur-2xl animate-fade-in" onClick={() => setSelectedPackage(null)}>
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 bg-black/95 backdrop-blur-2xl animate-fade-in" onClick={() => setSelectedPackage(null)}>
           <div className="bg-[#141414] w-full max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-hide rounded-[3rem] border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.8)] flex flex-col md:flex-row relative animate-app-reveal" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedPackage(null)} className="absolute top-8 right-8 p-3 bg-white/5 hover:bg-white/10 text-stone-400 rounded-full transition-all z-10"><X className="w-6 h-6" /></button>
 

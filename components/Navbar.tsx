@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Compass, Users, Leaf, Menu, X, MapPinned, 
@@ -63,8 +62,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Map className="w-7 h-7" />
         </button>
 
-        {/* Main Pill Navbar */}
-        <div className={`flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-6 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
+        {/* Main Pill Navbar - Added z-[200] and relative to ensure it stays above mobile drawer */}
+        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-6 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
           
           {/* Logo Section */}
           <div 
@@ -140,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer - z-[140] keeps it below the Pill Navbar (z-[200]) but above page content */}
       <div className={`fixed inset-0 z-[140] lg:hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setIsOpen(false)}></div>
         

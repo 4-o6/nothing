@@ -132,11 +132,10 @@ export const Explore: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
 
-      {selectedGem && (
-        <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in px-4" onClick={() => setSelectedGem(null)}>
-          <div className="bg-[#141414] w-full max-w-2xl rounded-t-[2rem] sm:rounded-[3rem] overflow-hidden border-t sm:border border-white/10 animate-app-reveal max-h-[90vh] overflow-y-auto scrollbar-hide" onClick={e => e.stopPropagation()}>
+        {selectedGem && (
+          <div className="fixed inset-0 z-[250] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in px-4" onClick={() => setSelectedGem(null)}>
+            <div className="bg-[#141414] w-full max-w-2xl rounded-t-[2rem] sm:rounded-[3rem] overflow-hidden border-t sm:border border-white/10 animate-app-reveal max-h-[90vh] overflow-y-auto scrollbar-hide" onClick={e => e.stopPropagation()}>
             <div className="h-64 sm:h-72 relative">
               <img src={selectedGem.imageUrl} alt={selectedGem.name} className="w-full h-full object-cover" />
               <button onClick={() => setSelectedGem(null)} className="absolute top-5 sm:top-6 right-5 sm:right-6 p-2 sm:p-3 bg-black/50 text-white rounded-full hover:bg-black transition-colors"><X className="w-5 h-5 sm:w-6 sm:h-6" /></button>

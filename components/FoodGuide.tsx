@@ -107,10 +107,10 @@ export const FoodGuide: React.FC = () => {
         </div>
       </div>
 
-      {/* Menu Modal Refined */}
+      {/* Menu Modal Refined - z-[250] to clear Navbar */}
       {selectedMenu && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in"
+          className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in"
           onClick={() => setSelectedMenu(null)}
         >
           <div 

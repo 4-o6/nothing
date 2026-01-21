@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BOOKING_ITEMS, BUS_SCHEDULE } from '../constants';
 import { Car, Bus, MapPin, Search, Map, Info, UserCircle, Navigation, Phone, Handshake, ShieldCheck, Sparkles, Clock, Star } from 'lucide-react';
@@ -46,7 +45,7 @@ export const Bookings: React.FC = () => {
         <div className="bg-stone-900/50 p-1.5 rounded-full border border-stone-800 flex backdrop-blur-xl shadow-2xl">
           <button
             onClick={() => { setActiveMode('transport'); setShowComingSoon(false); }}
-            className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
+            className={`px-6 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
               activeMode === 'transport' ? 'bg-amber-600 text-white shadow-xl shadow-amber-900/40' : 'text-stone-500 hover:text-stone-300'
             }`}
           >
@@ -54,7 +53,7 @@ export const Bookings: React.FC = () => {
           </button>
           <button
             onClick={() => { setActiveMode('stays'); setShowComingSoon(false); }}
-            className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
+            className={`px-6 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
               activeMode === 'stays' ? 'bg-amber-600 text-white shadow-xl shadow-amber-900/40' : 'text-stone-500 hover:text-stone-300'
             }`}
           >
