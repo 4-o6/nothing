@@ -15,18 +15,6 @@ const extractJson = (text: string): string => {
 };
 
 /**
- * Handles API errors, specifically looking for missing API key configuration
- */
-const handleApiError = (error: any) => {
-  if (error?.message?.includes("Requested entity was not found.")) {
-    // Reset key selection state by prompting the user as per guidelines
-    if (typeof window !== 'undefined' && (window as any).aistudio?.openSelectKey) {
-      (window as any).aistudio.openSelectKey();
-    }
-  }
-};
-
-/**
  * Generates a sustainable itinerary using Gemini 3
  */
 export const generateSustainableItinerary = async (
@@ -34,9 +22,9 @@ export const generateSustainableItinerary = async (
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  // Use the injected API_KEY directly and create a new instance before call as per guidelines
+  // Always initialize with the environment variable as per guidelines
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const model = "gemini-3-pro-preview"; // Upgraded to Pro for complex reasoning task
+  const model = "gemini-3-pro-preview"; 
   
   const prompt = `
     Generate a ${days}-day sustainable travel itinerary for Mysore, India.
@@ -88,7 +76,6 @@ export const generateSustainableItinerary = async (
     }
     throw new Error("Empty response");
   } catch (error) {
-    handleApiError(error);
     console.error("Itinerary Generation Failed:", error);
     return {
       title: "Essential Mysuru Heritage Route",
@@ -108,9 +95,8 @@ export const generateSustainableItinerary = async (
  */
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
   try {
-    // Create new GoogleGenAI instance right before making an API call
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    const model = "gemini-2.5-flash"; // Required for Maps Grounding
+    const model = "gemini-2.5-flash"; 
     
     const prompt = `
       Find authentic, off-the-beaten-path cultural spots or local workshops in Mysore related to: "${query}".
@@ -143,10 +129,9 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
   } catch (error) {
-    handleApiError(error);
     console.error("Grounding Search Failed:", error);
     return { 
-      text: "Heritage search is currently initializing. Please try again in a moment or explore our curated list.", 
+      text: "Heritage search is taking a moment. Please explore our curated list below while the data syncs.", 
       chunks: [] 
     };
   }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, Lock, ArrowRight, UserCircle2, Sparkles, ShieldCheck, X, Users, Globe, Landmark, Send, CheckCircle2, Cpu } from 'lucide-react';
+import { ArrowRight, Lock, Mail, ShieldCheck, UserCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface LoginProps {
   onLogin: () => void;
@@ -10,30 +10,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [inviteStep, setInviteStep] = useState<'form' | 'success'>('form');
-  const [hasKey, setHasKey] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const checkKey = async () => {
-      // Use window as any to access pre-configured aistudio without type conflict
-      const aistudio = (window as any).aistudio;
-      if (aistudio) {
-        const selected = await aistudio.hasSelectedApiKey();
-        setHasKey(selected);
-      }
-    };
-    checkKey();
-  }, []);
-
-  const handleInitializeKey = async () => {
-    const aistudio = (window as any).aistudio;
-    if (aistudio) {
-      await aistudio.openSelectKey();
-      // Proceed assuming success per instructions to avoid race condition
-      setHasKey(true);
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,15 +18,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
     } else {
       setError('Please enter your credentials to access the heritage network.');
     }
-  };
-
-  const handleInviteSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInviteStep('success');
-    setTimeout(() => {
-      setShowInviteModal(false);
-      setInviteStep('form');
-    }, 3000);
   };
 
   return (
@@ -79,23 +46,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
               Welcome <br/>
               <span className="text-amber-500 italic">Back Traveler.</span>
             </h1>
-
-            {hasKey === false && (
-              <div className="mt-4 p-6 bg-amber-600/10 rounded-3xl border border-amber-600/20 animate-pulse">
-                <p className="text-amber-500 text-xs font-black uppercase tracking-widest mb-4 flex items-center justify-center gap-2">
-                  <Cpu className="w-4 h-4" /> Connection Required
-                </p>
-                <button 
-                  onClick={handleInitializeKey}
-                  className="w-full py-4 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-amber-900/40 transition-all active:scale-95"
-                >
-                  Initialize Heritage Access
-                </button>
-                <p className="mt-3 text-[9px] text-stone-500 font-light leading-relaxed">
-                  Please link a valid heritage project to enable AI Grounding & Search features.
-                </p>
-              </div>
-            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -129,7 +79,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
 
             {error && (
               <div className="flex items-center gap-2 text-red-400 text-[10px] font-bold uppercase tracking-widest bg-red-500/5 p-3 rounded-xl border border-red-500/10">
-                <Sparkles className="w-3.5 h-3.5" /> {error}
+                {error}
               </div>
             )}
 
