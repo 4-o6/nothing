@@ -3,9 +3,10 @@ import { Itinerary, Place } from "../types";
 
 // Helper to get fresh AI instance
 const getAI = () => {
+  // Access key directly from process.env as per requirements
   const apiKey = process.env.API_KEY || "";
   if (!apiKey) {
-    console.error("Gemini API Key is missing. Search functionality will fail.");
+    console.error("Gemini API Key is missing. Search functionality will fail. Ensure API_KEY is set in environment variables.");
   }
   return new GoogleGenAI({ apiKey });
 };
@@ -80,15 +81,15 @@ export const generateSustainableItinerary = async (
 };
 
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
-  const ai = getAI();
-  // We use gemini-2.5-flash for Maps Grounding
-  const model = "gemini-2.5-flash";
-  
-  const prompt = `Find authentic, non-touristy, hidden gems in Mysore related to: "${query}". 
-  Focus on traditional artisans, heritage homes, or local food messes. 
-  Explain why they are special and how they help the local economy. Be specific about Mysore heritage.`;
-
   try {
+    const ai = getAI();
+    // Maps Grounding requires gemini-2.5-flash
+    const model = "gemini-2.5-flash";
+    
+    const prompt = `Find authentic, non-touristy, hidden gems in Mysore Karnataka related to: "${query}". 
+    Focus specifically on traditional artisans, heritage homes, or local food messes. 
+    Explain why they are special to Mysore heritage.`;
+
     const config: any = {
       tools: [{ googleMaps: {} }],
     };
@@ -115,10 +116,13 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
       text: response.text || "No specific hidden gems found for that query in Mysore.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini Search Error:", error);
+    const errorMessage = error.message?.includes("API_KEY") 
+        ? "API Key error. Please check your environment variables." 
+        : "Failed to fetch from heritage database. Please try a more specific search term.";
     return { 
-      text: "I'm having trouble connecting to the Mysore heritage database. Please ensure your search is specific to Mysuru's culture.", 
+      text: errorMessage, 
       chunks: [] 
     };
   }

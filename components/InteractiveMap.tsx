@@ -25,11 +25,15 @@ export const InteractiveMap: React.FC = () => {
   };
 
   // Construct OSM embed string with marker
-  // bbox is [min_lon, min_lat, max_lon, max_lat]
   const getMapSrc = () => {
-    const zoomLevel = 0.003; // Even tighter zoom for pinpoint precision
-    const bbox = `${mapCenter.lng - zoomLevel},${mapCenter.lat - zoomLevel},${mapCenter.lng + zoomLevel},${mapCenter.lat + zoomLevel}`;
-    // Using layer=mapnik and explicitly adding the marker parameter
+    // Zoom levels: 0.005 is approximately 500m across
+    const zoomLevel = 0.005; 
+    const minLon = mapCenter.lng - zoomLevel;
+    const minLat = mapCenter.lat - zoomLevel;
+    const maxLon = mapCenter.lng + zoomLevel;
+    const maxLat = mapCenter.lat + zoomLevel;
+    
+    const bbox = `${minLon},${minLat},${maxLon},${maxLat}`;
     return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`;
   };
 
@@ -116,7 +120,6 @@ export const InteractiveMap: React.FC = () => {
                 className="w-full h-full opacity-80 contrast-[1.1] grayscale-[0.2]"
                 title="Mysore Heritage Navigation"
             ></iframe>
-            {/* Soft Ambient Overlay */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-40"></div>
         </div>
 
