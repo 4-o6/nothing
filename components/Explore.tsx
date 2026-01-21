@@ -19,12 +19,13 @@ export const Explore: React.FC = () => {
       let location = undefined;
       // Use browser geolocation to provide context if available
       if (navigator.geolocation) {
-        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-        }).catch(() => null);
-        
-        if (pos) {
+        try {
+          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+          });
           location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        } catch (locErr) {
+          console.debug("Geolocation skipped or timed out");
         }
       }
 
@@ -57,7 +58,7 @@ export const Explore: React.FC = () => {
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Ask AI: Find woodcarvers in Agrahara..."
+                placeholder="Search: Find woodcarvers in Agrahara..."
                 className="flex-1 bg-transparent text-white border-none outline-none text-sm md:text-base placeholder:text-stone-600 py-3 md:py-4"
               />
               <button 

@@ -1,11 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Itinerary, Place } from "../types";
+import { Itinerary } from "../types";
 
-// Helper to get fresh AI instance
-const getAI = () => {
-  // Use apiKey directly from process.env as per environment standards
-  const apiKey = process.env.API_KEY || "";
-  return new GoogleGenAI({ apiKey });
+/**
+ * Clean JSON strings that might contain Markdown code blocks
+ */
+const extractJson = (text: string): string => {
+  const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/\{[\s\S]*\}/);
+  return jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
 };
 
 export const generateSustainableItinerary = async (
@@ -13,8 +14,10 @@ export const generateSustainableItinerary = async (
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  const ai = getAI();
-  const model = "gemini-3-flash-preview";
+  // Direct initialization as per guidelines
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // Use pro model for complex reasoning tasks
+  const model = "gemini-3-pro-preview";
   
   const prompt = `
     Create a ${days}-day sustainable tourism itinerary for Mysore, Karnataka.
@@ -26,7 +29,7 @@ export const generateSustainableItinerary = async (
     2. Suggest visiting these popular spots ONLY early morning or late evening if necessary.
     3. PRIORITIZE local artisans, heritage walks in Agrahara, hidden lakes (like Kukkarahalli), and authentic small eateries (messes) over commercial hotels.
     4. Provide specific names of locations.
-    5. Ensure JSON format output.
+    5. Ensure the response is valid JSON.
   `;
 
   try {
@@ -66,14 +69,16 @@ export const generateSustainableItinerary = async (
       }
     });
 
-    if (response.text) {
-      return JSON.parse(response.text) as Itinerary;
+    const text = response.text;
+    if (text) {
+      return JSON.parse(extractJson(text)) as Itinerary;
     }
-    throw new Error("No itinerary generated");
+    throw new Error("Empty response from AI");
   } catch (error) {
     console.error("Gemini Itinerary Error:", error);
+    // Fallback basic itinerary
     return {
-      title: "Essential Mysore Heritage",
+      title: "Essential Mysore Heritage Route",
       items: [
         { time: "07:00 AM", activity: "Heritage Walk in Agrahara", location: "Agrahara Circle", notes: "Experience the old world charm and traditional breakfast.", isSustainable: true },
         { time: "10:00 AM", activity: "Rosewood Inlay Workshop", location: "Tilak Nagar", notes: "Meet master craftsman Nanjundaiah.", isSustainable: true }
@@ -86,9 +91,9 @@ export const generateSustainableItinerary = async (
 
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
   try {
-    const ai = getAI();
-    // Maps Grounding is supported in 2.5 series.
-    const model = "gemini-2.5-flash-native-audio-preview-12-2025";
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Maps grounding is strictly supported in Gemini 2.5 series
+    const model = "gemini-2.5-flash";
     
     const prompt = `
       Search for authentic, non-touristy, hidden gems or local artisans in Mysuru district, Karnataka related to: "${query}". 
@@ -97,11 +102,11 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
       IF user location is provided, find spots nearby that location.
     `;
 
+    // Tool configuration for Maps Grounding
     const config: any = {
       tools: [{ googleMaps: {} }],
     };
     
-    // Pass geolocation to the tool configuration for grounding relevance
     if (userLocation) {
       config.toolConfig = {
         retrievalConfig: {
