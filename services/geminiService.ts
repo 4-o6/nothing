@@ -1,23 +1,21 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary, Place } from "../types";
 
-// NOTE: In a real app, strict error handling for missing API keys is essential.
-// We assume process.env.API_KEY is available as per instructions.
-
-// We check if the key exists to prevent immediate runtime crashes (White Screen of Death)
-// if the environment variable is missing in deployment.
-const apiKey = process.env.API_KEY || "";
-if (!apiKey) {
-  console.warn("API Key is missing. Check your environment variables.");
-}
-
-const ai = new GoogleGenAI({ apiKey });
+// Helper to get fresh AI instance
+const getAI = () => {
+  const apiKey = process.env.API_KEY || "";
+  if (!apiKey) {
+    console.error("Gemini API Key is missing. Search functionality will fail.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
 
 export const generateSustainableItinerary = async (
   days: number,
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
+  const ai = getAI();
   const model = "gemini-3-flash-preview";
   
   const prompt = `
@@ -82,12 +80,13 @@ export const generateSustainableItinerary = async (
 };
 
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
-  // Use Gemini 2.5 Flash for Maps Grounding as per guidelines
+  const ai = getAI();
+  // We use gemini-2.5-flash for Maps Grounding
   const model = "gemini-2.5-flash";
   
   const prompt = `Find authentic, non-touristy, hidden gems in Mysore related to: "${query}". 
   Focus on traditional artisans, heritage homes, or local food messes. 
-  Explain why they are special and how they help the local economy.`;
+  Explain why they are special and how they help the local economy. Be specific about Mysore heritage.`;
 
   try {
     const config: any = {
@@ -113,11 +112,14 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
     });
 
     return {
-      text: response.text || "No results found.",
+      text: response.text || "No specific hidden gems found for that query in Mysore.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
   } catch (error) {
     console.error("Gemini Search Error:", error);
-    return { text: "Sorry, I couldn't connect to the heritage database right now.", chunks: [] };
+    return { 
+      text: "I'm having trouble connecting to the Mysore heritage database. Please ensure your search is specific to Mysuru's culture.", 
+      chunks: [] 
+    };
   }
 };

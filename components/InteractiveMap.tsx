@@ -20,14 +20,16 @@ export const InteractiveMap: React.FC = () => {
     if (place && place.lat && place.lng) {
         setMapCenter({ lat: place.lat, lng: place.lng });
     }
-    // Auto-close sidebar on mobile after selection
+    // Auto-close sidebar on mobile after selection to show map
     if (window.innerWidth < 1024) setShowList(false);
   };
 
   // Construct OSM embed string with marker
+  // bbox is [min_lon, min_lat, max_lon, max_lat]
   const getMapSrc = () => {
-    const zoom = 0.005; // Tight zoom for city exploration
-    const bbox = `${mapCenter.lng - zoom},${mapCenter.lat - zoom},${mapCenter.lng + zoom},${mapCenter.lat + zoom}`;
+    const zoomLevel = 0.003; // Even tighter zoom for pinpoint precision
+    const bbox = `${mapCenter.lng - zoomLevel},${mapCenter.lat - zoomLevel},${mapCenter.lng + zoomLevel},${mapCenter.lat + zoomLevel}`;
+    // Using layer=mapnik and explicitly adding the marker parameter
     return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`;
   };
 
@@ -118,10 +120,10 @@ export const InteractiveMap: React.FC = () => {
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-40"></div>
         </div>
 
-        {/* Floating Detail Sheet (Mobile-proper & Desktop-refined) */}
+        {/* Floating Detail Sheet */}
         {selectedPlace && (
-           <div className="absolute bottom-6 sm:bottom-10 left-6 right-6 lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:max-w-xl z-40 animate-app-reveal">
-              <div className="bg-stone-900/95 backdrop-blur-2xl border border-white/10 p-5 sm:p-6 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+           <div className="absolute bottom-6 sm:bottom-10 left-4 right-4 sm:left-6 sm:right-6 lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:max-w-xl z-40 animate-app-reveal">
+              <div className="bg-stone-900/95 backdrop-blur-2xl border border-white/10 p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                  
                  <div className="w-full sm:w-24 sm:h-24 h-40 rounded-[1.5rem] overflow-hidden flex-shrink-0 border border-white/10 relative shadow-xl">
                    <img src={selectedPlace.imageUrl} alt={selectedPlace.name} className="w-full h-full object-cover" />
@@ -135,18 +137,18 @@ export const InteractiveMap: React.FC = () => {
                        <Sparkles className="w-3 h-3 text-amber-500" />
                        <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest">{selectedPlace.category}</span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-serif font-black text-white truncate leading-none mb-2">{selectedPlace.name}</h3>
+                    <h3 className="text-lg sm:text-2xl font-serif font-black text-white truncate leading-none mb-1 sm:mb-2">{selectedPlace.name}</h3>
                     <div className="flex items-center justify-center sm:justify-start gap-2 text-stone-500 text-[10px] uppercase font-black tracking-widest">
-                       <MapPin className="w-4 h-4 text-amber-600" /> {selectedPlace.location}
+                       <MapPin className="w-3.5 h-3.5 text-amber-600" /> {selectedPlace.location}
                     </div>
                  </div>
 
                  <button 
                    onClick={() => window.open(selectedPlace.googleMapsUri, '_blank')}
-                   className="w-full sm:w-20 sm:h-20 bg-amber-600 hover:bg-amber-500 text-white p-5 sm:p-6 rounded-3xl transition-all shadow-xl shadow-amber-900/30 active:scale-90 flex items-center justify-center gap-3 sm:flex-col"
+                   className="w-full sm:w-20 sm:h-20 bg-amber-600 hover:bg-amber-500 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl transition-all shadow-xl shadow-amber-900/30 active:scale-90 flex items-center justify-center gap-3 sm:flex-col"
                  >
-                   <Navigation className="w-6 h-6" />
-                   <span className="sm:hidden font-black text-[10px] uppercase tracking-widest">Route</span>
+                   <Navigation className="w-5 h-5" />
+                   <span className="sm:hidden font-black text-[10px] uppercase tracking-widest">Open in Maps</span>
                  </button>
               </div>
            </div>

@@ -148,7 +148,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'low',
     location: 'North of Mysore',
     rating: 4.7,
-    coordinates: { top: '15%', left: '10%' },
     lat: 12.4334,
     lng: 76.5615,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Blue+Lagoon+KRS+Backwaters'
@@ -162,7 +161,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'KRS Backwaters',
     rating: 4.9,
-    coordinates: { top: '12%', left: '15%' },
     lat: 12.4172,
     lng: 76.5624,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Venugopala+Swamy+Temple+KRS'
@@ -176,7 +174,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'Chamundi Hill Road',
     rating: 4.5,
-    coordinates: { top: '65%', left: '75%' },
     lat: 12.2965,
     lng: 76.6669,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Gowri+Sand+Museum+Mysore'
@@ -190,7 +187,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'Nazarbad',
     rating: 4.6,
-    coordinates: { top: '50%', left: '60%' },
     lat: 12.3020,
     lng: 76.6690,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Karanji+Lake+Mysore'
@@ -204,7 +200,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'SGS Ashram',
     rating: 4.8,
-    coordinates: { top: '75%', left: '30%' },
     lat: 12.2818,
     lng: 76.6644,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Shuka+Vana+Mysore'
@@ -218,7 +213,6 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'moderate',
     location: 'KRS Road',
     rating: 4.7,
-    coordinates: { top: '35%', left: '40%' },
     lat: 12.3175,
     lng: 76.6465,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Railway+Museum'
@@ -232,9 +226,8 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'low',
     location: 'Bangalore-Mysore Hwy',
     rating: 4.8,
-    coordinates: { top: '10%', left: '20%' },
-    lat: 12.3917,
-    lng: 76.6800,
+    lat: 12.4391,
+    lng: 76.7118,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Payana+Vintage+Car+Museum+Mysore'
   }
 ];
