@@ -1,30 +1,10 @@
 import React, { useState } from 'react';
 import { ARTISANS } from '../constants';
-import { MapPin, UserCheck, Navigation, Phone, MessageSquare, X, Info, Sparkles, Loader2, ExternalLink, ShieldCheck } from 'lucide-react';
+import { MapPin, UserCheck, Navigation, Phone, MessageSquare, X, Info, Sparkles } from 'lucide-react';
 import { Artisan } from '../types';
-import { verifyHeritageData } from '../services/geminiService';
 
 export const Artisans: React.FC = () => {
   const [selectedContact, setSelectedContact] = useState<Artisan | null>(null);
-  const [verifyingId, setVerifyingId] = useState<string | null>(null);
-  const [verificationResult, setVerificationResult] = useState<{id: string, message: string, source?: string} | null>(null);
-
-  const handleVerify = async (artisan: Artisan) => {
-    setVerifyingId(artisan.id);
-    setVerificationResult(null);
-    try {
-      const result = await verifyHeritageData(artisan.name, artisan.craft + " " + artisan.contactPhone);
-      setVerificationResult({
-        id: artisan.id,
-        message: result.message,
-        source: result.sourceUrl
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setVerifyingId(null);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] py-24 relative overflow-hidden">
@@ -45,27 +25,9 @@ export const Artisans: React.FC = () => {
           {ARTISANS.map((artisan, i) => (
             <div 
               key={artisan.id} 
-              className="group bg-[#141414] rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl flex flex-col card-lift relative"
+              className="group bg-[#141414] rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl flex flex-col card-lift"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
-              {/* Verification Badge */}
-              <div className="absolute top-6 left-6 z-20">
-                {verificationResult?.id === artisan.id ? (
-                  <div className="flex items-center gap-2 bg-green-500/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-green-500/30 text-green-400 text-[8px] font-black uppercase tracking-widest shadow-lg animate-fade-in">
-                    <ShieldCheck className="w-3 h-3" /> Grounded Verified
-                  </div>
-                ) : (
-                  <button 
-                    onClick={() => handleVerify(artisan)}
-                    disabled={!!verifyingId}
-                    className="flex items-center gap-2 bg-black/40 hover:bg-amber-600/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-stone-400 hover:text-amber-500 text-[8px] font-black uppercase tracking-widest shadow-lg transition-all"
-                  >
-                    {verifyingId === artisan.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                    Verify Live Details
-                  </button>
-                )}
-              </div>
-
               <div className="h-72 w-full overflow-hidden relative">
                 <img 
                   src={artisan.imageUrl} 
@@ -78,25 +40,10 @@ export const Artisans: React.FC = () => {
                   <h3 className="text-3xl font-serif font-bold leading-tight">{artisan.name}</h3>
                 </div>
               </div>
-              
               <div className="p-10 flex-1 flex flex-col">
                 <p className="text-stone-400 mb-8 text-base leading-relaxed font-light italic border-l-2 border-amber-900/30 pl-6 flex-1">
                   {artisan.story}
                 </p>
-
-                {verificationResult?.id === artisan.id && (
-                  <div className="mb-8 p-5 bg-green-500/5 rounded-2xl border border-green-500/10 text-[11px] text-stone-500 font-light leading-relaxed animate-app-reveal">
-                    <div className="font-black uppercase tracking-widest text-green-500 mb-2 flex items-center justify-between">
-                      AI Verification Insight
-                      {verificationResult.source && (
-                        <a href={verificationResult.source} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-white transition-colors">
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                    {verificationResult.message}
-                  </div>
-                )}
                 
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center text-xs font-black text-stone-500 uppercase tracking-widest">
@@ -129,7 +76,7 @@ export const Artisans: React.FC = () => {
           ))}
         </div>
 
-        {/* Impact Section */}
+        {/* Impact Section Polished */}
         <div className="mt-32 bg-[#141414] rounded-[4rem] p-16 md:p-24 text-white text-center relative overflow-hidden border border-white/5 shadow-inner">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/5 rounded-full blur-[150px] -mr-64 -mt-64"></div>
           
@@ -152,7 +99,7 @@ export const Artisans: React.FC = () => {
         </div>
       </div>
 
-      {/* Contact Modal */}
+      {/* Contact Modal Polished */}
       {selectedContact && (
         <div 
           className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in"
@@ -174,9 +121,8 @@ export const Artisans: React.FC = () => {
               <p className="text-amber-600 text-xs font-black uppercase tracking-widest mb-8">{selectedContact.craft} Master</p>
               
               <div className="bg-stone-900 rounded-3xl p-6 mb-8 border border-white/5 shadow-inner">
-                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">Heritage Guild Line</p>
+                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">Verified Direct Line</p>
                 <p className="text-2xl font-mono font-black text-white">{selectedContact.contactPhone}</p>
-                <p className="text-[8px] text-stone-600 uppercase mt-2 font-black tracking-widest">Verified by Guild Registry</p>
               </div>
 
               <div className="space-y-4">
@@ -185,6 +131,14 @@ export const Artisans: React.FC = () => {
                   className="w-full bg-amber-600 hover:bg-amber-500 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-amber-900/20"
                 >
                   <Phone className="w-5 h-5" /> CALL NOW
+                </a>
+                <a 
+                  href={`https://wa.me/${selectedContact.contactPhone.replace(/[^0-9+]/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-white/5 hover:bg-white/10 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 border border-white/5 transition-all"
+                >
+                  <MessageSquare className="w-5 h-5 text-green-500" /> WHATSAPP
                 </a>
               </div>
             </div>

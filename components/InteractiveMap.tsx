@@ -57,15 +57,15 @@ export const InteractiveMap: React.FC = () => {
   };
 
   return (
-    <div className="h-[100dvh] bg-[#0c0c0c] flex flex-col lg:flex-row overflow-hidden relative pt-[110px] md:pt-[130px]">
+    <div className="h-[100dvh] bg-[#0c0c0c] flex flex-col lg:flex-row overflow-hidden relative">
       
       {/* Sidebar - Heritage Directory */}
       <div className={`
         fixed inset-y-0 left-0 z-50 bg-[#0c0c0c] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col border-r border-white/5 shadow-2xl
         ${showList ? 'w-full sm:w-[400px] translate-x-0' : 'w-full sm:w-[400px] -translate-x-full lg:translate-x-0 lg:w-[320px] xl:w-[400px]'}
       `}>
-        {/* Header */}
-        <div className="p-6 sm:p-8 bg-[#141414]/80 backdrop-blur-xl border-b border-white/5 flex flex-col gap-4 pt-12 lg:pt-8">
+        {/* Header - Increased padding to clear fixed navbar */}
+        <div className="p-6 sm:p-8 bg-[#141414]/80 backdrop-blur-xl border-b border-white/5 flex flex-col gap-4 pt-36 lg:pt-28">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-amber-600 rounded-2xl flex items-center justify-center text-white shadow-xl">
@@ -112,20 +112,20 @@ export const InteractiveMap: React.FC = () => {
       </div>
 
       {/* Main Map Content Area */}
-      <div className="flex-1 relative bg-[#0c0c0c] overflow-hidden lg:ml-0">
+      <div className="flex-1 relative bg-[#0c0c0c] overflow-hidden lg:ml-[320px] xl:ml-[400px]">
         
-        {/* Toggle Sidebar Button (FAB) - Visible only when list is hidden on mobile */}
+        {/* Toggle Sidebar Button (FAB) - Moved down to clear navbar */}
         <button 
           onClick={() => setShowList(true)}
-          className={`absolute top-6 left-6 z-40 bg-stone-900/90 backdrop-blur-xl text-white px-5 sm:px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-black text-[10px] uppercase tracking-widest border border-white/10 active:scale-95 transition-all group lg:hidden ${showList ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}`}
+          className={`absolute top-32 left-6 z-40 bg-stone-900/90 backdrop-blur-xl text-white px-5 sm:px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-black text-[10px] uppercase tracking-widest border border-white/10 active:scale-95 transition-all group lg:hidden ${showList ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'}`}
         >
           <List className="w-4 h-4 text-amber-500" /> 
           <span>Directory</span>
         </button>
 
         {/* Map Viewport Wrapper */}
-        <div className="w-full h-full relative group">
-            {/* Loading Overlay for smooth-feeling transitions */}
+        <div className="w-full h-full relative group pt-[100px] lg:pt-0">
+            {/* Loading Overlay */}
             {isMapLoading && (
               <div className="absolute inset-0 z-10 bg-[#0c0c0c] flex items-center justify-center animate-fade-in">
                 <div className="flex flex-col items-center gap-4">
@@ -149,8 +149,8 @@ export const InteractiveMap: React.FC = () => {
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-40"></div>
         </div>
 
-        {/* Map Controls */}
-        <div className="absolute right-6 top-6 flex flex-col gap-3 z-40">
+        {/* Map Controls - Moved down to clear navbar */}
+        <div className="absolute right-6 top-32 flex flex-col gap-3 z-40">
           <button 
             onClick={() => handleZoom(1)}
             className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
