@@ -1,5 +1,5 @@
-import { ArrowRight, Lock, Mail, ShieldCheck, UserCircle2 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Mail, Lock, ArrowRight, UserCircle2, ShieldCheck, Sparkles, Cpu, Link as LinkIcon } from 'lucide-react';
 
 interface LoginProps {
   onLogin: () => void;
@@ -10,6 +10,37 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isKeyReady, setIsKeyReady] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkKeyStatus = async () => {
+      // Check if process.env.API_KEY is baked in or if platform selection exists
+      if (process.env.API_KEY && process.env.API_KEY.length > 10) {
+        setIsKeyReady(true);
+        return;
+      }
+      
+      const aistudio = (window as any).aistudio;
+      if (aistudio) {
+        const hasKey = await aistudio.hasSelectedApiKey();
+        setIsKeyReady(hasKey);
+      } else {
+        setIsKeyReady(false);
+      }
+    };
+    checkKeyStatus();
+  }, []);
+
+  const handleInitializeKey = async () => {
+    const aistudio = (window as any).aistudio;
+    if (aistudio) {
+      await aistudio.openSelectKey();
+      // Proceed assuming success to mitigate race conditions per platform instructions
+      setIsKeyReady(true);
+    } else {
+      alert("Heritage network interface not detected. Ensure you are using a compatible browser environment.");
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +77,23 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
               Welcome <br/>
               <span className="text-amber-500 italic">Back Traveler.</span>
             </h1>
+
+            {!isKeyReady && (
+              <div className="mt-8 p-6 bg-amber-600/5 rounded-[2rem] border border-amber-600/10 animate-fade-in">
+                <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-center gap-2">
+                  <Cpu className="w-4 h-4" /> Heritage Sync Required
+                </p>
+                <button 
+                  onClick={handleInitializeKey}
+                  className="w-full py-4 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-amber-900/40 transition-all flex items-center justify-center gap-3"
+                >
+                  <LinkIcon className="w-4 h-4" /> Initialize Heritage Key
+                </button>
+                <p className="mt-4 text-[9px] text-stone-600 font-light leading-relaxed">
+                  To enable AI Grounding and Itinerary Generation on Vercel, please link your heritage API project.
+                </p>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -79,7 +127,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
 
             {error && (
               <div className="flex items-center gap-2 text-red-400 text-[10px] font-bold uppercase tracking-widest bg-red-500/5 p-3 rounded-xl border border-red-500/10">
-                {error}
+                <Sparkles className="w-3.5 h-3.5" /> {error}
               </div>
             )}
 
