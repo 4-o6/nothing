@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Compass, Users, Leaf, Menu, X, MapPinned, 
   LogOut, Ticket, UtensilsCrossed, ChevronDown,
-  LayoutDashboard, ShoppingBag, Info
+  LayoutDashboard, ShoppingBag, Info, ArrowRight
 } from 'lucide-react';
 import { AppView } from '../types';
 
@@ -125,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 bg-white/5 border border-white/10 rounded-lg text-amber-500 shadow-xl"
+              className="lg:hidden p-2 bg-white/5 border border-white/10 rounded-lg text-amber-500 shadow-xl transition-all active:scale-90"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -133,7 +133,66 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </nav>
 
-      {/* Mobile Drawer remains unchanged for functionality */}
+      {/* Mobile Drawer Implementation */}
+      <div className={`fixed inset-0 z-[105] lg:hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-xl" onClick={() => setIsOpen(false)}></div>
+        
+        <div className={`absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#0c0c0c] border-l border-white/5 shadow-2xl flex flex-col p-8 pt-24 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="mb-10">
+             <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 block">Heritage Network</span>
+             <h3 className="text-3xl font-serif font-bold text-white">Menu</h3>
+          </div>
+
+          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-2">
+            <div className="space-y-1">
+              {coreItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigate(item.id)}
+                  className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all ${
+                    currentView === item.id 
+                      ? 'bg-amber-600/10 text-amber-500 border border-amber-600/20' 
+                      : 'text-stone-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  {item.icon}
+                  <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="h-px bg-white/5 my-6"></div>
+
+            <div className="space-y-1">
+              {secondaryItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigate(item.id)}
+                  className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all ${
+                    currentView === item.id 
+                      ? 'bg-stone-900 text-white' 
+                      : 'text-stone-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span className={item.color}>{item.icon}</span>
+                  <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {!isAuthenticated && (
+            <div className="mt-8 pt-8 border-t border-white/5">
+              <button 
+                onClick={() => { onLoginClick(); setIsOpen(false); }}
+                className="w-full bg-amber-600 hover:bg-amber-500 text-white h-16 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-2xl flex items-center justify-center gap-3 transition-all"
+              >
+                Portal Login <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
