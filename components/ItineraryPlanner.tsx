@@ -34,7 +34,7 @@ export const ItineraryPlanner: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 py-12">
+    <div className="min-h-screen bg-stone-50 pt-32 pb-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-serif font-bold text-stone-900 mb-4">Smart Sustainable Planner</h2>

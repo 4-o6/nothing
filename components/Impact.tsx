@@ -6,7 +6,7 @@ export const Impact: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 animate-fade-in">
        {/* Header Section */}
-       <div className="bg-stone-900 text-white py-20 px-4">
+       <div className="bg-stone-900 text-white pt-32 pb-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 text-green-400 border border-green-800 mb-6">
                 <Leaf className="w-4 h-4" /> Sustainable Future

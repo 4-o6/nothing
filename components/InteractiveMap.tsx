@@ -29,7 +29,7 @@ export const InteractiveMap: React.FC = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-stone-100 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen bg-stone-100 flex flex-col md:flex-row overflow-hidden pt-24">
       
       {/* Sidebar List */}
       <div className={`
