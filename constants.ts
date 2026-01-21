@@ -148,7 +148,7 @@ export const HIDDEN_GEMS: Place[] = [
     crowdLevel: 'low',
     location: 'North of Mysore',
     rating: 4.7,
-    lat: 12.4334,
+    lat: 12.4331,
     lng: 76.5615,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Blue+Lagoon+KRS+Backwaters'
   },
