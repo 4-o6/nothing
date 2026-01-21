@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleNavigate = (view: AppView) => {
     setView(view);
     setIsOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Removed redundant window.scrollTo as it's now handled centrally in App.tsx
   };
 
   return (

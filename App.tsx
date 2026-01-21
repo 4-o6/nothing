@@ -11,15 +11,26 @@ import { FoodGuide } from './components/FoodGuide';
 import { Login } from './components/Login';
 import { Impact } from './components/Impact';
 import { AppView } from './types';
-import { ChevronRight, Mail, Phone, MapPin, AlertCircle } from 'lucide-react';
+import { ChevronRight, Mail, Phone, MapPin } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Scroll to top on view change
+  // Centralized scroll reset on view change
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const resetScroll = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    // Immediate reset
+    resetScroll();
+    
+    // Fallback for asynchronous layout shifts
+    const timeoutId = setTimeout(resetScroll, 10);
+    return () => clearTimeout(timeoutId);
   }, [currentView]);
 
   const handleLoginSuccess = () => {
