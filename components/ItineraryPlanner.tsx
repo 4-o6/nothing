@@ -1,57 +1,196 @@
-import React from 'react';
-import { LayoutDashboard, Lock, ArrowLeft, Cpu, Database, Network } from 'lucide-react';
+import React, { useState } from 'react';
+import { generateSustainableItinerary } from '../services/geminiService';
+import { Itinerary } from '../types';
+import { 
+  Sparkles, Calendar, Users, Heart, Loader2, CheckCircle2, 
+  ArrowRight, Leaf, ShieldCheck, MapPin, Clock, Info, RefreshCw
+} from 'lucide-react';
 
 export const ItineraryPlanner: React.FC = () => {
-  return (
-    <div className="min-h-screen pt-32 pb-20 bg-[#0c0c0c] text-stone-200 overflow-hidden relative">
-      
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/5 rounded-full blur-[120px]"></div>
-        <div className="absolute top-0 left-0 w-full h-full opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #444 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-      </div>
+  const [days, setDays] = useState(3);
+  const [interests, setInterests] = useState<string[]>([]);
+  const [groupType, setGroupType] = useState('Solo Traveler');
+  const [itinerary, setItinerary] = useState<Itinerary | null>(null);
+  const [loading, setLoading] = useState(false);
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16 animate-app-reveal">
-           <div className="w-20 h-20 bg-[#141414] border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-amber-600/20 to-transparent"></div>
-              <Cpu className="w-8 h-8 text-amber-500 relative z-10 animate-pulse" />
-           </div>
-           
-           <h2 className="text-4xl md:text-6xl font-serif font-black text-white mb-6 tracking-tight">System Calibration.</h2>
-           <p className="text-stone-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
-             Our <span className="text-amber-500 font-bold">Sustainable Heritage Neural Network</span> is currently indexing local artisan schedules for the upcoming Dussehra season.
-           </p>
-        </div>
+  const interestOptions = ['Artisan Workshops', 'Hidden Lakes', 'Temple Heritage', 'Local Food', 'Silk Weaving', 'Nature Walks'];
 
-        {/* Dashboard Status Mocks */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 animate-app-reveal" style={{ animationDelay: '0.2s' }}>
-          {[
-            { icon: <Database className="w-4 h-4" />, label: "Dataset Sync", status: "88% Complete" },
-            { icon: <Network className="w-4 h-4" />, label: "Artisan Node", status: "Active Connection" },
-            { icon: <Lock className="w-4 h-4" />, label: "Security", status: "Protected" }
-          ].map((item, i) => (
-            <div key={i} className="bg-[#141414] border border-white/5 p-6 rounded-[2rem] flex flex-col items-center gap-3">
-               <div className="text-stone-600 mb-1">{item.icon}</div>
-               <div className="text-[10px] font-black uppercase tracking-widest text-stone-500">{item.label}</div>
-               <div className="text-[11px] font-bold text-amber-600">{item.status}</div>
+  const toggleInterest = (interest: string) => {
+    setInterests(prev => 
+      prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
+    );
+  };
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    try {
+      const result = await generateSustainableItinerary(days, interests, groupType);
+      setItinerary(result);
+    } catch (error) {
+      console.error(error);
+      alert("Heritage database is busy. Please try again in a moment.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (itinerary) {
+    return (
+      <div className="min-h-screen pt-28 pb-32 bg-[#0c0c0c] text-stone-200 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[9px] font-black uppercase tracking-widest mb-4">
+                <Sparkles className="w-3 h-3" /> SUSTAINABLE ROUTE GENERATED
+              </div>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">{itinerary.title}</h2>
             </div>
-          ))}
+            <button 
+              onClick={() => setItinerary(null)}
+              className="flex items-center gap-2 text-stone-500 hover:text-amber-500 transition-colors text-[10px] font-black uppercase tracking-widest"
+            >
+              <RefreshCw className="w-4 h-4" /> Reset Planner
+            </button>
+          </div>
+
+          <div className="space-y-8">
+            {itinerary.items.map((item, idx) => (
+              <div key={idx} className="group relative pl-8 sm:pl-12 pb-12 last:pb-0">
+                {/* Timeline Line */}
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-stone-800 group-last:h-4"></div>
+                <div className="absolute left-[-4px] top-0 w-2 h-2 rounded-full bg-amber-600 ring-4 ring-amber-600/10"></div>
+                
+                <div className="bg-[#141414] border border-white/5 p-6 sm:p-8 rounded-[2rem] transition-all hover:border-amber-600/20 card-lift">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-stone-900 px-3 py-1.5 rounded-xl border border-white/5 text-amber-500 text-[10px] font-mono font-black">
+                        {item.time}
+                      </div>
+                      <h3 className="text-xl font-bold text-white">{item.activity}</h3>
+                    </div>
+                    {item.isSustainable && (
+                      <div className="flex items-center gap-2 text-[9px] font-black text-green-500 uppercase tracking-widest px-3 py-1 bg-green-500/10 rounded-full border border-green-500/10">
+                        <Leaf className="w-3 h-3" /> ECO-PRIORITY
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-stone-500 text-xs mb-4">
+                    <MapPin className="w-3.5 h-3.5" /> {item.location}
+                  </div>
+                  
+                  <p className="text-stone-400 text-sm font-light leading-relaxed">{item.notes}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+             <div className="bg-stone-900/40 border border-white/5 p-8 rounded-[2.5rem]">
+                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest"><Info className="w-4 h-4 text-amber-600" /> Seasonal Tips</h4>
+                <ul className="space-y-3">
+                  {itinerary.seasonalGuidelines?.map((tip, i) => (
+                    <li key={i} className="text-xs text-stone-500 font-light flex items-start gap-3">
+                      <div className="w-1 h-1 rounded-full bg-amber-600 mt-1.5 flex-shrink-0"></div> {tip}
+                    </li>
+                  ))}
+                </ul>
+             </div>
+             <div className="bg-stone-900/40 border border-white/5 p-8 rounded-[2.5rem]">
+                <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-widest"><ShieldCheck className="w-4 h-4 text-green-600" /> Sustainable Safety</h4>
+                <ul className="space-y-3">
+                  {itinerary.safetyTips?.map((tip, i) => (
+                    <li key={i} className="text-xs text-stone-500 font-light flex items-start gap-3">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0" /> {tip}
+                    </li>
+                  ))}
+                </ul>
+             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen pt-28 pb-32 bg-[#0c0c0c] text-stone-200 px-4 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      <div className="max-w-4xl mx-auto relative z-10 animate-app-reveal">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">AI Route Planner</h2>
+          <p className="text-stone-500 text-lg font-light leading-relaxed max-w-2xl mx-auto">
+            Generate an itinerary focused on <span className="text-amber-500 italic">impact</span>. Our model prioritizes local artisans and quiet heritage spots over congested commercial zones.
+          </p>
         </div>
 
-        <div className="flex flex-col items-center gap-8 animate-app-reveal" style={{ animationDelay: '0.4s' }}>
-          <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-full flex items-center gap-4">
-             <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Global Status:</span>
-             <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">UNDER DEVELOPMENT</span>
+        <div className="bg-[#141414] border border-white/10 rounded-[3rem] p-8 md:p-14 shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+            <div className="space-y-6">
+              <div>
+                <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest block mb-4">Journey Duration</label>
+                <div className="flex items-center gap-4">
+                  {[1, 2, 3, 5, 7].map(num => (
+                    <button 
+                      key={num}
+                      onClick={() => setDays(num)}
+                      className={`w-12 h-12 rounded-2xl font-black text-xs transition-all ${days === num ? 'bg-amber-600 text-white' : 'bg-white/5 text-stone-500 hover:bg-white/10'}`}
+                    >
+                      {num}D
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest block mb-4">Group Dynamics</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {['Solo Traveler', 'Couple', 'Family', 'Photographers'].map(type => (
+                    <button 
+                      key={type}
+                      onClick={() => setGroupType(type)}
+                      className={`py-3 px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all text-left ${groupType === type ? 'bg-amber-600/10 text-amber-500 border border-amber-600/30' : 'bg-white/5 text-stone-500 border border-transparent'}`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest block">Heritage Focus</label>
+              <div className="flex flex-wrap gap-2">
+                {interestOptions.map(interest => (
+                  <button 
+                    key={interest}
+                    onClick={() => toggleInterest(interest)}
+                    className={`px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${interests.includes(interest) ? 'bg-white text-black' : 'bg-white/5 text-stone-600 border border-white/5 hover:border-white/20'}`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <button 
-             onClick={() => window.history.back()}
-             className="group flex items-center gap-3 px-10 py-5 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
+            onClick={handleGenerate}
+            disabled={loading || interests.length === 0}
+            className="w-full h-16 md:h-20 bg-amber-600 hover:bg-amber-500 disabled:bg-stone-800 disabled:text-stone-600 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-4 transition-all shadow-2xl shadow-amber-900/30 active:scale-[0.98]"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
-            Return to Explorations
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" /> Calibrating Sustainable Route...
+              </>
+            ) : (
+              <>Generate Personalized Plan <ArrowRight className="w-5 h-5" /></>
+            )}
           </button>
+          
+          {interests.length === 0 && !loading && (
+             <p className="text-center mt-6 text-[10px] font-bold text-amber-500/60 uppercase tracking-widest animate-pulse">Select at least one heritage focus to begin</p>
+          )}
         </div>
       </div>
     </div>
