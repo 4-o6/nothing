@@ -41,11 +41,11 @@ export const Bookings: React.FC = () => {
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-amber-600/5 rounded-full blur-[150px] -mr-64 -mt-64 pointer-events-none animate-pulse"></div>
       
       {/* Top Toggle Switch */}
-      <div className="max-w-7xl mx-auto px-4 mb-16 flex justify-center relative z-10 animate-fade-in-up">
-        <div className="bg-stone-900/50 p-1.5 rounded-full border border-stone-800 flex backdrop-blur-xl shadow-2xl">
+      <div className="max-w-7xl mx-auto px-4 mb-12 sm:mb-16 flex justify-center relative z-10 animate-fade-in-up">
+        <div className="bg-stone-900/50 p-1.5 rounded-full border border-stone-800 flex backdrop-blur-xl shadow-2xl w-full max-w-[300px] sm:max-w-none justify-between sm:justify-start">
           <button
             onClick={() => { setActiveMode('transport'); setShowComingSoon(false); }}
-            className={`px-6 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
+            className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
               activeMode === 'transport' ? 'bg-amber-600 text-white shadow-xl shadow-amber-900/40' : 'text-stone-500 hover:text-stone-300'
             }`}
           >
@@ -53,7 +53,7 @@ export const Bookings: React.FC = () => {
           </button>
           <button
             onClick={() => { setActiveMode('stays'); setShowComingSoon(false); }}
-            className={`px-6 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
+            className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
               activeMode === 'stays' ? 'bg-amber-600 text-white shadow-xl shadow-amber-900/40' : 'text-stone-500 hover:text-stone-300'
             }`}
           >
@@ -67,39 +67,39 @@ export const Bookings: React.FC = () => {
         {/* TRANSPORT SECTION */}
         {activeMode === 'transport' && (
           <div className="animate-fade-in-up max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-10 sm:mb-12">
               <h2 className="text-4xl md:text-5xl font-serif font-bold text-amber-500 mb-6">Seamless Travel</h2>
-              <p className="text-stone-400 text-lg font-light leading-relaxed max-w-xl mx-auto">Navigating Mysuru with local expertise and ethical transparency.</p>
+              <p className="text-stone-400 text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto">Navigating Mysuru with local expertise and ethical transparency.</p>
             </div>
 
             <div className="bg-[#141414] rounded-[2.5rem] border border-stone-800/50 overflow-hidden shadow-2xl backdrop-blur-sm">
-              <div className="flex bg-stone-900/30 p-2 border-b border-stone-800/50">
+              <div className="grid grid-cols-3 bg-stone-900/30 p-1.5 sm:p-2 border-b border-stone-800/50 gap-1">
                 {[
-                  { id: 'cabs', icon: <Car className="w-4 h-4" />, label: 'Private Cab' },
-                  { id: 'auto', icon: <AutoRickshawIcon className="w-4 h-4" />, label: 'Auto Rickshaw' },
-                  { id: 'bus', icon: <Bus className="w-4 h-4" />, label: 'City Bus' }
+                  { id: 'cabs', icon: <Car className="w-4 h-4" />, label: 'Cab' },
+                  { id: 'auto', icon: <AutoRickshawIcon className="w-4 h-4" />, label: 'Auto' },
+                  { id: 'bus', icon: <Bus className="w-4 h-4" />, label: 'Bus' }
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => { setTransportType(tab.id as any); setShowComingSoon(false); }}
-                    className={`flex-1 py-3.5 rounded-2xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2.5 transition-all ${
-                      transportType === tab.id ? 'bg-stone-800 text-amber-500 shadow-xl' : 'text-stone-500 hover:text-stone-300'
+                    className={`py-3 sm:py-3.5 rounded-2xl text-[9px] font-black uppercase tracking-widest flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2.5 transition-all ${
+                      transportType === tab.id ? 'bg-stone-800 text-amber-500 shadow-xl' : 'text-stone-500 hover:text-stone-300 hover:bg-white/5'
                     }`}
                   >
-                    {tab.icon} {tab.label}
+                    {tab.icon} <span className="hidden sm:inline">{tab.label === 'Cab' ? 'Private Cab' : (tab.label === 'Auto' ? 'Auto Rickshaw' : 'City Bus')}</span><span className="sm:hidden">{tab.label}</span>
                   </button>
                 ))}
               </div>
 
-              <div className="p-10 md:p-14">
+              <div className="p-8 sm:p-14">
                 {showComingSoon ? (
                    <div className="text-center animate-fade-in">
                       <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 text-amber-500 border border-amber-500/20">
                          <Handshake className="w-10 h-10" />
                       </div>
-                      <h3 className="text-2xl font-serif font-bold text-white mb-4">Live Collaboration in Progress</h3>
-                      <p className="text-stone-400 text-base font-light leading-relaxed max-w-md mx-auto mb-10">
-                        We are currently collaborating with local KSRTC and private driver unions to ensure fair pricing and heritage-trained guides. This real-time booking feature will be live soon.
+                      <h3 className="text-2xl font-serif font-bold text-white mb-4">Live Collaboration</h3>
+                      <p className="text-stone-400 text-sm sm:text-base font-light leading-relaxed max-w-md mx-auto mb-10">
+                        We are currently collaborating with local KSRTC and private driver unions to ensure fair pricing. This feature will be live soon.
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-sm mx-auto">
                         <div className="bg-[#0c0c0c] p-4 rounded-2xl border border-stone-800 flex items-center gap-3">
@@ -127,20 +127,20 @@ export const Bookings: React.FC = () => {
                             <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest ml-2">Pickup Point</label>
                             <div className="relative group">
                               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-500" />
-                              <input type="text" placeholder="Pickup Location" className="w-full bg-[#0c0c0c] border border-stone-800 rounded-2xl py-4 pl-12 pr-6 text-sm text-white focus:border-amber-500/50 outline-none transition-all placeholder:text-stone-700" />
+                              <input type="text" placeholder="Pickup Location" className="w-full bg-[#0c0c0c] border border-stone-800 rounded-2xl py-4 pl-12 pr-6 text-base sm:text-sm text-white focus:border-amber-500/50 outline-none transition-all placeholder:text-stone-700" />
                             </div>
                           </div>
                           <div className="space-y-3">
                             <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest ml-2">Destination</label>
                             <div className="relative group">
                               <Navigation className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-700" />
-                              <input type="text" placeholder="Where to?" className="w-full bg-[#0c0c0c] border border-stone-800 rounded-2xl py-4 pl-12 pr-6 text-sm text-white focus:border-amber-500/50 outline-none transition-all placeholder:text-stone-700" />
+                              <input type="text" placeholder="Where to?" className="w-full bg-[#0c0c0c] border border-stone-800 rounded-2xl py-4 pl-12 pr-6 text-base sm:text-sm text-white focus:border-amber-500/50 outline-none transition-all placeholder:text-stone-700" />
                             </div>
                           </div>
                         </div>
                         <button 
                           onClick={handleBookingRequest}
-                          className="w-full bg-amber-600 hover:bg-amber-500 text-white py-5 rounded-2xl font-black text-base tracking-widest shadow-xl shadow-amber-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"
+                          className="w-full bg-amber-600 hover:bg-amber-500 text-white py-5 rounded-2xl font-black text-sm sm:text-base tracking-widest shadow-xl shadow-amber-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"
                         >
                           INITIALIZE SECURE BOOKING
                         </button>
@@ -164,19 +164,19 @@ export const Bookings: React.FC = () => {
 
                         <div className="space-y-3 max-h-[400px] overflow-y-auto pr-3 scrollbar-hide">
                            {BUS_SCHEDULE.map((bus, idx) => (
-                             <div key={idx} className="bg-stone-900/20 border border-stone-800/40 p-5 rounded-2xl flex items-center justify-between group hover:border-amber-500/40 hover:bg-stone-900/40 transition-all duration-500">
+                             <div key={idx} className="bg-stone-900/20 border border-stone-800/40 p-4 sm:p-5 rounded-2xl flex items-center justify-between group hover:border-amber-500/40 hover:bg-stone-900/40 transition-all duration-500">
                                 <div className="flex items-center gap-4">
-                                   <div className="w-12 h-12 bg-amber-600/10 rounded-xl flex items-center justify-center text-amber-500 font-black text-lg border border-amber-600/10">
+                                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-600/10 rounded-xl flex items-center justify-center text-amber-500 font-black text-base sm:text-lg border border-amber-600/10 flex-shrink-0">
                                       {bus.routeNo}
                                    </div>
                                    <div>
-                                      <h4 className="text-base font-bold text-stone-100 mb-0.5">{bus.destination}</h4>
-                                      <p className="text-[10px] text-stone-500 font-medium tracking-tight">From: {bus.stand}</p>
+                                      <h4 className="text-sm sm:text-base font-bold text-stone-100 mb-0.5 line-clamp-1">{bus.destination}</h4>
+                                      <p className="text-[9px] sm:text-[10px] text-stone-500 font-medium tracking-tight">From: {bus.stand}</p>
                                    </div>
                                 </div>
-                                <div className="text-right">
-                                   <div className="text-[10px] font-black text-amber-600 mb-1">{bus.frequency}</div>
-                                   <div className="text-[9px] text-stone-600 font-black uppercase tracking-widest">{bus.timings}</div>
+                                <div className="text-right flex-shrink-0">
+                                   <div className="text-[9px] sm:text-[10px] font-black text-amber-600 mb-1">{bus.frequency}</div>
+                                   <div className="text-[8px] sm:text-[9px] text-stone-600 font-black uppercase tracking-widest">{bus.timings}</div>
                                 </div>
                              </div>
                            ))}
@@ -195,7 +195,7 @@ export const Bookings: React.FC = () => {
           <div className="animate-fade-in-up">
              <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-serif font-bold text-amber-500 mb-6">Royal Stays</h2>
-              <p className="text-stone-400 text-lg font-light max-w-xl mx-auto leading-relaxed">Curated properties that preserve architectural heritage.</p>
+              <p className="text-stone-400 text-base sm:text-lg font-light max-w-xl mx-auto leading-relaxed">Curated properties that preserve architectural heritage.</p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

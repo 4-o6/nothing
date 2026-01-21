@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, UserCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 
@@ -58,7 +57,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
+                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-base sm:text-sm"
                   placeholder="name@heritage.com"
                 />
               </div>
@@ -72,7 +71,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
+                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-base sm:text-sm"
                   placeholder="••••••••"
                 />
               </div>

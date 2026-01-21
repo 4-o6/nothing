@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-4 md:px-12 lg:px-16 pt-6 pointer-events-none`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-4 md:px-12 lg:px-16 pt-6 pointer-events-none h-0 overflow-visible`}>
       <div className="max-w-[1400px] mx-auto flex items-center gap-3 pointer-events-auto">
         
         {/* Map Icon Circle (Left Side) */}
@@ -62,22 +62,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Map className="w-7 h-7" />
         </button>
 
-        {/* Main Pill Navbar - Added z-[200] and relative to ensure it stays above mobile drawer */}
-        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-6 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
+        {/* Main Pill Navbar */}
+        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-5 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
           
           {/* Logo Section */}
           <div 
-            className="flex flex-col cursor-pointer group select-none mr-8"
+            className="flex flex-col cursor-pointer group select-none mr-4 min-w-0"
             onClick={() => handleNavigate(AppView.HOME)}
           >
             <div className="flex items-center gap-2">
-              <span className="text-xl md:text-2xl font-bold font-serif text-amber-500 tracking-tight">MysuruUnveiled <span className="text-stone-600 font-sans">•</span></span>
+              <span className="text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate">MysuruUnveiled <span className="text-stone-600 font-sans hidden sm:inline">•</span></span>
             </div>
-            <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase text-stone-500 -mt-1">Beyond Palace Walls</span>
+            <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase text-stone-500 -mt-1 hidden sm:block">Beyond Palace Walls</span>
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-4">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-4 flex-shrink-0">
             {coreItems.map((item) => (
               <button
                 key={item.id}
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Action Area */}
-          <div className="flex items-center gap-3 ml-4">
+          <div className="flex items-center gap-3 ml-2 flex-shrink-0">
             {isAuthenticated ? (
               <button onClick={onLogout} className="p-3 bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400 rounded-xl transition-all border border-white/5">
                 <LogOut className="w-5 h-5" />
@@ -139,22 +139,22 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer - z-[140] keeps it below the Pill Navbar (z-[200]) but above page content */}
+      {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-[140] lg:hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setIsOpen(false)}></div>
         
-        <div className={`absolute right-0 top-0 bottom-0 w-[80%] max-w-sm bg-[#0c0c0c] border-l border-white/5 shadow-2xl flex flex-col p-10 pt-32 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="mb-12">
+        <div className={`absolute right-0 top-0 bottom-0 w-[80%] max-w-sm bg-[#0c0c0c] border-l border-white/5 shadow-2xl flex flex-col p-8 pt-32 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="mb-10">
              <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 block">Heritage Network</span>
-             <h3 className="text-4xl font-serif font-bold text-white tracking-tight">Directory</h3>
+             <h3 className="text-3xl font-serif font-bold text-white tracking-tight">Directory</h3>
           </div>
 
-          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-3">
+          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-2">
             {coreItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
-                className={`w-full flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${
+                className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all ${
                   currentView === item.id 
                     ? 'bg-amber-600 text-white' 
                     : 'text-stone-400 hover:text-white hover:bg-white/5'
@@ -165,7 +165,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             ))}
             
-            <div className="h-px bg-white/10 my-6"></div>
+            <div className="h-px bg-white/10 my-4"></div>
 
             {secondaryItems.map((item) => (
               <button
@@ -177,6 +177,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
               </button>
             ))}
+
+             {/* Mobile Login Button inside drawer for easier access */}
+            {!isAuthenticated && (
+              <button 
+                onClick={() => { onLoginClick(); setIsOpen(false); }}
+                className="w-full mt-6 bg-stone-800 hover:bg-stone-700 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                Access Portal
+              </button>
+            )}
           </div>
         </div>
       </div>

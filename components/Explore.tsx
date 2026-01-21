@@ -59,7 +59,7 @@ export const Explore: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search: Find woodcarvers in Agrahara..."
-                className="flex-1 bg-transparent text-white border-none outline-none text-sm md:text-base placeholder:text-stone-600 py-3 md:py-4"
+                className="flex-1 bg-transparent text-white border-none outline-none text-base sm:text-base placeholder:text-stone-600 py-3 md:py-4"
               />
               <button 
                 type="submit"
