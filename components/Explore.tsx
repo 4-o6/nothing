@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
 import { searchHiddenGems } from '../services/geminiService';
-import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, Lock, Cpu, ArrowRight, ExternalLink } from 'lucide-react';
+import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
 
 export const Explore: React.FC = () => {
   const [selectedGem, setSelectedGem] = useState<Place | null>(null);
@@ -17,7 +17,6 @@ export const Explore: React.FC = () => {
     setIsSearching(true);
     try {
       let location = undefined;
-      // Use browser geolocation to provide context if available
       if (navigator.geolocation) {
         try {
           const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -25,7 +24,7 @@ export const Explore: React.FC = () => {
           });
           location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         } catch (locErr) {
-          console.debug("Geolocation skipped or timed out");
+          console.debug("Geolocation skipped");
         }
       }
 
@@ -33,7 +32,7 @@ export const Explore: React.FC = () => {
       setAiResults(results);
     } catch (error) {
       console.error(error);
-      setAiResults({ text: "Heritage node connection timed out. Showing local database results.", chunks: [] });
+      setAiResults({ text: "Heritage node connection initializing. If search fails, please check your network or refresh.", chunks: [] });
     } finally {
       setIsSearching(false);
     }
@@ -49,7 +48,6 @@ export const Explore: React.FC = () => {
           </p>
         </div>
 
-        {/* Functional AI Search Engine */}
         <div className="max-w-3xl mx-auto mb-16 sm:mb-24 animate-app-reveal group">
           <form onSubmit={handleSearch} className="relative p-1 rounded-[2.5rem] bg-gradient-to-r from-stone-900 via-amber-900/20 to-stone-900 border border-white/5 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
             <div className="flex items-center bg-[#0c0c0c] rounded-[2.3rem] px-4 md:px-6 py-2 md:py-3 overflow-hidden relative">
@@ -69,7 +67,6 @@ export const Explore: React.FC = () => {
                 {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
-            
             <div className="absolute -inset-1 bg-amber-600/5 blur-2xl -z-10 group-focus-within:bg-amber-600/10 transition-all"></div>
           </form>
           
@@ -81,7 +78,7 @@ export const Explore: React.FC = () => {
                <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">
                  <Sparkles className="w-3.5 h-3.5" /> AI Heritage Insights
                </div>
-               <div className="text-stone-300 text-sm md:text-base leading-relaxed mb-8 prose prose-invert font-light max-w-none">
+               <div className="text-stone-300 text-sm md:text-base leading-relaxed mb-8 prose prose-invert font-light max-w-none whitespace-pre-wrap">
                  {aiResults.text}
                </div>
                
@@ -107,8 +104,7 @@ export const Explore: React.FC = () => {
                )}
             </div>
           )}
-          
-          <p className="text-center mt-6 text-[9px] font-black text-stone-700 uppercase tracking-[0.4em]">Heritage Neural Network Online • Real-time Data Active</p>
+          <p className="text-center mt-6 text-[9px] font-black text-stone-700 uppercase tracking-[0.4em]">Heritage Neural Network • Secure Key Required</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
