@@ -16,10 +16,23 @@ export const Explore: React.FC = () => {
     
     setIsSearching(true);
     try {
-      const results = await searchHiddenGems(searchQuery);
+      let location = undefined;
+      // Use browser geolocation to provide context if available
+      if (navigator.geolocation) {
+        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+        }).catch(() => null);
+        
+        if (pos) {
+          location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        }
+      }
+
+      const results = await searchHiddenGems(searchQuery, location);
       setAiResults(results);
     } catch (error) {
       console.error(error);
+      setAiResults({ text: "Heritage node connection timed out. Showing local database results.", chunks: [] });
     } finally {
       setIsSearching(false);
     }
@@ -62,7 +75,7 @@ export const Explore: React.FC = () => {
           {aiResults && (
             <div className="mt-8 bg-[#141414] border border-white/10 rounded-[2.5rem] p-8 animate-app-reveal shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 p-4">
-                  <button onClick={() => setAiResults(null)} className="text-stone-600 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
+                  <button onClick={() => setAiResults(null)} className="text-stone-600 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><X className="w-5 h-5" /></button>
                </div>
                <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">
                  <Sparkles className="w-3.5 h-3.5" /> AI Heritage Insights
@@ -71,7 +84,7 @@ export const Explore: React.FC = () => {
                  {aiResults.text}
                </div>
                
-               {aiResults.chunks.length > 0 && (
+               {aiResults.chunks && aiResults.chunks.length > 0 && (
                  <div className="space-y-4 pt-6 border-t border-white/5">
                    <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest">Grounding Sources</p>
                    <div className="flex flex-wrap gap-3">

@@ -5,9 +5,6 @@ import { Itinerary, Place } from "../types";
 const getAI = () => {
   // Use apiKey directly from process.env as per environment standards
   const apiKey = process.env.API_KEY || "";
-  if (!apiKey) {
-    console.warn("Gemini API Key is missing. Initializing dummy client.");
-  }
   return new GoogleGenAI({ apiKey });
 };
 
@@ -17,7 +14,6 @@ export const generateSustainableItinerary = async (
   groupType: string
 ): Promise<Itinerary> => {
   const ai = getAI();
-  // Using gemini-3-flash-preview for complex reasoning tasks as per guidelines
   const model = "gemini-3-flash-preview";
   
   const prompt = `
@@ -76,7 +72,6 @@ export const generateSustainableItinerary = async (
     throw new Error("No itinerary generated");
   } catch (error) {
     console.error("Gemini Itinerary Error:", error);
-    // Return a fallback basic itinerary in case of API failure to keep app usable
     return {
       title: "Essential Mysore Heritage",
       items: [
@@ -92,19 +87,21 @@ export const generateSustainableItinerary = async (
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
   try {
     const ai = getAI();
-    // Maps Grounding is best on Gemini 2.5 series.
+    // Maps Grounding is supported in 2.5 series.
     const model = "gemini-2.5-flash-native-audio-preview-12-2025";
     
     const prompt = `
       Search for authentic, non-touristy, hidden gems or local artisans in Mysuru district, Karnataka related to: "${query}". 
       Focus on specific locations with historical or cultural value. 
-      Format your response in friendly Markdown. Mention if they support local livelihood.
+      Format your response in friendly Markdown. 
+      IF user location is provided, find spots nearby that location.
     `;
 
     const config: any = {
       tools: [{ googleMaps: {} }],
     };
     
+    // Pass geolocation to the tool configuration for grounding relevance
     if (userLocation) {
       config.toolConfig = {
         retrievalConfig: {
@@ -129,7 +126,7 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
   } catch (error: any) {
     console.error("Gemini Search Error:", error);
     return { 
-      text: "Our heritage database is temporarily offline for maintenance. Please explore our curated gems list below.", 
+      text: "Connection to Heritage Database interrupted. Please explore our curated gems list manually.", 
       chunks: [] 
     };
   }
