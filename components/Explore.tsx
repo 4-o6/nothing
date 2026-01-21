@@ -7,9 +7,9 @@ export const Explore: React.FC = () => {
   const [selectedGem, setSelectedGem] = useState<Place | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] pt-24 sm:pt-32 pb-24 sm:pb-32">
+    <div className="min-h-screen bg-[#0c0c0c] pt-20 sm:pt-28 pb-24 sm:pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-20 animate-app-reveal">
+        <div className="text-center mb-12 sm:mb-16 animate-app-reveal">
           <h2 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-4 sm:mb-6 tracking-tight">Hidden Gems</h2>
           <p className="text-stone-500 max-w-2xl mx-auto text-base sm:text-xl font-light leading-relaxed">
             Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by heritage data.
@@ -91,7 +91,6 @@ export const Explore: React.FC = () => {
               <h3 className="text-2xl sm:text-4xl font-serif font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">{selectedGem.name}</h3>
               <p className="text-stone-500 text-base sm:text-lg font-light leading-relaxed mb-8 sm:mb-10">{selectedGem.description}</p>
               <button 
-                // Fix: Corrected variable name from selectedPlace to selectedGem
                 onClick={() => window.open(selectedGem.googleMapsUri, '_blank')}
                 className="w-full bg-amber-600 hover:bg-amber-500 text-white h-14 sm:h-16 rounded-xl sm:rounded-2xl font-black text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 sm:gap-4 shadow-2xl transition-all active:scale-95"
               >
