@@ -1,17 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { Explore } from './components/Explore';
-import { ItineraryPlanner } from './components/ItineraryPlanner';
-import { Artisans } from './components/Artisans';
-import { Bookings } from './components/Bookings';
-import { Packages } from './components/Packages';
-import { InteractiveMap } from './components/InteractiveMap';
-import { FoodGuide } from './components/FoodGuide';
-import { Login } from './components/Login';
 import { Impact } from './components/Impact';
 import { AppView } from './types';
-import { ChevronRight, Mail, Phone, MapPin } from 'lucide-react';
+import { ChevronRight, Mail, Phone, MapPin, Loader2 } from 'lucide-react';
+
+// Lazy load heavy feature components to optimize initial load
+const Explore = lazy(() => import('./components/Explore').then(module => ({ default: module.Explore })));
+const ItineraryPlanner = lazy(() => import('./components/ItineraryPlanner').then(module => ({ default: module.ItineraryPlanner })));
+const Artisans = lazy(() => import('./components/Artisans').then(module => ({ default: module.Artisans })));
+const Bookings = lazy(() => import('./components/Bookings').then(module => ({ default: module.Bookings })));
+const Packages = lazy(() => import('./components/Packages').then(module => ({ default: module.Packages })));
+const InteractiveMap = lazy(() => import('./components/InteractiveMap').then(module => ({ default: module.InteractiveMap })));
+const FoodGuide = lazy(() => import('./components/FoodGuide').then(module => ({ default: module.FoodGuide })));
+const Login = lazy(() => import('./components/Login').then(module => ({ default: module.Login })));
+
+const LoadingScreen = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+      <span className="text-[10px] font-black text-stone-500 uppercase tracking-[0.3em] animate-pulse">Loading Heritage...</span>
+    </div>
+  </div>
+);
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
@@ -25,10 +36,7 @@ const App: React.FC = () => {
       document.body.scrollTop = 0;
     };
 
-    // Immediate reset
     resetScroll();
-    
-    // Fallback for asynchronous layout shifts
     const timeoutId = setTimeout(resetScroll, 10);
     return () => clearTimeout(timeoutId);
   }, [currentView]);
@@ -57,50 +65,59 @@ const App: React.FC = () => {
   };
 
   const renderView = () => {
-    switch (currentView) {
-      case AppView.LOGIN:
-        return <Login onLogin={handleLoginSuccess} onSkip={handleSkipLogin} />;
-      case AppView.HOME:
-        return (
-          <div className="animate-fade-in">
-            <Hero 
-              onStart={() => setCurrentView(AppView.EXPLORE)} 
-              onImpact={() => setCurrentView(AppView.IMPACT)}
-            />
-            <div className="py-32 bg-[#0c0c0c] border-y border-white/5">
-              <div className="max-w-7xl mx-auto px-6 text-center">
-                <p className="italic font-serif text-3xl md:text-5xl text-stone-500 max-w-4xl mx-auto leading-[1.3]">
-                  "Mysore is not just a palace. It is a living museum of crafts, cuisine, and culture waiting to be explored."
-                </p>
-                <div className="mt-12 flex justify-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-600"></div>
-                  <div className="w-2 h-2 rounded-full bg-amber-600/40"></div>
-                  <div className="w-2 h-2 rounded-full bg-amber-600/20"></div>
+    // Wrap lazy loaded components in Suspense
+    const ViewContent = () => {
+      switch (currentView) {
+        case AppView.LOGIN:
+          return <Login onLogin={handleLoginSuccess} onSkip={handleSkipLogin} />;
+        case AppView.HOME:
+          return (
+            <div className="animate-fade-in">
+              <Hero 
+                onStart={() => setCurrentView(AppView.EXPLORE)} 
+                onImpact={() => setCurrentView(AppView.IMPACT)}
+              />
+              <div className="py-32 bg-[#0c0c0c] border-y border-white/5">
+                <div className="max-w-7xl mx-auto px-6 text-center">
+                  <p className="italic font-serif text-3xl md:text-5xl text-stone-500 max-w-4xl mx-auto leading-[1.3]">
+                    "Mysore is not just a palace. It is a living museum of crafts, cuisine, and culture waiting to be explored."
+                  </p>
+                  <div className="mt-12 flex justify-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-amber-600"></div>
+                    <div className="w-2 h-2 rounded-full bg-amber-600/40"></div>
+                    <div className="w-2 h-2 rounded-full bg-amber-600/20"></div>
+                  </div>
                 </div>
               </div>
+              <Impact />
             </div>
-            <Impact />
-          </div>
-        );
-      case AppView.EXPLORE:
-        return <Explore />;
-      case AppView.PACKAGES:
-        return <Packages />;
-      case AppView.MAP:
-        return <InteractiveMap />;
-      case AppView.PLANNER:
-        return <ItineraryPlanner />;
-      case AppView.BOOKINGS:
-        return <Bookings />;
-      case AppView.ARTISANS:
-        return <Artisans />;
-      case AppView.FOOD:
-        return <FoodGuide />;
-      case AppView.IMPACT:
-        return <Impact />;
-      default:
-        return <Hero onStart={() => setCurrentView(AppView.EXPLORE)} onImpact={() => setCurrentView(AppView.IMPACT)} />;
-    }
+          );
+        case AppView.EXPLORE:
+          return <Explore />;
+        case AppView.PACKAGES:
+          return <Packages />;
+        case AppView.MAP:
+          return <InteractiveMap />;
+        case AppView.PLANNER:
+          return <ItineraryPlanner />;
+        case AppView.BOOKINGS:
+          return <Bookings />;
+        case AppView.ARTISANS:
+          return <Artisans />;
+        case AppView.FOOD:
+          return <FoodGuide />;
+        case AppView.IMPACT:
+          return <Impact />;
+        default:
+          return <Hero onStart={() => setCurrentView(AppView.EXPLORE)} onImpact={() => setCurrentView(AppView.IMPACT)} />;
+      }
+    };
+
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <ViewContent />
+      </Suspense>
+    );
   };
 
   return (

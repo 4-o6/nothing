@@ -12,6 +12,17 @@ export default defineConfig(({ mode }) => {
       // Allow process.env.API_KEY to be accessed if defined at build time
       'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-ui': ['lucide-react'],
+            'vendor-ai': ['@google/genai'],
+          }
+        }
+      }
+    },
     server: {
       port: 3000
     }
