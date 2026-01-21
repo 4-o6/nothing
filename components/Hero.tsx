@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
           </div>
         </div>
 
-        {/* Floating Cards with Fluid Motion */}
+        {/* Static Cards - No floating nonsense */}
         <div className="grid md:grid-cols-3 gap-8 mt-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           {[
             { 
@@ -62,30 +62,26 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
               title: "The Problem", 
               desc: "Overtourism is eroding heritage and traditional local economies.",
               color: "text-red-400",
-              bg: "bg-red-400/10",
-              delay: "0s"
+              bg: "bg-red-400/10"
             },
             { 
               icon: <Leaf className="w-5 h-5" />, 
               title: "The Vision", 
               desc: "Redirecting travel to sustain artisan hubs and natural gems.",
               color: "text-green-400",
-              bg: "bg-green-400/10",
-              delay: "0.2s"
+              bg: "bg-green-400/10"
             },
             { 
               icon: <Heart className="w-5 h-5" />, 
               title: "The Future", 
               desc: "Directly empowering 500+ local families through discovery.",
               color: "text-amber-400",
-              bg: "bg-amber-400/10",
-              delay: "0.4s"
+              bg: "bg-amber-400/10"
             }
           ].map((card, i) => (
             <div 
               key={i} 
-              className={`bg-stone-900/60 backdrop-blur-3xl border border-white/5 p-8 rounded-[2.5rem] animate-soft-float relative overflow-hidden group card-lift shadow-2xl`}
-              style={{ animationDelay: card.delay }}
+              className={`bg-stone-900/60 backdrop-blur-3xl border border-white/5 p-8 rounded-[2.5rem] relative overflow-hidden group card-lift shadow-2xl`}
             >
               <div className={`w-14 h-14 ${card.bg} rounded-2xl flex items-center justify-center ${card.color} mb-8 transition-all group-hover:scale-110 group-hover:rotate-3 duration-500`}>
                 {card.icon}
@@ -93,7 +89,6 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
               <h3 className="text-2xl font-bold mb-3 font-serif text-white tracking-tight">{card.title}</h3>
               <p className="text-stone-400 text-base leading-relaxed font-light">{card.desc}</p>
               
-              {/* Subtle glass effect accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-amber-500/10 transition-colors duration-700"></div>
             </div>
           ))}
