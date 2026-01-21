@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, UserCircle2, Sparkles, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, ArrowRight, UserCircle2, Sparkles, ShieldCheck, X, Users, Globe, Landmark, Send, CheckCircle2 } from 'lucide-react';
 
 interface LoginProps {
   onLogin: () => void;
@@ -10,6 +10,8 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteStep, setInviteStep] = useState<'form' | 'success'>('form');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +20,15 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
     } else {
       setError('Please enter your credentials to access the heritage network.');
     }
+  };
+
+  const handleInviteSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInviteStep('success');
+    setTimeout(() => {
+      setShowInviteModal(false);
+      setInviteStep('form');
+    }, 3000);
   };
 
   return (
@@ -33,7 +44,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
          <div className="absolute inset-0 bg-black/60"></div>
       </div>
       
-      {/* Content Container - Pushed down to avoid Navbar overlap */}
+      {/* Content Container */}
       <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-start pt-32 pb-16 md:pt-48 md:pb-24 px-6 animate-app-reveal">
         <div className="w-full max-w-lg glass-card p-10 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 relative overflow-hidden">
           
@@ -118,13 +129,105 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
           </div>
         </div>
         
-        {/* Footer Link */}
+        {/* Improved Request Invite Trigger */}
         <div className="mt-10 text-center mb-8">
-          <p className="text-stone-600 text-[10px] font-black uppercase tracking-widest">
-            Don't have an account? <span className="text-amber-600 cursor-pointer hover:text-amber-500 underline underline-offset-4 ml-2">Request Invite</span>
-          </p>
+          <div className="inline-flex items-center gap-3 p-1.5 pl-6 bg-white/5 border border-white/10 rounded-full group cursor-pointer hover:bg-white/10 transition-all active:scale-95" onClick={() => setShowInviteModal(true)}>
+            <span className="text-stone-400 text-[10px] font-black uppercase tracking-widest">
+              Don't have an account? 
+            </span>
+            <span className="bg-amber-600 text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-xl shadow-amber-900/20 group-hover:bg-amber-500 transition-colors">
+              Request Invite
+            </span>
+          </div>
         </div>
       </div>
+
+      {/* Meaningful Request Invite Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl animate-fade-in">
+          <div className="w-full max-w-2xl bg-[#141414] border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.9)] relative animate-app-reveal">
+            <button 
+              onClick={() => setShowInviteModal(false)}
+              className="absolute top-8 right-8 p-3 bg-white/5 hover:bg-white/10 text-stone-400 rounded-full transition-all active:rotate-90"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="flex flex-col md:flex-row h-full">
+              {/* Sidebar Info */}
+              <div className="md:w-5/12 bg-amber-600/10 p-10 md:p-12 border-r border-white/5 flex flex-col justify-center">
+                <div className="w-14 h-14 bg-amber-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-2xl shadow-amber-900/40">
+                  <Landmark className="w-7 h-7" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-white mb-6 leading-tight">Join the Heritage Network.</h3>
+                <div className="space-y-6">
+                  {[
+                    { icon: <Users className="w-4 h-4" />, title: "Support Artisans", desc: "Gain direct access to 40+ master craft families." },
+                    { icon: <Globe className="w-4 h-4" />, title: "Unlock Impact", desc: "See real-time stats of your tourism contribution." },
+                    { icon: <Sparkles className="w-4 h-4" />, title: "Private Map", desc: "Access 100+ vetted locations away from crowds." }
+                  ].map((benefit, i) => (
+                    <div key={i} className="flex gap-4 items-start">
+                      <div className="text-amber-500 mt-1">{benefit.icon}</div>
+                      <div>
+                        <div className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{benefit.title}</div>
+                        <p className="text-[11px] text-stone-500 leading-relaxed font-light">{benefit.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Form Area */}
+              <div className="md:w-7/12 p-10 md:p-12">
+                {inviteStep === 'form' ? (
+                  <>
+                    <h4 className="text-stone-300 text-xs font-black uppercase tracking-widest mb-8 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-600"></div> Heritage Invitation Request
+                    </h4>
+                    <form onSubmit={handleInviteSubmit} className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="text-[9px] font-black text-stone-600 uppercase tracking-widest ml-1">Full Name</label>
+                        <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white text-sm focus:border-amber-500/30 focus:bg-white/[0.08] transition-all outline-none" placeholder="Your name" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[9px] font-black text-stone-600 uppercase tracking-widest ml-1">Primary Email</label>
+                        <input required type="email" className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white text-sm focus:border-amber-500/30 focus:bg-white/[0.08] transition-all outline-none" placeholder="travel@heritage.com" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[9px] font-black text-stone-600 uppercase tracking-widest ml-1">I am a...</label>
+                        <select className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-stone-400 text-sm focus:border-amber-500/30 focus:bg-white/[0.08] transition-all outline-none appearance-none">
+                          <option>Conscious Traveler</option>
+                          <option>Local Artisan / Craftsman</option>
+                          <option>Heritage Preservationist</option>
+                          <option>Tourism Professional</option>
+                        </select>
+                      </div>
+                      <button type="submit" className="w-full py-5 bg-stone-100 text-black hover:bg-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl">
+                        Submit Interest <Send className="w-4 h-4" />
+                      </button>
+                    </form>
+                  </>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center animate-fade-in">
+                    <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-8 border border-green-500/20 animate-bounce">
+                      <CheckCircle2 className="w-10 h-10" />
+                    </div>
+                    <h3 className="text-3xl font-serif font-bold text-white mb-4">Request Received</h3>
+                    <p className="text-stone-500 text-sm leading-relaxed max-w-xs font-light">
+                      Thank you for your interest in preserving Mysuru's heritage. Our stewards will review your request and reach out shortly.
+                    </p>
+                    <div className="mt-10 flex gap-2">
+                      <div className="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></div>
+                      <div className="w-2 h-2 rounded-full bg-amber-600 animate-pulse delay-75"></div>
+                      <div className="w-2 h-2 rounded-full bg-amber-600 animate-pulse delay-150"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
