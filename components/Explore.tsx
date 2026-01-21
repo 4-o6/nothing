@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
-import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles } from 'lucide-react';
+import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, Lock } from 'lucide-react';
 import { searchHiddenGems } from '../services/geminiService';
 
 export const Explore: React.FC = () => {
@@ -12,17 +12,8 @@ export const Explore: React.FC = () => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return;
-    setLoading(true);
-    try {
-      // Use hardcoded coordinates if geolocation is not available to ensure grounding works in Mysore
-      const results = await searchHiddenGems(query, { lat: 12.2958, lng: 76.6394 });
-      setAiResults(results);
-    } catch (err) {
-      console.error("Search failed:", err);
-    } finally {
-      setLoading(false);
-    }
+    // Logic kept but we'll show Coming Soon for search
+    return;
   };
 
   return (
@@ -35,52 +26,37 @@ export const Explore: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto mb-16 sm:mb-24 animate-app-reveal">
-          <form onSubmit={handleSearch} className="bg-white/5 p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl border border-white/10 flex items-center shadow-2xl backdrop-blur-2xl">
+        <div className="max-w-2xl mx-auto mb-16 sm:mb-24 animate-app-reveal relative">
+          <div className="absolute inset-0 bg-[#0c0c0c]/60 backdrop-blur-[2px] z-10 rounded-3xl flex items-center justify-center border border-amber-600/20 shadow-2xl overflow-hidden group cursor-not-allowed">
+             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-600/5 to-transparent animate-pulse"></div>
+             <div className="flex flex-col items-center gap-3 relative z-20">
+                <div className="bg-amber-600/20 p-3 rounded-2xl border border-amber-600/30">
+                  <Lock className="w-5 h-5 text-amber-500" />
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500 mb-1">AI Heritage Engine</p>
+                  <p className="text-stone-300 font-bold text-sm">COMING SOON</p>
+                </div>
+             </div>
+          </div>
+          
+          <form className="bg-white/5 p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl border border-white/10 flex items-center shadow-2xl opacity-40">
             <Search className="w-5 h-5 sm:w-6 sm:h-6 text-stone-600 ml-4 sm:ml-5 hidden sm:block" />
             <input
+              disabled
               type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search unseen Mysuru..."
               className="flex-1 bg-transparent px-4 sm:px-5 py-3 sm:py-4.5 text-white outline-none placeholder-stone-700 text-sm sm:text-base font-medium"
             />
             <button 
-              type="submit"
-              disabled={loading}
-              className="bg-amber-600 hover:bg-amber-500 text-white px-5 sm:px-8 py-3 sm:py-4.5 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest disabled:opacity-50 flex items-center gap-2 sm:gap-3 shadow-xl transition-all active:scale-95"
+              disabled
+              className="bg-amber-600/50 text-white/50 px-5 sm:px-8 py-3 sm:py-4.5 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest flex items-center gap-2 sm:gap-3"
             >
-              {loading ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />}
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">DISCOVER</span>
             </button>
           </form>
         </div>
-
-        {aiResults && (
-          <div className="mb-16 sm:mb-24 glass-card rounded-2xl sm:rounded-[3rem] p-6 sm:p-14 animate-app-reveal">
-            <div className="flex items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/10 rounded-xl sm:rounded-2xl flex items-center justify-center text-amber-500 shadow-inner">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <h3 className="text-xl sm:text-2xl font-serif font-bold text-white tracking-tight">AI Heritage Discovery</h3>
-            </div>
-            <p className="text-stone-400 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 font-light italic border-l-2 border-amber-900/30 pl-6 sm:pl-8">
-              {aiResults.text}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {aiResults.chunks?.map((chunk, idx) => {
-                const data = chunk.web || chunk.maps;
-                if (!data) return null;
-                return (
-                  <a key={idx} href={data.uri} target="_blank" className="p-4 sm:p-5 bg-black/40 rounded-xl sm:rounded-2xl border border-white/5 flex items-center gap-3 sm:gap-4 hover:border-amber-500/50 hover:bg-amber-600/5 transition-all group">
-                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-wider truncate">{data.title}</span>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {HIDDEN_GEMS.map((place, i) => (
