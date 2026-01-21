@@ -30,6 +30,16 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
   const coreItems = [
     { id: AppView.HOME, label: 'Home', icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: AppView.EXPLORE, label: 'Gems', icon: <Compass className="w-5 h-5" /> },
@@ -86,7 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button className="px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-white flex items-center gap-2 bg-white/5 border border-white/5 transition-all">
                 Discovery <ChevronDown className="w-3.5 h-3.5 group-hover/menu:rotate-180 transition-transform" />
               </button>
-              {/* Gap fix: Changed mt-4 to pt-4 to bridge the gap between button and menu so hover isn't lost */}
               <div className="absolute top-full right-0 pt-4 w-60 opacity-0 translate-y-3 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300">
                 <div className="bg-[#181818] border border-white/10 rounded-3xl p-3 shadow-[0_30px_60px_rgba(0,0,0,0.8)] backdrop-blur-3xl">
                   {secondaryItems.map((item) => (
@@ -125,9 +134,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </nav>
 
-      {/* Mobile Drawer (Polished) */}
-      <div className={`fixed inset-0 z-[105] bg-black/98 backdrop-blur-3xl lg:hidden flex flex-col pt-36 px-8 transition-all duration-500 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="max-w-md mx-auto w-full space-y-12">
+      {/* Mobile Drawer (Polished & Scrollable) */}
+      <div className={`fixed inset-0 z-[105] bg-black/98 backdrop-blur-3xl lg:hidden transition-all duration-500 overflow-y-auto scrollbar-hide ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full pointer-events-none'}`}>
+        <div className="max-w-md mx-auto w-full px-8 pt-32 pb-20 space-y-12">
           <div>
             <div className="text-[10px] font-black text-stone-600 uppercase tracking-[0.4em] mb-6 pl-2">Primary Routes</div>
             <div className="grid grid-cols-2 gap-4">
@@ -163,6 +172,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               ))}
             </div>
           </div>
+
+          {/* Mobile Login Button */}
+          {!isAuthenticated && (
+            <button 
+              onClick={() => handleNavigate(AppView.LOGIN)}
+              className="w-full bg-amber-600 text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-amber-900/30 active:scale-95 transition-all"
+            >
+              Member Portal Access
+            </button>
+          )}
         </div>
       </div>
     </>

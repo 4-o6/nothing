@@ -21,9 +21,9 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-[#0c0c0c] overflow-hidden selection:bg-amber-600/30">
+    <div className="min-h-screen w-full relative bg-[#0c0c0c] overflow-y-auto selection:bg-amber-600/30">
       {/* Dynamic Background Overlay */}
-      <div className="absolute inset-0 z-0">
+      <div className="fixed inset-0 z-0">
          <img 
             src="https://images.unsplash.com/photo-1600100397608-f09075727653?q=80&w=2070&auto=format&fit=crop" 
             alt="Mysore Palace Heritage" 
@@ -33,14 +33,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
          <div className="absolute inset-0 bg-black/60"></div>
       </div>
       
-      {/* Content Container */}
-      <div className="relative z-10 w-full max-w-lg px-6 animate-app-reveal">
-        <div className="glass-card p-10 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 relative overflow-hidden">
+      {/* Content Container - Pushed down to avoid Navbar overlap */}
+      <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-start pt-32 pb-16 md:pt-48 md:pb-24 px-6 animate-app-reveal">
+        <div className="w-full max-w-lg glass-card p-10 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 relative overflow-hidden">
           
           {/* Decorative Corner */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-600/10 blur-3xl rounded-full -mr-16 -mt-16"></div>
 
-          <div className="text-center mb-12">
+          <div className="text-center mb-10 md:mb-12">
             <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[9px] font-black uppercase tracking-[0.3em] mb-8">
               <ShieldCheck className="w-3.5 h-3.5" /> Secure Heritage Portal
             </div>
@@ -63,7 +63,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
+                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
                   placeholder="name@heritage.com"
                 />
               </div>
@@ -77,7 +77,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
+                  className="w-full pl-14 pr-6 py-4 md:py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-stone-700 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.08] transition-all text-sm"
                   placeholder="••••••••"
                 />
               </div>
@@ -112,14 +112,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onSkip }) => {
               <div className="h-px bg-stone-500 flex-1"></div>
             </div>
             
-            <p className="text-[8px] font-black text-stone-700 uppercase tracking-[0.4em] text-center px-4">
+            <p className="text-[8px] font-black text-stone-700 uppercase tracking-[0.4em] text-center px-4 leading-relaxed">
               Authorized access strictly for registered MysuruUnveiled partners and members.
             </p>
           </div>
         </div>
         
         {/* Footer Link */}
-        <div className="mt-10 text-center">
+        <div className="mt-10 text-center mb-8">
           <p className="text-stone-600 text-[10px] font-black uppercase tracking-widest">
             Don't have an account? <span className="text-amber-600 cursor-pointer hover:text-amber-500 underline underline-offset-4 ml-2">Request Invite</span>
           </p>
