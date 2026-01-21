@@ -15,10 +15,11 @@ export const Explore: React.FC = () => {
     if (!query.trim()) return;
     setLoading(true);
     try {
+      // Use hardcoded coordinates if geolocation is not available to ensure grounding works in Mysore
       const results = await searchHiddenGems(query, { lat: 12.2958, lng: 76.6394 });
       setAiResults(results);
     } catch (err) {
-      console.error(err);
+      console.error("Search failed:", err);
     } finally {
       setLoading(false);
     }

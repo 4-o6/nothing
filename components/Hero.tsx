@@ -8,7 +8,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
   return (
-    <div className="relative bg-[#0c0c0c] min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden">
+    <div className="relative bg-[#0c0c0c] min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden">
       {/* Background Layers */}
       <div className="absolute inset-0 z-0">
         <img
@@ -20,31 +20,31 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 pt-24 sm:pt-32 pb-12 lg:pt-48 lg:pb-24">
-        <div className="max-w-5xl animate-app-reveal">
-          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-6 sm:mb-10 shadow-2xl backdrop-blur-md">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 lg:pt-36 pb-12">
+        <div className="max-w-4xl animate-app-reveal">
+          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] mb-4 sm:mb-6 shadow-2xl backdrop-blur-md">
             <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> Mysore Heritage Discovery
           </div>
           
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black font-serif mb-6 sm:mb-8 leading-[1.1] sm:leading-[1] tracking-tighter text-white">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black font-serif mb-4 sm:mb-6 leading-[1.1] sm:leading-[1] tracking-tighter text-white">
             Beyond the <br className="hidden sm:block"/>
             <span className="text-amber-500 italic">Palace Walls.</span>
           </h1>
           
-          <p className="text-base sm:text-lg md:text-2xl text-stone-400 mb-8 sm:mb-14 max-w-2xl leading-relaxed font-light">
+          <p className="text-sm sm:text-base md:text-xl text-stone-400 mb-6 sm:mb-10 max-w-2xl leading-relaxed font-light">
             Skip the generic trails. Connect with 40+ master artisans, find silent backwaters, and experience the heartbeat of the Royal City.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-16 sm:mb-24">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-12 sm:mb-16">
             <button 
               onClick={onStart}
-              className="h-14 sm:h-16 md:h-20 bg-amber-600 hover:bg-amber-500 text-white px-8 sm:px-10 md:px-14 rounded-xl sm:rounded-2xl md:rounded-3xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 sm:gap-4 transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
+              className="h-14 sm:h-16 bg-amber-600 hover:bg-amber-500 text-white px-8 sm:px-10 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 sm:gap-4 transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
             >
               Start Exploring <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button 
               onClick={onImpact}
-              className="h-14 sm:h-16 md:h-20 bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 px-8 sm:px-10 md:px-14 rounded-xl sm:rounded-2xl md:rounded-3xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] backdrop-blur-xl transition-all active:scale-95"
+              className="h-14 sm:h-16 bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 px-8 sm:px-10 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] backdrop-blur-xl transition-all active:scale-95"
             >
               Our Impact
             </button>
@@ -58,13 +58,13 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
             { title: "Eco-Conscious Travel", desc: "AI-guided routing to avoid over-congested zones and preserve Mysore's historic infrastructure." },
             { title: "Curated Hidden Gems", desc: "Access locations unknown even to most locals, strictly vetted for authentic heritage value." }
           ].map((item, i) => (
-            <div key={i} className="glass-card p-6 sm:p-10 rounded-2xl sm:rounded-[2.5rem] flex flex-col gap-4 sm:gap-6 card-lift">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center text-amber-500 border border-amber-600/20">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
+            <div key={i} className="glass-card p-5 sm:p-8 rounded-xl sm:rounded-[2rem] flex flex-col gap-3 sm:gap-5 card-lift">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 bg-amber-600/20 rounded-lg sm:rounded-xl flex items-center justify-center text-amber-500 border border-amber-600/20">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <h4 className="font-bold text-white mb-2 sm:mb-3 text-lg sm:text-xl font-serif tracking-tight">{item.title}</h4>
-                <p className="text-stone-500 text-xs sm:text-sm font-light leading-relaxed">{item.desc}</p>
+                <h4 className="font-bold text-white mb-1.5 sm:mb-2 text-base sm:text-lg font-serif tracking-tight">{item.title}</h4>
+                <p className="text-stone-500 text-[11px] sm:text-xs font-light leading-relaxed">{item.desc}</p>
               </div>
             </div>
           ))}
