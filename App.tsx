@@ -12,7 +12,7 @@ import { FoodGuide } from './components/FoodGuide';
 import { Login } from './components/Login';
 import { Impact } from './components/Impact';
 import { AppView } from './types';
-import { ChevronRight, Mail, Phone, Instagram, Facebook, Twitter, MapPin } from 'lucide-react';
+import { ChevronRight, Mail, Phone, MapPin } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
@@ -105,17 +105,6 @@ const App: React.FC = () => {
             <p className="leading-relaxed mb-6 text-stone-400">
               Decentralizing tourism to preserve heritage and empower locals. We help you discover the soul of the city while supporting the hands that build it.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-amber-600 hover:text-white transition-all duration-300">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-amber-600 hover:text-white transition-all duration-300">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-amber-600 hover:text-white transition-all duration-300">
-                <Twitter className="w-5 h-5" />
-              </a>
-            </div>
           </div>
           
           <div>
