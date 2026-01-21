@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HIDDEN_GEMS } from '../constants';
-import { MapPin, X, Navigation, List, Map as MapIcon, ChevronRight, Sparkles } from 'lucide-react';
+import { MapPin, X, Navigation, List, Map as MapIcon, ChevronRight, Sparkles, Plus, Minus, Crosshair, Loader2 } from 'lucide-react';
 
 export const InteractiveMap: React.FC = () => {
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(HIDDEN_GEMS[0].id);
   const [showList, setShowList] = useState(false);
+  const [zoom, setZoom] = useState(15);
+  const [isMapLoading, setIsMapLoading] = useState(true);
+  const mapIframeRef = useRef<HTMLIFrameElement>(null);
 
   const selectedPlace = HIDDEN_GEMS.find(p => p.id === selectedPlaceId);
 
@@ -15,6 +18,7 @@ export const InteractiveMap: React.FC = () => {
   });
 
   const handlePlaceClick = (id: string) => {
+    setIsMapLoading(true);
     setSelectedPlaceId(id);
     const place = HIDDEN_GEMS.find(p => p.id === id);
     if (place && place.lat && place.lng) {
@@ -24,9 +28,25 @@ export const InteractiveMap: React.FC = () => {
     setShowList(false);
   };
 
-  // Construct OSM embed string with marker
+  const handleRecenter = () => {
+    if (selectedPlace && selectedPlace.lat && selectedPlace.lng) {
+      setIsMapLoading(true);
+      setMapCenter({ lat: selectedPlace.lat, lng: selectedPlace.lng });
+    }
+  };
+
+  const handleZoom = (delta: number) => {
+    setIsMapLoading(true);
+    setZoom(prev => Math.min(Math.max(prev + delta, 12), 19));
+  };
+
+  // Construct OSM embed string with marker and dynamic zoom-based bbox
   const getMapSrc = () => {
-    const delta = 0.008; 
+    // Standard OSM delta for zoom 15 is ~0.008
+    const baseDelta = 0.008;
+    const factor = Math.pow(2, 15 - zoom);
+    const delta = baseDelta * factor;
+    
     const minLon = mapCenter.lng - delta;
     const minLat = mapCenter.lat - delta;
     const maxLon = mapCenter.lng + delta;
@@ -39,7 +59,7 @@ export const InteractiveMap: React.FC = () => {
   return (
     <div className="h-[100dvh] bg-[#0c0c0c] flex flex-col lg:flex-row overflow-hidden relative pt-[64px] lg:pt-[80px]">
       
-      {/* Sidebar - Transition for all viewports */}
+      {/* Sidebar - Heritage Directory */}
       <div className={`
         fixed inset-y-0 left-0 z-50 bg-[#0c0c0c] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col border-r border-white/5 shadow-2xl
         ${showList ? 'w-full sm:w-[400px] translate-x-0' : 'w-full sm:w-[400px] -translate-x-full lg:translate-x-0 lg:w-[320px] xl:w-[400px]'}
@@ -104,20 +124,57 @@ export const InteractiveMap: React.FC = () => {
         </button>
 
         {/* Map Viewport Wrapper */}
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative group">
+            {/* Loading Overlay for smooth-feeling transitions */}
+            {isMapLoading && (
+              <div className="absolute inset-0 z-10 bg-[#0c0c0c] flex items-center justify-center animate-fade-in">
+                <div className="flex flex-col items-center gap-4">
+                  <Loader2 className="w-10 h-10 text-amber-600 animate-spin" />
+                  <span className="text-[10px] font-black text-stone-600 uppercase tracking-widest">Pivoting Atlas...</span>
+                </div>
+              </div>
+            )}
+
             <iframe 
+                ref={mapIframeRef}
                 width="100%" 
                 height="100%" 
                 frameBorder="0" 
                 scrolling="no" 
                 src={getMapSrc()} 
-                className="w-full h-full opacity-80 contrast-[1.1] grayscale-[0.2]"
+                onLoad={() => setIsMapLoading(false)}
+                className={`w-full h-full contrast-[1.1] grayscale-[0.2] transition-opacity duration-700 ${isMapLoading ? 'opacity-0' : 'opacity-80'}`}
                 title="Mysore Heritage Navigation"
             ></iframe>
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-40"></div>
         </div>
 
-        {/* Floating Detail Sheet - Responsive Bottom Alignment */}
+        {/* Map Controls */}
+        <div className="absolute right-6 top-6 flex flex-col gap-3 z-40">
+          <button 
+            onClick={() => handleZoom(1)}
+            className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
+            title="Zoom In"
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => handleZoom(-1)}
+            className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
+            title="Zoom Out"
+          >
+            <Minus className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={handleRecenter}
+            className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
+            title="Center on Selected"
+          >
+            <Crosshair className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Floating Detail Sheet */}
         {selectedPlace && !showList && (
            <div className="absolute bottom-6 sm:bottom-10 left-4 right-4 sm:left-6 sm:right-6 lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:max-w-xl z-40 animate-app-reveal pb-[env(safe-area-inset-bottom)]">
               <div className="bg-stone-900/95 backdrop-blur-2xl border border-white/10 p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] flex flex-row items-center gap-4 sm:gap-6">
