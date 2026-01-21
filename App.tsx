@@ -100,21 +100,21 @@ const App: React.FC = () => {
         onLogout={handleLogout} 
         onLoginClick={() => setCurrentView(AppView.LOGIN)}
       />
-      <main className="animate-fade-in">
+      <main className="animate-fade-in pb-24 md:pb-0">
         {renderView()}
       </main>
       
-      <footer className="bg-[#111] border-stone-800 py-16 border-t">
+      <footer className="bg-[#111] border-stone-800 py-16 border-t pb-32 md:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
           <div>
             <h4 className="text-stone-100 font-bold mb-2 text-2xl font-serif">MysuruUnveiled</h4>
             <p className="mb-6 text-[10px] uppercase tracking-widest text-amber-600 font-black">Beyond the Palace</p>
-            <p className="leading-relaxed mb-6 text-stone-400 font-light">
+            <p className="leading-relaxed mb-6 text-stone-400 font-light text-xs md:text-sm">
               Decentralizing tourism to preserve heritage and empower locals. We help you discover the soul of the city while supporting the hands that build it.
             </p>
           </div>
           
-          <div>
+          <div className="hidden md:block">
             <h4 className="text-stone-100 font-bold mb-6 text-lg font-serif">Quick Links</h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
               {[
@@ -141,28 +141,28 @@ const App: React.FC = () => {
             <h4 className="text-stone-100 font-bold mb-6 text-lg font-serif">Connect</h4>
             <div className="space-y-4">
               <a href="mailto:info@mysuruunveiled.com" className="flex items-start gap-3 transition-colors group text-stone-400 hover:text-white">
-                <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded flex items-center justify-center transition-colors">
+                <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center transition-colors">
                   <Mail className="w-4 h-4 text-amber-500" />
                 </div>
-                <div>
+                <div className="text-xs md:text-sm">
                   <span className="block text-[10px] mb-0.5 text-stone-500 uppercase font-black">Email Us</span>
                   info@mysuruunveiled.com
                 </div>
               </a>
               <a href="tel:+919900000000" className="flex items-start gap-3 transition-colors group text-stone-400 hover:text-white">
-                 <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded flex items-center justify-center transition-colors">
+                 <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center transition-colors">
                   <Phone className="w-4 h-4 text-amber-500" />
                 </div>
-                <div>
+                <div className="text-xs md:text-sm">
                   <span className="block text-[10px] mb-0.5 text-stone-500 uppercase font-black">Call Us</span>
                   +91 99000 00000
                 </div>
               </a>
               <div className="flex items-start gap-3">
-                 <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded flex items-center justify-center">
+                 <div className="bg-stone-800 mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center">
                   <MapPin className="w-4 h-4 text-amber-500" />
                 </div>
-                <div>
+                <div className="text-xs md:text-sm">
                   <span className="block text-[10px] mb-0.5 text-stone-500 uppercase font-black">Visit Us</span>
                   <p className="leading-snug text-stone-500">
                     Vidyavardhaka College of Engineering,<br/> 
@@ -175,10 +175,10 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-widest text-stone-600">
-          <p>&copy; 2026 MysuruUnveiled.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <span onClick={() => showReason('privacy')} className="cursor-pointer hover:text-amber-500 transition-colors flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Privacy Policy</span>
-            <span onClick={() => showReason('terms')} className="cursor-pointer hover:text-amber-500 transition-colors flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Terms of Service</span>
+          <p className="mb-4 md:mb-0">&copy; 2026 MysuruUnveiled.</p>
+          <div className="flex flex-wrap justify-center gap-6">
+            <span onClick={() => showReason('privacy')} className="cursor-pointer hover:text-amber-500 transition-colors flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Privacy</span>
+            <span onClick={() => showReason('terms')} className="cursor-pointer hover:text-amber-500 transition-colors flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Terms</span>
             <span onClick={() => showReason('sitemap')} className="cursor-pointer hover:text-amber-500 transition-colors flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Sitemap</span>
           </div>
         </div>
