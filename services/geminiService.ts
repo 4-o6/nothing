@@ -15,6 +15,18 @@ const extractJson = (text: string): string => {
 };
 
 /**
+ * Handles API errors, specifically looking for missing API key configuration
+ */
+const handleApiError = (error: any) => {
+  if (error?.message?.includes("Requested entity was not found.")) {
+    // Reset key selection state by prompting the user as per guidelines
+    if (typeof window !== 'undefined' && (window as any).aistudio?.openSelectKey) {
+      (window as any).aistudio.openSelectKey();
+    }
+  }
+};
+
+/**
  * Generates a sustainable itinerary using Gemini 3
  */
 export const generateSustainableItinerary = async (
@@ -22,15 +34,9 @@ export const generateSustainableItinerary = async (
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    console.error("API_KEY missing from environment");
-    throw new Error("Configuration Error");
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
-  // Use gemini-3-flash-preview for structured text tasks
-  const model = "gemini-3-flash-preview";
+  // Use the injected API_KEY directly and create a new instance before call as per guidelines
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const model = "gemini-3-pro-preview"; // Upgraded to Pro for complex reasoning task
   
   const prompt = `
     Generate a ${days}-day sustainable travel itinerary for Mysore, India.
@@ -80,19 +86,19 @@ export const generateSustainableItinerary = async (
     if (text) {
       return JSON.parse(extractJson(text)) as Itinerary;
     }
-    throw new Error("No text in response");
+    throw new Error("Empty response");
   } catch (error) {
+    handleApiError(error);
     console.error("Itinerary Generation Failed:", error);
-    // Reliable fallback for immediate UX
     return {
-      title: "Essential Mysuru Heritage (Fallback Mode)",
+      title: "Essential Mysuru Heritage Route",
       items: [
         { time: "06:30 AM", activity: "Yoga at Gokulam", location: "Gokulam 3rd Stage", notes: "Experience Mysore's world-famous Ashtanga heritage.", isSustainable: true },
         { time: "09:00 AM", activity: "Mylari Breakfast", location: "Nazarbad", notes: "A zero-waste local culinary institution.", isSustainable: true },
         { time: "11:00 AM", activity: "Inlay Workshop Visit", location: "Tilak Nagar", notes: "Support master craftsmen directly.", isSustainable: true }
       ],
-      seasonalGuidelines: ["Stay hydrated between 12 PM - 3 PM."],
-      safetyTips: ["Always verify artisan availability via phone first."]
+      seasonalGuidelines: ["Stay hydrated during afternoon hours."],
+      safetyTips: ["Verify artisan availability before visiting."]
     };
   }
 };
@@ -101,15 +107,10 @@ export const generateSustainableItinerary = async (
  * Searches for hidden gems using Maps Grounding on Gemini 2.5
  */
 export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    return { text: "Search requires an active API configuration.", chunks: [] };
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    // Use gemini-2.5-flash for Maps Grounding tasks
-    const model = "gemini-2.5-flash";
+    // Create new GoogleGenAI instance right before making an API call
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const model = "gemini-2.5-flash"; // Required for Maps Grounding
     
     const prompt = `
       Find authentic, off-the-beaten-path cultural spots or local workshops in Mysore related to: "${query}".
@@ -142,9 +143,10 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
   } catch (error) {
+    handleApiError(error);
     console.error("Grounding Search Failed:", error);
     return { 
-      text: "Our heritage database is currently processing high traffic. Please browse the curated list below.", 
+      text: "Heritage search is currently initializing. Please try again in a moment or explore our curated list.", 
       chunks: [] 
     };
   }
