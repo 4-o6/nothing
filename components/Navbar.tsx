@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Map, Compass, Users, Leaf, Menu, X, ShoppingBag, MapPinned, LogIn, LogOut, Ticket, UtensilsCrossed } from 'lucide-react';
 import { AppView } from '../types';
@@ -25,14 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: AppView.EXPLORE, label: 'Explore', icon: <Compass className="w-5 h-5" /> },
     { id: AppView.PLANNER, label: 'Planner', icon: <Leaf className="w-5 h-5" /> },
     { id: AppView.ARTISANS, label: 'Artisans', icon: <Users className="w-5 h-5" /> },
-    { id: AppView.BOOKINGS, label: 'Bookings', icon: <ShoppingBag className="w-5 h-5" /> },
-  ];
-
-  const desktopItems = [
-    ...navItems,
-    { id: AppView.FOOD, label: 'Food', icon: <UtensilsCrossed className="w-4 h-4" /> },
-    { id: AppView.PACKAGES, label: 'Packages', icon: <Ticket className="w-4 h-4" /> },
-    { id: AppView.MAP, label: 'Map', icon: <MapPinned className="w-4 h-4" /> },
+    { id: AppView.MAP, label: 'Map', icon: <MapPinned className="w-5 h-5" /> },
   ];
 
   const handleNavigate = (view: AppView) => {
@@ -43,117 +35,44 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      {/* Desktop/Tablet Top Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] transition-all duration-500">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-4">
-          <div className="bg-stone-900/60 border-white/10 backdrop-blur-xl border rounded-3xl md:rounded-[2rem] px-4 md:px-6 h-16 md:h-18 flex items-center justify-between shadow-2xl">
-            {/* Brand/Logo */}
-            <div className="flex items-center cursor-pointer group" onClick={() => handleNavigate(AppView.HOME)}>
-              <div className="flex flex-col">
-                <span className="text-lg md:text-xl font-black font-serif leading-none transition-colors text-amber-500 group-hover:text-amber-400">MysuruUnveiled</span>
-                <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase mt-0.5 text-stone-500">Heritage Decentralized</span>
-              </div>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden lg:block">
-              <div className="flex items-center gap-1">
-                {desktopItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavigate(item.id)}
-                    className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${
-                      currentView === item.id
-                        ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/20'
-                        : 'text-stone-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-                
-                <div className="w-px h-6 mx-4 bg-white/10"></div>
+      {/* Top Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 pt-4 md:pt-6">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div 
+            className="flex flex-col cursor-pointer bg-stone-900/40 backdrop-blur-xl border border-white/5 px-5 py-2.5 rounded-2xl"
+            onClick={() => handleNavigate(AppView.HOME)}
+          >
+            <span className="text-lg md:text-xl font-black font-serif leading-none text-amber-500">MysuruUnveiled</span>
+            <span className="text-[7px] font-black tracking-[0.3em] uppercase mt-1 text-stone-500">Heritage First</span>
+          </div>
 
-                {isAuthenticated ? (
-                  <button 
-                    onClick={onLogout}
-                    className="p-2.5 rounded-xl transition-all bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
-                ) : (
-                   <button 
-                    onClick={onLoginClick}
-                    className="bg-amber-600 hover:bg-amber-500 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-900/20"
-                  >
-                    Login
-                  </button>
-                )}
-              </div>
-            </div>
-            
-            {/* Mobile Menu Button (Top Right) */}
-            <div className="lg:hidden flex items-center gap-2">
-              {!isAuthenticated && (
-                <button 
-                  onClick={onLoginClick}
-                  className="bg-amber-600/10 text-amber-500 p-2 rounded-xl border border-amber-600/20"
-                >
-                  <LogIn className="w-5 h-5" />
-                </button>
-              )}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`p-2.5 rounded-xl transition-colors text-stone-400 hover:text-white bg-white/5 ${isOpen ? 'bg-amber-600 text-white' : ''}`}
-              >
-                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <div className="flex items-center gap-2">
+            {!isAuthenticated && (
+              <button onClick={onLoginClick} className="bg-amber-600 text-white p-3 rounded-2xl shadow-lg shadow-amber-900/20 active:scale-90 transition-transform">
+                <LogIn className="w-5 h-5" />
               </button>
-            </div>
+            )}
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden bg-stone-900/40 backdrop-blur-xl border border-white/5 p-3 rounded-2xl text-white"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
 
-        {/* Full Screen Mobile Overlay */}
-        {isOpen && (
-          <div className="lg:hidden fixed inset-0 z-[90] bg-black/95 backdrop-blur-2xl animate-fade-in flex flex-col pt-24 px-6">
-            <div className="flex-1 overflow-y-auto pb-32 space-y-2">
-              {desktopItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavigate(item.id)}
-                  className={`w-full text-left px-6 py-4 rounded-2xl text-base font-bold flex items-center gap-5 transition-all ${
-                    currentView === item.id
-                      ? 'bg-amber-600 text-white shadow-xl'
-                      : 'text-stone-400 bg-white/5'
-                  }`}
-                >
-                  {item.icon}
-                  <span className="uppercase tracking-widest text-xs font-black">{item.label}</span>
-                </button>
-              ))}
-              
-              {isAuthenticated && (
-                <button 
-                  onClick={onLogout}
-                  className="w-full text-left px-6 py-4 rounded-2xl text-base font-bold flex items-center gap-5 transition-all text-red-400 bg-red-400/5 mt-4"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span className="uppercase tracking-widest text-xs font-black">Logout</span>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Desktop Side Navigation could go here, but keeping top clean for now */}
       </nav>
 
-      {/* Mobile Bottom Navigation (Native App Style) */}
-      <div className="lg:hidden fixed bottom-6 left-6 right-6 z-[100] flex justify-center pointer-events-none">
-        <div className="bg-stone-900/80 border border-white/10 backdrop-blur-2xl rounded-[2.5rem] px-4 py-3 flex items-center justify-around w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] pointer-events-auto">
+      {/* Mobile Bottom Dock (Native Style) */}
+      <div className="fixed bottom-6 left-6 right-6 z-[100] md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:w-fit pointer-events-none">
+        <div className="bg-[#141414]/80 backdrop-blur-2xl border border-white/5 rounded-[2rem] px-4 py-2 flex items-center justify-around md:justify-center md:gap-4 w-full shadow-[0_20px_50px_rgba(0,0,0,0.4)] pointer-events-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigate(item.id)}
-              className={`flex flex-col items-center gap-1.5 p-2 rounded-2xl transition-all ${
-                currentView === item.id ? 'text-amber-500 scale-110' : 'text-stone-500'
+              className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all relative ${
+                currentView === item.id ? 'text-amber-500' : 'text-stone-500'
               }`}
             >
               <div className={`p-2 rounded-xl transition-all ${currentView === item.id ? 'bg-amber-600/10' : ''}`}>
@@ -164,6 +83,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className={`text-[8px] font-black uppercase tracking-widest ${currentView === item.id ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
                 {item.label}
               </span>
+              {currentView === item.id && (
+                <div className="absolute -bottom-1 w-1 h-1 bg-amber-500 rounded-full"></div>
+              )}
             </button>
           ))}
         </div>
