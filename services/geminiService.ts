@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
@@ -19,30 +20,8 @@ const extractJson = (text: string): string => {
  */
 let isRequestInProgress = false;
 
-/**
- * Resolves the API key. 
- */
-const getActiveApiKey = async (): Promise<string> => {
-  const envKey = process.env.API_KEY;
-  if (envKey && envKey.length > 10) return envKey;
-
-  const aistudio = (window as any).aistudio;
-  if (aistudio) {
-    const hasKey = await aistudio.hasSelectedApiKey();
-    if (!hasKey) {
-      await aistudio.openSelectKey();
-    }
-  }
-  return process.env.API_KEY || "";
-};
-
 const handleApiError = (error: any) => {
   console.error("Gemini API Error:", error);
-  if (error?.message?.includes("API key not valid") || error?.message?.includes("Requested entity was not found")) {
-    if (typeof window !== 'undefined' && (window as any).aistudio?.openSelectKey) {
-      (window as any).aistudio.openSelectKey();
-    }
-  }
 };
 
 /**
@@ -58,8 +37,8 @@ export const generateSustainableItinerary = async (
   
   try {
     isRequestInProgress = true;
-    const apiKey = await getActiveApiKey();
-    const ai = new GoogleGenAI({ apiKey });
+    // Always use the API key from environment variables as per guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
     // Using flash for better stability across environments
     const model = "gemini-3-flash-preview"; 
     
@@ -86,7 +65,7 @@ export const generateSustainableItinerary = async (
       config: {
         systemInstruction,
         temperature: 0.1, // Near deterministic
-        seed: 123,
+        seed: 42,
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -167,8 +146,7 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
   
   try {
     isRequestInProgress = true;
-    const apiKey = await getActiveApiKey();
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
     const model = "gemini-2.5-flash"; 
     
     const systemInstruction = `

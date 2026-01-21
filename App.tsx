@@ -172,7 +172,7 @@ const App: React.FC = () => {
                   <div className="flex flex-col">
                     <span className="text-[10px] mb-1 text-stone-600 uppercase font-black tracking-widest">Base Camp</span>
                     <span className="text-stone-300 leading-snug">
-                      Medar Block, Mysuru,<br/>Karnataka 570001
+                      vvce mysore
                     </span>
                   </div>
                 </div>

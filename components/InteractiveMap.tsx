@@ -57,7 +57,7 @@ export const InteractiveMap: React.FC = () => {
   };
 
   return (
-    <div className="h-[100dvh] bg-[#0c0c0c] flex flex-col lg:flex-row overflow-hidden relative pt-[64px] lg:pt-[80px]">
+    <div className="h-[100dvh] bg-[#0c0c0c] flex flex-col lg:flex-row overflow-hidden relative pt-[110px] md:pt-[130px]">
       
       {/* Sidebar - Heritage Directory */}
       <div className={`
