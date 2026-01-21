@@ -116,7 +116,12 @@ export const Explore: React.FC = () => {
               style={{ animationDelay: `${0.1 * i}s` }}
             >
               <div className="h-56 sm:h-64 overflow-hidden relative">
-                <img src={place.imageUrl} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                <img 
+                  src={place.imageUrl} 
+                  alt={place.name} 
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                />
                 <div className="absolute top-3 sm:top-4 right-3 sm:right-4 bg-black/70 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black text-amber-400 flex items-center gap-1.5 sm:gap-2 shadow-xl">
                   <Star className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current" /> {place.rating}
                 </div>

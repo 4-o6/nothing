@@ -32,6 +32,7 @@ export const Artisans: React.FC = () => {
                 <img 
                   src={artisan.imageUrl} 
                   alt={artisan.name} 
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent"></div>

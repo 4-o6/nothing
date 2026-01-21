@@ -202,7 +202,7 @@ export const Bookings: React.FC = () => {
               {hotels.map((hotel) => (
                 <div key={hotel.id} className="bg-[#141414] border border-stone-800/50 rounded-3xl overflow-hidden group hover:border-amber-500/30 transition-all duration-700 card-lift">
                   <div className="h-56 overflow-hidden relative">
-                    <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100" />
+                    <img src={hotel.imageUrl} alt={hotel.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100" />
                     <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-amber-400 font-black flex items-center shadow-2xl">
                       <Star className="w-3.5 h-3.5 mr-1.5 fill-current" /> {hotel.rating}
                     </div>

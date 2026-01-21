@@ -8,6 +8,7 @@ export const InteractiveMap: React.FC = () => {
   const [zoom, setZoom] = useState(15);
   const [isMapLoading, setIsMapLoading] = useState(true);
   const mapIframeRef = useRef<HTMLIFrameElement>(null);
+  const [containerAspect, setContainerAspect] = useState(1);
 
   const selectedPlace = HIDDEN_GEMS.find(p => p.id === selectedPlaceId);
 
@@ -16,6 +17,16 @@ export const InteractiveMap: React.FC = () => {
     lat: HIDDEN_GEMS[0].lat || 12.3051, 
     lng: HIDDEN_GEMS[0].lng || 76.6551 
   });
+
+  // Calculate container aspect ratio for better map bounding
+  useEffect(() => {
+    const updateAspect = () => {
+      setContainerAspect(window.innerWidth / window.innerHeight);
+    };
+    updateAspect();
+    window.addEventListener('resize', updateAspect);
+    return () => window.removeEventListener('resize', updateAspect);
+  }, []);
 
   const handlePlaceClick = (id: string) => {
     setIsMapLoading(true);
@@ -42,15 +53,19 @@ export const InteractiveMap: React.FC = () => {
 
   // Construct OSM embed string with marker and dynamic zoom-based bbox
   const getMapSrc = () => {
-    // Standard OSM delta for zoom 15 is ~0.008
+    // Standard OSM delta base
     const baseDelta = 0.008;
     const factor = Math.pow(2, 15 - zoom);
-    const delta = baseDelta * factor;
     
-    const minLon = mapCenter.lng - delta;
-    const minLat = mapCenter.lat - delta;
-    const maxLon = mapCenter.lng + delta;
-    const maxLat = mapCenter.lat + delta;
+    // Adjust delta based on aspect ratio to prevent "stretching" or bad centering
+    // If aspect > 1 (landscape), we need more width (lon). If < 1 (portrait), we need more height (lat).
+    const deltaLat = baseDelta * factor * (containerAspect < 1 ? 1 / containerAspect : 1);
+    const deltaLon = baseDelta * factor * (containerAspect > 1 ? containerAspect : 1);
+    
+    const minLon = mapCenter.lng - deltaLon;
+    const minLat = mapCenter.lat - deltaLat;
+    const maxLon = mapCenter.lng + deltaLon;
+    const maxLat = mapCenter.lat + deltaLat;
     
     const bbox = `${minLon},${minLat},${maxLon},${maxLat}`;
     return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`;
@@ -95,7 +110,12 @@ export const InteractiveMap: React.FC = () => {
               }`}
             >
               <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
-                <img src={place.imageUrl} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <img 
+                  src={place.imageUrl} 
+                  alt={place.name} 
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className={`text-[8px] font-black uppercase tracking-widest mb-1 ${selectedPlaceId === place.id ? 'text-white/60' : 'text-amber-600'}`}>
@@ -114,7 +134,7 @@ export const InteractiveMap: React.FC = () => {
       {/* Main Map Content Area */}
       <div className="flex-1 relative bg-[#0c0c0c] overflow-hidden lg:ml-[320px] xl:ml-[400px]">
         
-        {/* Toggle Sidebar Button (FAB) - Moved down to clear navbar */}
+        {/* Toggle Sidebar Button (FAB) */}
         <button 
           onClick={() => setShowList(true)}
           className={`absolute top-32 left-6 z-40 bg-stone-900/90 backdrop-blur-xl text-white px-5 sm:px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-black text-[10px] uppercase tracking-widest border border-white/10 active:scale-95 transition-all group lg:hidden ${showList ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'}`}
@@ -124,7 +144,7 @@ export const InteractiveMap: React.FC = () => {
         </button>
 
         {/* Map Viewport Wrapper */}
-        <div className="w-full h-full relative group pt-[100px] lg:pt-0">
+        <div className="w-full h-full relative group pt-[0px]">
             {/* Loading Overlay */}
             {isMapLoading && (
               <div className="absolute inset-0 z-10 bg-[#0c0c0c] flex items-center justify-center animate-fade-in">
@@ -149,12 +169,13 @@ export const InteractiveMap: React.FC = () => {
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-40"></div>
         </div>
 
-        {/* Map Controls - Moved down to clear navbar */}
+        {/* Map Controls */}
         <div className="absolute right-6 top-32 flex flex-col gap-3 z-40">
           <button 
             onClick={() => handleZoom(1)}
             className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
             title="Zoom In"
+            aria-label="Zoom In"
           >
             <Plus className="w-5 h-5" />
           </button>
@@ -162,6 +183,7 @@ export const InteractiveMap: React.FC = () => {
             onClick={() => handleZoom(-1)}
             className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
             title="Zoom Out"
+            aria-label="Zoom Out"
           >
             <Minus className="w-5 h-5" />
           </button>
@@ -169,6 +191,7 @@ export const InteractiveMap: React.FC = () => {
             onClick={handleRecenter}
             className="w-12 h-12 bg-stone-900/90 backdrop-blur-xl text-white rounded-xl border border-white/10 shadow-2xl flex items-center justify-center hover:bg-amber-600 transition-all active:scale-90"
             title="Center on Selected"
+            aria-label="Recenter Map"
           >
             <Crosshair className="w-5 h-5" />
           </button>
@@ -180,7 +203,7 @@ export const InteractiveMap: React.FC = () => {
               <div className="bg-stone-900/95 backdrop-blur-2xl border border-white/10 p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] flex flex-row items-center gap-4 sm:gap-6">
                  
                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-[1.2rem] sm:rounded-[1.5rem] overflow-hidden flex-shrink-0 border border-white/10 relative shadow-xl">
-                   <img src={selectedPlace.imageUrl} alt={selectedPlace.name} className="w-full h-full object-cover" />
+                   <img src={selectedPlace.imageUrl} alt={selectedPlace.name} className="w-full h-full object-cover" loading="lazy" />
                  </div>
                  
                  <div className="flex-1 min-w-0">
@@ -197,6 +220,7 @@ export const InteractiveMap: React.FC = () => {
                  <button 
                    onClick={() => window.open(selectedPlace.googleMapsUri, '_blank')}
                    className="w-14 h-14 sm:w-20 sm:h-20 bg-amber-600 hover:bg-amber-500 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl transition-all shadow-xl shadow-amber-900/30 active:scale-90 flex items-center justify-center flex-shrink-0"
+                   aria-label="Navigate in Google Maps"
                  >
                    <Navigation className="w-5 h-5" />
                  </button>

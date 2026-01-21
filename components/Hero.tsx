@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface HeroProps {
@@ -14,6 +14,7 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
         <img
           src="https://s7ap1.scene7.com/is/image/incredibleindia/sri-nandi-temple-mysuru-karnataka-1-attr-hero?qlt=82&ts=1742178245295"
           alt="Mysore Heritage"
+          loading="eager"
           className="w-full h-full object-cover opacity-20 lg:opacity-30 scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0c0c0c] via-transparent to-[#0c0c0c]"></div>
