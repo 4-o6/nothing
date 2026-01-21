@@ -47,7 +47,7 @@ export const BUS_SCHEDULE = [
     stand: 'City Bus Stand (CBS)', 
     destination: 'Palace / Zoo Loop', 
     timings: '09:00 AM - 06:00 PM',
-    frequency: 'Every 30 mins' // Volvo AC
+    frequency: 'Every 30 mins' 
   },
   { 
     routeNo: '12', 
@@ -124,17 +124,6 @@ export const RESTAURANTS: Restaurant[] = [
     location: 'Contour Road',
     imageUrl: 'https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/cdwhmave/f5618a25-59a6-40ab-86e2-b5655ccf3f56.jpg',
     priceRange: '₹₹₹'
-  },
-  {
-    id: 'r7',
-    name: "Jagavi's Kritunga",
-    diet: 'Non-Veg',
-    cuisine: 'Andhra Style',
-    specialty: 'Train Theme Dining',
-    rating: 4.4,
-    location: 'Hebbal',
-    imageUrl: 'https://b.zmtcdn.com/data/reviews_photos/8af/5f37767156cb664c01adfe9856f328af_1684904602.jpg',
-    priceRange: '₹₹₹'
   }
 ];
 
@@ -142,11 +131,11 @@ export const HIDDEN_GEMS: Place[] = [
   {
     id: '2',
     name: 'Blue Lagoon (KRS Backwaters)',
-    description: 'A hidden island-like spot in the KRS backwaters, offering crystal clear waters and a perfect picnic spot.',
+    description: 'A serene backwater spot near KRS Dam. Best visited during sunset for the island-like views.',
     category: 'nature',
     imageUrl: 'https://imgmediagumlet.lbb.in/media/2019/10/5d9c4fa0a0087660bb629c1f_1570525088838.jpg',
     crowdLevel: 'low',
-    location: 'North of Mysore',
+    location: 'KRS Backwaters, Mysuru',
     rating: 4.7,
     lat: 12.4331,
     lng: 76.5615,
@@ -155,11 +144,11 @@ export const HIDDEN_GEMS: Place[] = [
   {
     id: '3',
     name: 'Venugopala Swamy Temple',
-    description: 'A submerged temple that resurfaced, located on the banks of KRS backwaters. A stunning architectural marvel.',
+    description: 'An architectural marvel on the banks of KRS backwaters, reconstructed after being submerged for decades.',
     category: 'temple',
     imageUrl: 'https://bulbulonthewing.com/wp-content/uploads/2024/11/IMG_20230825_175915-min-2048x1536.jpg',
     crowdLevel: 'moderate',
-    location: 'KRS Backwaters',
+    location: 'Hosa Kannambadi, Mysuru',
     rating: 4.9,
     lat: 12.4223,
     lng: 76.5644,
@@ -168,7 +157,7 @@ export const HIDDEN_GEMS: Place[] = [
   {
     id: '4',
     name: 'Gowri’s Sand Museum',
-    description: 'A unique museum showcasing incredible sculptures made entirely of sand and water, depicting mythology and Mysore heritage.',
+    description: 'Asia\'s first sand museum showcasing sculptures made of sand and water by artist MN Gowri.',
     category: 'culture',
     imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sand_museum_Mysore_sculpture.jpg/500px-Sand_museum_Mysore_sculpture.jpg',
     crowdLevel: 'moderate',
@@ -177,58 +166,6 @@ export const HIDDEN_GEMS: Place[] = [
     lat: 12.2965,
     lng: 76.6669,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Gowri+Sand+Museum+Mysore'
-  },
-  {
-    id: '5',
-    name: 'Karanji Lake & Aviary',
-    description: 'A serene lake nature park with a walk-through aviary, butterfly park, and boating facilities right in the city.',
-    category: 'nature',
-    imageUrl: 'https://www.mysoretourism.org.in/images/v2/places-to-visit/karanji-lake-header-mysore-tourism.jpg',
-    crowdLevel: 'moderate',
-    location: 'Nazarbad',
-    rating: 4.6,
-    lat: 12.3023,
-    lng: 76.6688,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Karanji+Lake+Mysore'
-  },
-  {
-    id: '6',
-    name: 'Shuka Vana',
-    description: 'A rehabilitation center for birds holding a Guinness World Record for most bird species in an aviary.',
-    category: 'nature',
-    imageUrl: 'https://www.trawell.in/admin/images/upload/211116678shuka%20vana.jpg',
-    crowdLevel: 'moderate',
-    location: 'SGS Ashram',
-    rating: 4.8,
-    lat: 12.2818,
-    lng: 76.6645,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Shuka+Vana+Mysore'
-  },
-  {
-    id: '7',
-    name: 'Railway Museum',
-    description: 'An outdoor museum exhibiting vintage locomotives, royal carriages, and railway memorabilia from the colonial era.',
-    category: 'culture',
-    imageUrl: 'https://www.mysoretourism.org.in/images/v2/places-to-visit/mysore-rail-museum-header-mysore-tourism.jpg',
-    crowdLevel: 'moderate',
-    location: 'KRS Road',
-    rating: 4.7,
-    lat: 12.3175,
-    lng: 76.6465,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Railway+Museum'
-  },
-  {
-    id: '9',
-    name: 'Payana Vintage Car Museum',
-    description: 'A spectacular collection of vintage automobiles and motorcycles, showcasing the evolution of transport.',
-    category: 'culture',
-    imageUrl: 'https://www.payanamuseum.com/wp-content/uploads/2025/02/Asset-8@4x-1-2048x797.png',
-    crowdLevel: 'low',
-    location: 'Bangalore-Mysore Hwy',
-    rating: 4.8,
-    lat: 12.4391,
-    lng: 76.7118,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Payana+Vintage+Car+Museum+Mysore'
   }
 ];
 
@@ -237,56 +174,34 @@ export const ARTISANS: Artisan[] = [
     id: 'a1',
     name: 'Shri. Nanjundaiah',
     craft: 'Rosewood Inlay',
-    story: 'Inheriting the craft from his grandfather, Nanjundaiah has been creating portraits of the Maharajas for over 40 years. He uses locally sourced rosewood and ethically acquired bone/synthetic materials to create breathtaking landscapes.',
+    story: 'Inheriting the craft from his grandfather, Nanjundaiah has been creating portraits of the Maharajas for over 40 years. He uses locally sourced rosewood to create breathtaking wood inlay art.',
     imageUrl: 'https://www.gitagged.com/wp-content/uploads/2023/10/MRI-001-ELEPHANT-02-2-441x662.jpg',
     location: 'Tilak Nagar, Mysuru',
     visitable: true,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Rosewood+Inlay+Tilak+Nagar+Mysore',
-    contactPhone: '+91 94480 11111'
+    contactPhone: '+91 821-2521111 (Heritage Guild)'
   },
   {
     id: 'a2',
     name: 'Smt. Lakshmi Devi',
     craft: 'Mysore Silk Weaving',
-    story: 'One of the few remaining independent weavers running a home-based loom in the Agrahara area. She specializes in pure zari silk sarees that take weeks of meticulous labor to complete.',
+    story: 'A master weaver specializing in traditional KSIC-style pure zari silk sarees. She maintains a private loom where visitors can observe the complex weaving process.',
     imageUrl: 'https://mysorepattu.com/cdn/shop/files/WhatsAppImage2025-02-21at20.18.24_58e271cf.jpg?v=1749037920&width=1946',
     location: 'Agrahara, Mysuru',
     visitable: true,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Silk+Weavers+Agrahara',
-    contactPhone: '+91 94480 22222'
+    contactPhone: '+91 821-2522222 (Weavers Society)'
   },
   {
     id: 'a3',
     name: 'Shri. Raghupathi Bhat',
     craft: 'Ganjifa Art',
-    story: 'A master of the detailed Ganjifa cards, formerly played by royalty. His work is recognized by the Guinness Book of World Records. He hosts workshops to keep this dying Mughal-era art form alive.',
+    story: 'Internationally recognized master of Ganjifa cards. He preserves the intricate Mughal-era card game art using traditional pigments and squirrel-hair brushes.',
     imageUrl: 'https://cdn.shopify.com/s/files/1/0576/0391/5966/files/16_480x480.jpg?v=1632369107',
     location: 'Srirampura, Mysuru',
     visitable: true,
     googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Ganjifa+Art+Raghupathi+Bhat+Mysore',
-    contactPhone: '+91 94480 33333'
-  },
-  {
-    id: 'a4',
-    name: 'Sandalwood Carvers Guild',
-    craft: 'Sandalwood Sculpture',
-    story: 'Represented by a collective of masters near Jaganmohan Palace, these artisans carve deities and intricate fans from the fragrant wood Mysore is world-famous for.',
-    imageUrl: 'https://www.memeraki.com/cdn/shop/products/Maa-Durga-Sandalwood-Miniature-Artwork-by-Om-Prakash-1_900x.jpg?v=1726057132',
-    location: 'Medar Block, Mysuru',
-    visitable: true,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Sandalwood+Carving+Mysore+Palace+Area',
-    contactPhone: '+91 94480 44444'
-  },
-  {
-    id: 'a5',
-    name: 'Smt. Radha',
-    craft: 'Mysore Traditional Painting',
-    story: 'Specializing in the "Mysore Style" involving unique gesso work and authentic 24K gold foil. Her paintings are noted for their attention to detail and traditional narratives.',
-    imageUrl: 'https://www.artisera.com/cdn/shop/products/07.3_7c1e73ec-c12e-49c1-9c7c-0c4402d1b568_2048x2048.jpg?v=1632391590',
-    location: 'Jaganmohan Palace Area, Mysuru',
-    visitable: true,
-    googleMapsUri: 'https://www.google.com/maps/search/?api=1&query=Mysore+Traditional+Painting+Workshops',
-    contactPhone: '+91 94480 55555'
+    contactPhone: '+91 821-2523333 (Art Registry)'
   }
 ];
 
@@ -298,58 +213,8 @@ export const BOOKING_ITEMS: BookingItem[] = [
     price: '₹8,500/night',
     rating: 4.6,
     imageUrl: 'https://www.lalithamahalpalace.co.in/wp-content/uploads/2018/03/dayview-1-800x533.jpg',
-    description: 'Experience royalty in this shimmering white palace built by the Maharaja in 1931.',
+    description: 'Experience royalty in this white palace built by the Maharaja in 1931.',
     features: ['Heritage', 'Royal Suite', 'Pool']
-  },
-  {
-    id: 'h2',
-    name: 'Radisson Blu Plaza',
-    type: 'hotel',
-    price: '₹7,200/night',
-    rating: 4.8,
-    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/232840359.jpg?k=3d639c2ea9eb765b73e83f6d60d2b5daab6f96d6c847127e8b0a3eacaab535da&o=',
-    description: 'Modern luxury located next to the race course with breathtaking views of Chamundi Hills.',
-    features: ['Luxury', 'Spa', 'Swimming Pool']
-  },
-  {
-    id: 'h3',
-    name: 'Fortune JP Palace',
-    type: 'hotel',
-    price: '₹5,500/night',
-    rating: 4.5,
-    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/598109812.jpg?k=75302664a0f4a2a7da810cdba84953d1f0a6d296081f0f79267188586c79c6ca&o=',
-    description: 'Palatial architecture meeting modern comforts in the heart of the city.',
-    features: ['Landscaped Gardens', 'Fine Dining']
-  },
-  {
-    id: 'h4',
-    name: 'Aishwarya Le Royal',
-    type: 'hotel',
-    price: '₹3,500/night',
-    rating: 4.3,
-    imageUrl: 'https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_1020,q_auto,w_2000/hotelier-images/c1/d4/5a55b9dbfce216c66a28af4dc7b4960fb23bb983e2038795b07cef15914f.jpeg',
-    description: 'Elegant boutique hotel offering a blend of classic charm and contemporary amenities.',
-    features: ['City Center', 'Banquet']
-  },
-  {
-    id: 'v1',
-    name: 'Private AC Sedan',
-    type: 'vehicle',
-    price: '₹2,500/day',
-    rating: 4.8,
-    imageUrl: 'https://picsum.photos/id/111/400/300',
-    description: 'Comfortable 4-seater sedan (Etios/Dzire) with experienced driver.',
-    features: ['AC', 'English Speaking Driver']
-  },
-  {
-    id: 'v2',
-    name: 'Toyota Innova Crysta',
-    type: 'vehicle',
-    price: '₹4,500/day',
-    rating: 4.9,
-    imageUrl: 'https://picsum.photos/id/655/400/300',
-    description: 'Luxury 6-seater SUV perfect for families.',
-    features: ['Premium Comfort', 'Ample Luggage Space']
   }
 ];
 
@@ -368,36 +233,6 @@ export const TOUR_PACKAGES: TourPackage[] = [
     ],
     recommendedFor: 'Solo Travelers',
     icon: 'leaf'
-  },
-  {
-    id: 'p2',
-    name: 'Cultural Premium',
-    tier: 'Standard',
-    price: '₹4,499',
-    description: 'per person',
-    features: [
-      'All features of Basic Explorer',
-      'Visit to a local artisan workshop',
-      'Authentic Mysuru lunch experience',
-      'Priority entry to Zoo'
-    ],
-    recommendedFor: 'Couples',
-    icon: 'star'
-  },
-  {
-    id: 'p3',
-    name: 'Luxury Royal',
-    tier: 'Premium',
-    price: '₹8,999',
-    description: 'per person',
-    features: [
-      'All features of Cultural Premium',
-      'Private guided tour',
-      'Mysore silk saree shopping experience',
-      'Fine dining dinner at a heritage hotel'
-    ],
-    recommendedFor: 'Luxury Travelers',
-    icon: 'diamond'
   }
 ];
 

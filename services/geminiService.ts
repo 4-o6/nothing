@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
@@ -26,7 +25,6 @@ const handleApiError = (error: any) => {
 
 /**
  * Generates a high-quality sustainable itinerary.
- * Switched to gemini-3-flash-preview for faster response and better availability.
  */
 export const generateSustainableItinerary = async (
   days: number,
@@ -37,9 +35,7 @@ export const generateSustainableItinerary = async (
   
   try {
     isRequestInProgress = true;
-    // Always use the API key from environment variables as per guidelines
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-    // Using flash for better stability across environments
     const model = "gemini-3-flash-preview"; 
     
     const systemInstruction = `
@@ -64,7 +60,7 @@ export const generateSustainableItinerary = async (
       contents: [{ parts: [{ text: userPrompt }] }],
       config: {
         systemInstruction,
-        temperature: 0.1, // Near deterministic
+        temperature: 0.1,
         seed: 42,
         responseMimeType: "application/json",
         responseSchema: {
@@ -105,7 +101,6 @@ export const generateSustainableItinerary = async (
     throw new Error("Invalid response format");
   } catch (error) {
     handleApiError(error);
-    // Reliable Fallback
     return {
       title: "The Artisan Heritage Trail",
       items: [
@@ -182,5 +177,52 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
     return { text: "Connecting to heritage database...", chunks: [] };
   } finally {
     isRequestInProgress = false;
+  }
+};
+
+/**
+ * Verification service to cross-reference data with the live web.
+ */
+export const verifyHeritageData = async (entityName: string, detail: string): Promise<{
+  isVerified: boolean;
+  message: string;
+  sourceUrl?: string;
+}> => {
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    const model = "gemini-3-pro-preview"; // Use Pro for complex grounding tasks
+
+    const prompt = `
+      Verify the following information about a Mysuru Heritage entity:
+      Entity: ${entityName}
+      Detail to check: ${detail}
+
+      Check if the person/place still exists, if the craft is correctly attributed, and if contact info is generally valid in public records.
+      If the contact number looks like a placeholder (e.g., +91 94480 11111), flag it as needing direct verification.
+    `;
+
+    const response = await ai.models.generateContent({
+      model,
+      contents: [{ parts: [{ text: prompt }] }],
+      config: {
+        tools: [{ googleSearch: {} }],
+        temperature: 0,
+      },
+    });
+
+    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+    const sourceUrl = chunks && chunks.length > 0 ? chunks[0]?.web?.uri : undefined;
+
+    return {
+      isVerified: !response.text.toLowerCase().includes("not found") && !response.text.toLowerCase().includes("inaccurate"),
+      message: response.text,
+      sourceUrl: sourceUrl
+    };
+  } catch (error) {
+    console.error("Verification failed:", error);
+    return {
+      isVerified: false,
+      message: "Unable to verify at this moment. Please use official guild contact points."
+    };
   }
 };
