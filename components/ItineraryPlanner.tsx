@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { generateSustainableItinerary } from '../services/geminiService';
 import { Itinerary } from '../types';
@@ -24,7 +25,16 @@ export const ItineraryPlanner: React.FC = () => {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const interestOptions = ['Artisan Workshops', 'Hidden Lakes', 'Temple Heritage', 'Local Food', 'Silk Weaving', 'Nature Walks'];
+  const interestOptions = [
+    'Artisan Workshops', 
+    'Hidden Lakes', 
+    'Temple Heritage', 
+    'Local Food', 
+    'Silk Weaving', 
+    'Nature Walks',
+    'Yoga & Wellness',
+    'Vintage Trails'
+  ];
 
   const toggleInterest = (interest: string) => {
     setInterests(prev => 
@@ -172,7 +182,7 @@ export const ItineraryPlanner: React.FC = () => {
               <div>
                 <label className="text-[10px] font-black text-stone-500 uppercase tracking-widest block mb-4">Traveler Profile</label>
                 <div className="grid grid-cols-2 gap-3">
-                  {['Solo Traveler', 'Couple', 'Art Enthusiasts', 'Photographers'].map(type => (
+                  {['Solo Traveler', 'Couple', 'Families', 'Art Enthusiasts', 'Photographers', 'Digital Nomads'].map(type => (
                     <button 
                       key={type}
                       onClick={() => setGroupType(type)}
