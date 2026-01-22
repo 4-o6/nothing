@@ -51,8 +51,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-4 md:px-12 lg:px-16 pt-6 pointer-events-none h-0 overflow-visible`}>
-      <div className="max-w-[1400px] mx-auto flex items-center gap-3 pointer-events-auto">
+    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-3 md:px-12 lg:px-16 pt-4 md:pt-6 pointer-events-none h-0 overflow-visible`}>
+      <div className="max-w-[1400px] mx-auto flex items-center gap-2 sm:gap-3 pointer-events-auto">
         
         {/* Map Icon Circle (Left Side) */}
         <button 
@@ -63,15 +63,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         {/* Main Pill Navbar */}
-        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-5 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
+        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-4 sm:px-10 py-2 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
           
           {/* Logo Section */}
           <div 
-            className="flex flex-col cursor-pointer group select-none mr-4 min-w-0"
+            className="flex flex-col cursor-pointer group select-none mr-2 sm:mr-4 min-w-0"
             onClick={() => handleNavigate(AppView.HOME)}
           >
             <div className="flex items-center gap-2">
-              <span className="text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate">MysuruUnveiled <span className="text-stone-600 font-sans hidden sm:inline">•</span></span>
+              <span className="text-base sm:text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate">
+                MysuruUnveiled 
+                <span className="text-stone-600 font-sans hidden md:inline ml-2">•</span>
+              </span>
             </div>
             <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase text-stone-500 -mt-1 hidden sm:block">Beyond Palace Walls</span>
           </div>
@@ -115,25 +118,25 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Action Area */}
-          <div className="flex items-center gap-3 ml-2 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 ml-2 flex-shrink-0">
             {isAuthenticated ? (
-              <button onClick={onLogout} className="p-3 bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400 rounded-xl transition-all border border-white/5">
+              <button onClick={onLogout} className="p-2 sm:p-3 bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400 rounded-xl transition-all border border-white/5">
                 <LogOut className="w-5 h-5" />
               </button>
             ) : (
               <button 
                 onClick={onLoginClick} 
-                className="hidden sm:block bg-amber-600 hover:bg-amber-500 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] shadow-xl transition-all active:scale-95 whitespace-nowrap"
+                className="hidden sm:block bg-amber-600 hover:bg-amber-500 text-white px-6 md:px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] shadow-xl transition-all active:scale-95 whitespace-nowrap"
               >
-                PORTAL LOGIN
+                LOGIN
               </button>
             )}
             
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-3 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
+              className="lg:hidden p-2.5 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -143,7 +146,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className={`fixed inset-0 z-[140] lg:hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setIsOpen(false)}></div>
         
-        <div className={`absolute right-0 top-0 bottom-0 w-[80%] max-w-sm bg-[#0c0c0c] border-l border-white/5 shadow-2xl flex flex-col p-8 pt-32 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#0c0c0c] border-l border-white/5 shadow-2xl flex flex-col p-6 sm:p-8 pt-24 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="mb-10">
              <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 block">Heritage Network</span>
              <h3 className="text-3xl font-serif font-bold text-white tracking-tight">Directory</h3>

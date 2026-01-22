@@ -21,9 +21,9 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 pt-24 sm:pt-40 lg:pt-44 pb-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 pt-36 sm:pt-40 lg:pt-44 pb-12">
         <div className="max-w-4xl animate-app-reveal">
-          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] mb-4 sm:mb-8 shadow-2xl backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] mb-6 sm:mb-8 shadow-2xl backdrop-blur-md">
             <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> Mysore Heritage Discovery
           </div>
           

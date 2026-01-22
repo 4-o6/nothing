@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
@@ -29,7 +28,7 @@ export const Explore: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] pt-20 sm:pt-28 pb-24 sm:pb-32 px-4">
+    <div className="min-h-screen bg-[#0c0c0c] pt-32 sm:pt-28 pb-24 sm:pb-32 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 sm:mb-16 animate-app-reveal">
           <h2 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-4 sm:mb-6 tracking-tight">Hidden Gems</h2>
