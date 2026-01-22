@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Compass, Users, Leaf, Menu, X, MapPinned, 
@@ -51,29 +52,31 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-4 md:px-12 lg:px-16 pt-6 pointer-events-none h-0 overflow-visible`}>
-      <div className="max-w-[1400px] mx-auto flex items-center gap-3 pointer-events-auto">
+    <nav className={`fixed top-0 left-0 right-0 z-[150] transition-all duration-500 px-3 md:px-12 lg:px-16 pt-4 sm:pt-6 pointer-events-none h-0 overflow-visible`}>
+      <div className="max-w-[1400px] mx-auto flex items-center gap-2 sm:gap-3 pointer-events-auto">
         
-        {/* Map Icon Circle (Left Side) */}
+        {/* Map Icon Circle (Left Side) - Hidden on smallest mobile */}
         <button 
           onClick={() => handleNavigate(AppView.MAP)}
-          className={`hidden sm:flex w-14 h-14 rounded-2xl items-center justify-center shadow-2xl transition-all duration-300 active:scale-95 border border-white/10 ${currentView === AppView.MAP ? 'bg-amber-600 text-white' : 'bg-stone-900/90 backdrop-blur-3xl text-amber-500'}`}
+          className={`hidden sm:flex w-14 h-14 rounded-2xl items-center justify-center shadow-2xl transition-all duration-300 active:scale-95 border border-white/10 flex-shrink-0 ${currentView === AppView.MAP ? 'bg-amber-600 text-white' : 'bg-stone-900/90 backdrop-blur-3xl text-amber-500'}`}
         >
           <Map className="w-7 h-7" />
         </button>
 
         {/* Main Pill Navbar */}
-        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-5 md:px-10 py-2.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
+        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/95 backdrop-blur-3xl border border-white/10 px-3 sm:px-5 md:px-10 py-2 sm:py-2.5 rounded-[1.8rem] sm:rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all overflow-hidden`}>
           
           {/* Logo Section */}
           <div 
-            className="flex flex-col cursor-pointer group select-none mr-4 min-w-0"
+            className="flex flex-col cursor-pointer group select-none mr-2 sm:mr-4 min-w-0 flex-1 sm:flex-none"
             onClick={() => handleNavigate(AppView.HOME)}
           >
-            <div className="flex items-center gap-2">
-              <span className="text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate">MysuruUnveiled <span className="text-stone-600 font-sans hidden sm:inline">•</span></span>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <span className="text-base xs:text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate max-w-[180px] xs:max-w-none">
+                MysuruUnveiled <span className="text-stone-600 font-sans hidden sm:inline">•</span>
+              </span>
             </div>
-            <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase text-stone-500 -mt-1 hidden sm:block">Beyond Palace Walls</span>
+            <span className="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase text-stone-500 -mt-0.5 hidden sm:block">Beyond Palace Walls</span>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -115,10 +118,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Action Area */}
-          <div className="flex items-center gap-3 ml-2 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 ml-2 flex-shrink-0">
             {isAuthenticated ? (
-              <button onClick={onLogout} className="p-3 bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400 rounded-xl transition-all border border-white/5">
-                <LogOut className="w-5 h-5" />
+              <button onClick={onLogout} className="p-2.5 sm:p-3 bg-stone-800 hover:bg-red-900/20 text-stone-400 hover:text-red-400 rounded-xl transition-all border border-white/5">
+                <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             ) : (
               <button 
@@ -131,9 +134,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-3 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
+              className="p-2.5 sm:p-3 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
