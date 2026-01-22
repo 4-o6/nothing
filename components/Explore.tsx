@@ -21,38 +21,39 @@ export const Explore: React.FC = () => {
     
     try {
       const results = await searchHiddenGems(searchQuery);
-      if (!results || (!results.text && results.chunks.length === 0)) {
-        throw new Error("No results returned");
+      // Even if chunks are empty, if there is text, show it
+      if (!results || (!results.text && (!results.chunks || results.chunks.length === 0))) {
+        throw new Error("No information found");
       }
       setAiResults(results);
-    } catch (error) {
+    } catch (error: any) {
       console.error("AI Search Failed:", error);
-      setAiError("Heritage data is currently reaching capacity or unavailable. Please try a simpler query.");
+      setAiError("We couldn't retrieve specific heritage data for this query right now. Try searching 'Rosewood Agrahara' or 'Blue Lagoon'.");
     } finally {
       setIsSearching(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] pt-40 sm:pt-36 pb-24 px-4">
+    <div className="min-h-screen bg-[#0c0c0c] pt-48 sm:pt-40 pb-24 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 sm:mb-16 animate-app-reveal">
           <h2 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-4 tracking-tight">Hidden Gems</h2>
-          <p className="text-stone-500 max-w-2xl mx-auto text-base sm:text-xl font-light">
-            Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by heritage grounding.
+          <p className="text-stone-500 max-w-2xl mx-auto text-base sm:text-lg font-light leading-relaxed">
+            Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by real-time heritage grounding.
           </p>
         </div>
 
         {/* AI Heritage Search */}
         <div className="max-w-3xl mx-auto mb-16 sm:mb-24 animate-app-reveal group">
-          <form onSubmit={handleSearch} className="relative p-1 rounded-[2.5rem] bg-gradient-to-r from-stone-900 via-amber-900/30 to-stone-900 border border-white/5 shadow-2xl">
+          <form onSubmit={handleSearch} className="relative p-1 rounded-[2.5rem] bg-gradient-to-r from-stone-900 via-amber-900/40 to-stone-900 border border-white/5 shadow-2xl">
             <div className="flex items-center bg-[#0c0c0c] rounded-[2.3rem] px-4 md:px-6 py-1 overflow-hidden">
               <Search className={`w-5 h-5 mr-3 transition-colors ${isSearching ? 'text-amber-500 animate-pulse' : 'text-stone-700'}`} />
               <input 
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search: Try 'Rosewood artisans' or 'Quiet lakes'..."
+                placeholder="Search: Try 'Silk weavers' or 'Silent lakes'..."
                 className="flex-1 bg-transparent text-white border-none outline-none text-sm sm:text-base placeholder:text-stone-700 py-4"
               />
               <button 
@@ -66,25 +67,28 @@ export const Explore: React.FC = () => {
           </form>
           
           {aiError && (
-            <div className="mt-6 flex items-center gap-3 bg-red-500/10 border border-red-500/20 p-4 rounded-2xl text-red-400 text-xs font-bold uppercase tracking-widest animate-fade-in">
+            <div className="mt-6 flex items-center gap-3 bg-red-500/10 border border-red-500/20 p-5 rounded-2xl text-red-400 text-xs font-bold uppercase tracking-widest animate-fade-in">
               <AlertCircle className="w-5 h-5" /> {aiError}
             </div>
           )}
 
           {aiResults && (
-            <div className="mt-8 bg-[#141414] border border-amber-500/30 rounded-[2.5rem] p-8 sm:p-12 animate-app-reveal shadow-2xl relative">
+            <div className="mt-8 bg-[#141414] border border-amber-600/30 rounded-[2.5rem] p-8 sm:p-12 animate-app-reveal shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative">
                <div className="absolute top-0 right-0 p-4">
                   <button onClick={() => setAiResults(null)} className="text-stone-600 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><X className="w-5 h-5" /></button>
                </div>
+               
                <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-6">
-                 <Sparkles className="w-4 h-4" /> AI Heritage Search Insight
+                 <Sparkles className="w-4 h-4" /> Heritage Grounding Result
                </div>
+               
                <div className="text-stone-300 text-sm md:text-base leading-relaxed mb-10 prose prose-invert font-light max-w-none whitespace-pre-wrap">
                  {aiResults.text}
                </div>
+
                {aiResults.chunks && aiResults.chunks.length > 0 && (
                  <div className="space-y-4 pt-8 border-t border-white/5">
-                   <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest">Linked Locations & Sources</p>
+                   <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest">Grounding Sources</p>
                    <div className="flex flex-wrap gap-3">
                      {aiResults.chunks.map((chunk: any, i: number) => {
                        const link = chunk.web || chunk.maps;
@@ -119,7 +123,7 @@ export const Explore: React.FC = () => {
               style={{ animationDelay: `${0.1 * i}s` }}
             >
               <div className="h-64 overflow-hidden relative">
-                <img src={place.imageUrl} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                <img src={place.imageUrl} alt={place.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                 <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full text-[10px] font-black text-amber-400 flex items-center gap-2">
                   <Star className="w-3.5 h-3.5 fill-current" /> {place.rating}
                 </div>
@@ -149,7 +153,7 @@ export const Explore: React.FC = () => {
                   <div className="bg-amber-600 text-[10px] font-black px-4 py-1.5 rounded-full text-white uppercase tracking-widest">{selectedGem.category}</div>
                   <div className="bg-white/5 text-[10px] font-black px-4 py-1.5 rounded-full text-stone-500 uppercase tracking-widest border border-white/5">{selectedGem.crowdLevel} Crowd</div>
                 </div>
-                <h3 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6 leading-tight">{selectedGem.name}</h3>
+                <h3 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6 leading-tight tracking-tight">{selectedGem.name}</h3>
                 <p className="text-stone-500 text-base sm:text-lg font-light leading-relaxed mb-10">{selectedGem.description}</p>
                 <button 
                   onClick={() => window.open(selectedGem.googleMapsUri, '_blank')}

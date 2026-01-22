@@ -20,37 +20,29 @@ const extractJson = (text: string): string => {
  */
 export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
   try {
-    // Fresh client instance for every call
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Guidelines mandate using process.env.API_KEY directly
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const model = "gemini-3-flash-preview"; 
     
-    const systemInstruction = `
-      You are a World-Class Mysuru Heritage Expert and Sustainable Tourism Architect.
-      
-      GOAL: Help travelers find high-quality, authentic, and decentralized spots in Mysore.
-      
-      GUIDELINES:
-      - Focus on hidden gems, artisan studios, and silent heritage sites.
-      - Discourage overcrowded areas (like the main Palace grounds at noon).
-      - Provide historical context and sensory details.
-      - ALWAYS include specific neighborhood names (e.g., Agrahara, Tilak Nagar, Mandi Mohalla).
-      - Be concise but evocative.
-    `;
+    const systemInstruction = `You are a Mysuru Heritage Expert. 
+Use the googleSearch tool for every request to provide the most accurate, up-to-date, and verified information about hidden gems, artisan studios, and decentralized tourism spots in Mysore. 
+Focus on spots away from the main palace. Include historical context and specific neighborhood names like Agrahara or Tilak Nagar. 
+If you find website links or location links in your search, they will be used for grounding.`;
 
     const response = await ai.models.generateContent({
       model,
-      contents: [{ parts: [{ text: `Search and describe this heritage spot or artisan craft in Mysore: ${query}` }] }],
+      contents: `Search for this specific heritage detail or hidden gem in Mysore, Karnataka: ${query}`,
       config: {
         systemInstruction,
-        temperature: 0.1, // High precision
+        temperature: 0.1,
         tools: [{ googleSearch: {} }],
       }
     });
 
-    return {
-      text: response.text || "No descriptive data found for this specific query.",
-      chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
-    };
+    const text = response.text || "";
+    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+
+    return { text, chunks };
   } catch (error) {
     console.error("Gemini Search Error:", error);
     throw error;
@@ -66,24 +58,21 @@ export const generateSustainableItinerary = async (
   groupType: string
 ): Promise<Itinerary> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const model = "gemini-3-flash-preview"; 
     
-    const systemInstruction = `
-      You are the "Mysuru Heritage Architect". Your goal is to decentralize tourism away from the Mysore Palace.
-      
-      STRICT RULES:
-      1. NO generic malls or international food chains.
-      2. MANDATORY inclusion of specific artisan hubs: Tilak Nagar (Rosewood), Agrahara (Silk), Mandi Mohalla (Food).
-      3. Suggest hidden natural gems like Blue Lagoon or Venugopala Swamy Temple.
-      4. Return results in strict JSON format matching the schema.
-    `;
+    const systemInstruction = `You are the "Mysuru Heritage Architect". Your goal is to decentralize tourism away from the Mysore Palace.
+STRICT RULES:
+1. NO generic malls or international food chains.
+2. MANDATORY inclusion of specific artisan hubs: Tilak Nagar (Rosewood), Agrahara (Silk), Mandi Mohalla (Food).
+3. Suggest hidden natural gems like Blue Lagoon or Venugopala Swamy Temple.
+4. Return results in strict JSON format matching the schema provided.`;
 
     const userPrompt = `Create a ${days}-day plan for a ${groupType}. Interests: ${interests.join(', ')}.`;
 
     const response = await ai.models.generateContent({
       model,
-      contents: [{ parts: [{ text: userPrompt }] }],
+      contents: userPrompt,
       config: {
         systemInstruction,
         temperature: 0.1,
@@ -117,21 +106,18 @@ export const generateSustainableItinerary = async (
       }
     });
 
-    if (response.text) {
-      const parsed = JSON.parse(extractJson(response.text));
-      return parsed as Itinerary;
-    }
-    throw new Error("Empty response");
+    const parsed = JSON.parse(extractJson(response.text || "{}"));
+    return parsed as Itinerary;
   } catch (error) {
     console.error("Gemini Itinerary Error:", error);
     return {
-      title: "Artisan Heritage Trail (Manual Mode)",
+      title: "The Artisan Heritage Trail",
       items: [
         { 
           time: "09:00 AM", 
           duration: "3 Hours",
           category: "artisan",
-          activity: "Rosewood Inlay Studio Visit", 
+          activity: "Rosewood Inlay Studio Tour", 
           location: "Tilak Nagar", 
           notes: "Visit master craftsmen and support hereditary art forms directly.", 
           isSustainable: true,

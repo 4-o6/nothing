@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Menu, X, Map, ChevronRight, ChevronDown, 
   LogOut, ShoppingBag, Ticket, UtensilsCrossed, Leaf, Info
@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         {/* Main Pill Navbar */}
-        <div className="relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-3 sm:px-10 py-1.5 sm:py-2 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="relative z-[200] flex-1 flex items-center justify-between bg-stone-900/90 backdrop-blur-3xl border border-white/10 px-3 sm:px-10 py-1 sm:py-2 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           
           {/* Logo Section */}
           <div 
@@ -63,11 +63,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavigate(AppView.HOME)}
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm sm:text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate">
+              <span className="text-[13px] sm:text-lg md:text-2xl font-bold font-serif text-amber-500 tracking-tight truncate leading-none">
                 MysuruUnveiled 
               </span>
             </div>
-            <span className="text-[6px] md:text-[8px] font-black tracking-[0.2em] uppercase text-stone-500 -mt-0.5 hidden sm:block">Beyond Palace Walls</span>
+            <span className="text-[6px] md:text-[8px] font-black tracking-[0.2em] uppercase text-stone-500 mt-0.5 hidden sm:block">Beyond Palace Walls</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -124,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
+              className="lg:hidden p-1.5 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
