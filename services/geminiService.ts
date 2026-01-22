@@ -15,28 +15,20 @@ const extractJson = (text: string): string => {
   }
 };
 
-/**
- * Simple throttle to prevent overlapping requests
- */
-let isRequestInProgress = false;
-
 const handleApiError = (error: any) => {
   console.error("Gemini API Error:", error);
 };
 
 /**
  * Generates a high-quality sustainable itinerary.
- * Switched to gemini-3-flash-preview for faster response and better availability.
+ * Using gemini-3-flash-preview for speed and reliability.
  */
 export const generateSustainableItinerary = async (
   days: number,
   interests: string[],
   groupType: string
 ): Promise<Itinerary> => {
-  if (isRequestInProgress) throw new Error("A request is already in progress.");
-  
   try {
-    isRequestInProgress = true;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
     const model = "gemini-3-flash-preview"; 
     
@@ -62,8 +54,7 @@ export const generateSustainableItinerary = async (
       contents: [{ parts: [{ text: userPrompt }] }],
       config: {
         systemInstruction,
-        temperature: 0.1, // Near deterministic
-        seed: 42,
+        temperature: 0.1,
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -96,83 +87,65 @@ export const generateSustainableItinerary = async (
 
     if (response.text) {
       const parsed = JSON.parse(extractJson(response.text));
-      if (parsed && parsed.items && parsed.items.length > 0) {
-        return parsed as Itinerary;
-      }
+      return parsed as Itinerary;
     }
-    throw new Error("Invalid response format");
+    throw new Error("Empty response");
   } catch (error) {
     handleApiError(error);
-    // Reliable Fallback
     return {
-      title: "The Artisan Heritage Trail",
+      title: "The Artisan Heritage Trail (Recovery Mode)",
       items: [
         { 
-          time: "07:30 AM", 
-          duration: "2 Hours",
-          category: "culture",
-          activity: "Gokulam Yoga Immersion", 
-          location: "Gokulam 3rd Stage", 
-          notes: "Visit an authentic Shala to witness the tradition that put Mysuru on the world map.", 
-          isSustainable: true,
-          impactReason: "Direct support to local yoga tradition preservation."
-        },
-        { 
-          time: "10:30 AM", 
-          duration: "2.5 Hours",
+          time: "09:00 AM", 
+          duration: "3 Hours",
           category: "artisan",
-          activity: "Inlay Art Masterclass", 
+          activity: "Rosewood Inlay Studio Tour", 
           location: "Tilak Nagar", 
-          notes: "Watch master craftspeople like Nanjundaiah create wood inlay masterpieces.", 
+          notes: "Visit the master craftsman studios for an authentic look at Mysuru's hereditary art.", 
           isSustainable: true,
-          impactReason: "Ensures the continuation of 400-year-old hereditary craft."
+          impactReason: "Direct support to local artisan families."
         }
       ],
-      seasonalGuidelines: ["Check for temple festivals during the season."],
-      safetyTips: ["Always respect artisan home studio boundaries."]
+      seasonalGuidelines: ["Check local studio timings."],
+      safetyTips: ["Ask for permission before taking photos of intricate designs."]
     };
-  } finally {
-    isRequestInProgress = false;
   }
 };
 
 /**
- * Searches for hidden gems using Maps Grounding.
+ * Searches for hidden gems using Google Search Grounding.
  */
 export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
-  if (isRequestInProgress) return { text: "Network busy, please wait...", chunks: [] };
-  
   try {
-    isRequestInProgress = true;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-    const model = "gemini-2.5-flash"; 
+    const model = "gemini-3-flash-preview"; 
     
     const systemInstruction = `
       You are a Mysuru Heritage Expert. 
       Only search for "Hidden Gems" or decentralized spots in and around Mysore. 
-      Do not suggest the main Palace or Zoo unless specifically asked.
+      Provide specific descriptions, history, and why it is a gem.
+      Include website or map references if found.
     `;
-
-    const config: any = {
-      systemInstruction,
-      temperature: 0.1,
-      tools: [{ googleMaps: {} }, { googleSearch: {} }],
-    };
 
     const response = await ai.models.generateContent({
       model,
       contents: [{ parts: [{ text: query }] }],
-      config
+      config: {
+        systemInstruction,
+        temperature: 0.2,
+        tools: [{ googleSearch: {} }],
+      }
     });
 
     return {
-      text: response.text || "No records found.",
+      text: response.text || "I couldn't find specific heritage data for that query.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
   } catch (error) {
     handleApiError(error);
-    return { text: "Connecting to heritage database...", chunks: [] };
-  } finally {
-    isRequestInProgress = false;
+    return { 
+      text: "The heritage database is currently unavailable. Please try searching for 'Rosewood inlay Agrahara' or 'Blue Lagoon Mysore'.", 
+      chunks: [] 
+    };
   }
 };
