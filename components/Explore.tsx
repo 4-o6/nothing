@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
@@ -19,19 +20,8 @@ export const Explore: React.FC = () => {
     setAiResults(null);
     
     try {
-      let location = undefined;
-      if (navigator.geolocation) {
-        try {
-          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 2000 });
-          });
-          location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        } catch (locErr) {
-          console.debug("Location services timed out");
-        }
-      }
-
-      const results = await searchHiddenGems(searchQuery, location);
+      // Location logic removed as per request to stop using location permissions
+      const results = await searchHiddenGems(searchQuery);
       setAiResults(results);
     } catch (error) {
       console.error(error);
