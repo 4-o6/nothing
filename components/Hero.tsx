@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
 
 interface HeroProps {
   onStart: () => void;
@@ -8,7 +8,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
   return (
-    <div className="relative bg-[#0c0c0c] min-h-[95vh] flex items-center overflow-hidden">
+    <div className="relative bg-[#0c0c0c] min-h-[100dvh] flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           src="https://s7ap1.scene7.com/is/image/incredibleindia/sri-nandi-temple-mysuru-karnataka-1-attr-hero?qlt=82&ts=1742178245295"
@@ -19,46 +19,46 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onImpact }) => {
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-44 sm:pt-48 pb-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 sm:pt-48 pb-12">
         <div className="max-w-4xl animate-app-reveal">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] mb-8">
             <Sparkles className="w-3.5 h-3.5" /> Mysore Heritage Discovery
           </div>
           
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black font-serif mb-5 leading-[1.1] tracking-tighter text-white">
-            Beyond the <br className="hidden sm:block"/>
-            <span className="text-amber-500 italic">Palace Walls.</span>
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-black font-serif mb-6 leading-[1] tracking-tighter text-white">
+            The Palace is <br className="hidden sm:block"/>
+            <span className="text-amber-500 italic">Not the Whole Story.</span>
           </h1>
           
-          <p className="text-sm sm:text-lg text-stone-400 mb-10 max-w-2xl leading-relaxed font-light">
-            Skip the generic trails. Connect with 40+ master artisans, find silent backwaters, and experience the heartbeat of the Royal City.
+          <p className="text-base sm:text-xl text-stone-400 mb-10 max-w-2xl leading-relaxed font-light">
+            90% of tourists never leave the Palace grounds. We’re here to change that. Connect with 40+ master artisans and find the silent soul of the Royal City.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 mb-16">
             <button 
               onClick={onStart}
-              className="h-16 bg-amber-600 hover:bg-amber-500 text-white px-10 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-4 transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
+              className="h-16 sm:h-20 bg-amber-600 hover:bg-amber-500 text-white px-12 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-4 transition-all shadow-2xl shadow-amber-900/40 active:scale-95"
             >
-              Start Exploring <ArrowRight className="w-5 h-5" />
+              Start Your Discovery <ArrowRight className="w-5 h-5" />
             </button>
             <button 
               onClick={onImpact}
-              className="h-16 bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 px-10 rounded-2xl font-black text-xs uppercase tracking-[0.2em] backdrop-blur-xl transition-all"
+              className="h-16 sm:h-20 bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 px-12 rounded-2xl font-black text-xs uppercase tracking-[0.2em] backdrop-blur-xl transition-all flex items-center justify-center gap-3"
             >
-              Our Impact
+              The Problem <AlertCircle className="w-5 h-5 text-amber-600" />
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 animate-app-reveal" style={{ animationDelay: '0.2s' }}>
           {[
-            { title: "Direct-to-Artisan", desc: "No middleman. Your tourism directly supports master craft families." },
-            { title: "Eco-Conscious", desc: "AI-guided routing to preserve Mysore's historic infrastructure." },
-            { title: "Curated GEMS", desc: "Access locations strictly vetted for authentic heritage value." }
+            { title: "Direct Support", desc: "Skip the middlemen. Your visit directly funds the families preserving Mysuru's legacy." },
+            { title: "AI Grounding", desc: "Using real-time search to verify locations of silent weavers and hidden studios." },
+            { title: "Decentralized", desc: "Reducing Palace crowd density by promoting outer heritage hubs." }
           ].map((item, i) => (
-            <div key={i} className="glass-card p-6 rounded-[1.5rem] flex flex-col gap-2">
-              <h4 className="font-bold text-white text-base sm:text-lg font-serif">{item.title}</h4>
-              <p className="text-stone-500 text-[10px] sm:text-xs font-light leading-relaxed">{item.desc}</p>
+            <div key={i} className="glass-card p-8 rounded-[2rem] flex flex-col gap-3 border-white/5 hover:border-amber-600/20 transition-all">
+              <h4 className="font-bold text-white text-lg font-serif">{item.title}</h4>
+              <p className="text-stone-500 text-xs font-light leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
