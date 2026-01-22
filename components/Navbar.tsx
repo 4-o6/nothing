@@ -63,8 +63,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Map className="w-7 h-7" />
         </button>
 
-        {/* Main Pill Navbar */}
-        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/95 backdrop-blur-3xl border border-white/10 px-3 sm:px-5 md:px-10 py-2 sm:py-2.5 rounded-[1.8rem] sm:rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all overflow-hidden`}>
+        {/* Main Pill Navbar - Removed overflow-hidden to allow dropdown visibility */}
+        <div className={`relative z-[200] flex-1 flex items-center justify-between bg-stone-900/95 backdrop-blur-3xl border border-white/10 px-3 sm:px-5 md:px-10 py-2 sm:py-2.5 rounded-[1.8rem] sm:rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all`}>
           
           {/* Logo Section */}
           <div 
@@ -100,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button className="px-5 py-2.5 rounded-2xl text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] text-stone-400 hover:text-white flex items-center gap-2 bg-white/5 border border-white/5 transition-all">
                 DISCOVERY <ChevronDown className="w-3.5 h-3.5 group-hover/menu:rotate-180 transition-transform" />
               </button>
-              <div className="absolute top-full right-0 pt-4 w-60 opacity-0 translate-y-3 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300">
+              <div className="absolute top-full right-0 pt-4 w-60 opacity-0 translate-y-3 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300 z-[300]">
                 <div className="bg-[#141414] border border-white/10 rounded-[2rem] p-3 shadow-[0_30px_60px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
                   {secondaryItems.map((item) => (
                     <button
