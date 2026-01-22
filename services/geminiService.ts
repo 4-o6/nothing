@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Itinerary } from "../types";
 
@@ -15,13 +14,51 @@ const extractJson = (text: string): string => {
   }
 };
 
-const handleApiError = (error: any) => {
-  console.error("Gemini API Error:", error);
+/**
+ * Heritage Grounding Search
+ * Uses Google Search to find verified Mysuru heritage information.
+ */
+export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
+  try {
+    // Fresh client instance for every call
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    const model = "gemini-3-flash-preview"; 
+    
+    const systemInstruction = `
+      You are a World-Class Mysuru Heritage Expert and Sustainable Tourism Architect.
+      
+      GOAL: Help travelers find high-quality, authentic, and decentralized spots in Mysore.
+      
+      GUIDELINES:
+      - Focus on hidden gems, artisan studios, and silent heritage sites.
+      - Discourage overcrowded areas (like the main Palace grounds at noon).
+      - Provide historical context and sensory details.
+      - ALWAYS include specific neighborhood names (e.g., Agrahara, Tilak Nagar, Mandi Mohalla).
+      - Be concise but evocative.
+    `;
+
+    const response = await ai.models.generateContent({
+      model,
+      contents: [{ parts: [{ text: `Search and describe this heritage spot or artisan craft in Mysore: ${query}` }] }],
+      config: {
+        systemInstruction,
+        temperature: 0.1, // High precision
+        tools: [{ googleSearch: {} }],
+      }
+    });
+
+    return {
+      text: response.text || "No descriptive data found for this specific query.",
+      chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
+    };
+  } catch (error) {
+    console.error("Gemini Search Error:", error);
+    throw error;
+  }
 };
 
 /**
  * Generates a high-quality sustainable itinerary.
- * Using gemini-3-flash-preview for speed and reliability.
  */
 export const generateSustainableItinerary = async (
   days: number,
@@ -37,17 +74,12 @@ export const generateSustainableItinerary = async (
       
       STRICT RULES:
       1. NO generic malls or international food chains.
-      2. NO suggesting the Palace between 11 AM and 4 PM (peak crowd).
-      3. MANDATORY inclusion of specific artisan hubs: Tilak Nagar (Rosewood), Agrahara (Silk), Mandi Mohalla (Food).
-      4. Suggest hidden natural gems like Blue Lagoon or Venugopala Swamy Temple.
-      5. Every activity must have a "Sustainability Impact" explanation.
-      6. Return results in strict JSON format matching the schema.
+      2. MANDATORY inclusion of specific artisan hubs: Tilak Nagar (Rosewood), Agrahara (Silk), Mandi Mohalla (Food).
+      3. Suggest hidden natural gems like Blue Lagoon or Venugopala Swamy Temple.
+      4. Return results in strict JSON format matching the schema.
     `;
 
-    const userPrompt = `
-      Create a highly detailed ${days}-day plan for a ${groupType}. 
-      Interests: ${interests.join(', ')}.
-    `;
+    const userPrompt = `Create a ${days}-day plan for a ${groupType}. Interests: ${interests.join(', ')}.`;
 
     const response = await ai.models.generateContent({
       model,
@@ -91,61 +123,23 @@ export const generateSustainableItinerary = async (
     }
     throw new Error("Empty response");
   } catch (error) {
-    handleApiError(error);
+    console.error("Gemini Itinerary Error:", error);
     return {
-      title: "The Artisan Heritage Trail (Recovery Mode)",
+      title: "Artisan Heritage Trail (Manual Mode)",
       items: [
         { 
           time: "09:00 AM", 
           duration: "3 Hours",
           category: "artisan",
-          activity: "Rosewood Inlay Studio Tour", 
+          activity: "Rosewood Inlay Studio Visit", 
           location: "Tilak Nagar", 
-          notes: "Visit the master craftsman studios for an authentic look at Mysuru's hereditary art.", 
+          notes: "Visit master craftsmen and support hereditary art forms directly.", 
           isSustainable: true,
-          impactReason: "Direct support to local artisan families."
+          impactReason: "Direct support to local families."
         }
       ],
       seasonalGuidelines: ["Check local studio timings."],
-      safetyTips: ["Ask for permission before taking photos of intricate designs."]
-    };
-  }
-};
-
-/**
- * Searches for hidden gems using Google Search Grounding.
- */
-export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
-  try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-    const model = "gemini-3-flash-preview"; 
-    
-    const systemInstruction = `
-      You are a Mysuru Heritage Expert. 
-      Only search for "Hidden Gems" or decentralized spots in and around Mysore. 
-      Provide specific descriptions, history, and why it is a gem.
-      Include website or map references if found.
-    `;
-
-    const response = await ai.models.generateContent({
-      model,
-      contents: [{ parts: [{ text: query }] }],
-      config: {
-        systemInstruction,
-        temperature: 0.2,
-        tools: [{ googleSearch: {} }],
-      }
-    });
-
-    return {
-      text: response.text || "I couldn't find specific heritage data for that query.",
-      chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
-    };
-  } catch (error) {
-    handleApiError(error);
-    return { 
-      text: "The heritage database is currently unavailable. Please try searching for 'Rosewood inlay Agrahara' or 'Blue Lagoon Mysore'.", 
-      chunks: [] 
+      safetyTips: ["Ask permission before photography."]
     };
   }
 };
