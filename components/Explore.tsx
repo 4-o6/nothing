@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
@@ -9,7 +10,6 @@ export const Explore: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
-  const searchTimeoutRef = useRef<number | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,19 +19,7 @@ export const Explore: React.FC = () => {
     setAiResults(null);
     
     try {
-      let location = undefined;
-      if (navigator.geolocation) {
-        try {
-          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 2000 });
-          });
-          location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        } catch (locErr) {
-          console.debug("Location services timed out");
-        }
-      }
-
-      const results = await searchHiddenGems(searchQuery, location);
+      const results = await searchHiddenGems(searchQuery);
       setAiResults(results);
     } catch (error) {
       console.error(error);

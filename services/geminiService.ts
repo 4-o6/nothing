@@ -37,9 +37,7 @@ export const generateSustainableItinerary = async (
   
   try {
     isRequestInProgress = true;
-    // Always use the API key from environment variables as per guidelines
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-    // Using flash for better stability across environments
     const model = "gemini-3-flash-preview"; 
     
     const systemInstruction = `
@@ -141,7 +139,7 @@ export const generateSustainableItinerary = async (
 /**
  * Searches for hidden gems using Maps Grounding.
  */
-export const searchHiddenGems = async (query: string, userLocation?: {lat: number, lng: number}): Promise<{text: string, chunks: any[]}> => {
+export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
   if (isRequestInProgress) return { text: "Network busy, please wait...", chunks: [] };
   
   try {
@@ -151,7 +149,7 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
     
     const systemInstruction = `
       You are a Mysuru Heritage Expert. 
-      Only search for "Hidden Gems" or decentralized spots. 
+      Only search for "Hidden Gems" or decentralized spots in and around Mysore. 
       Do not suggest the main Palace or Zoo unless specifically asked.
     `;
 
@@ -160,12 +158,6 @@ export const searchHiddenGems = async (query: string, userLocation?: {lat: numbe
       temperature: 0.1,
       tools: [{ googleMaps: {} }, { googleSearch: {} }],
     };
-    
-    if (userLocation) {
-      config.toolConfig = {
-        retrievalConfig: { latLng: { latitude: userLocation.lat, longitude: userLocation.lng } }
-      };
-    }
 
     const response = await ai.models.generateContent({
       model,
