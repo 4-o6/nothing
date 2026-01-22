@@ -16,12 +16,23 @@ const extractJson = (text: string): string => {
 };
 
 /**
- * Heritage Grounding Search - Optimized for SPEED
+ * Validates the existence of the API Key
+ */
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey || apiKey === "") {
+    console.error("CRITICAL: API_KEY is missing from the environment. Search will not work.");
+    throw new Error("MISSING_API_KEY");
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
+/**
+ * Heritage Grounding Search - Optimized for SPEED & Reliability
  */
 export const searchHiddenGems = async (query: string): Promise<{text: string, chunks: any[]}> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    // Use Flash for maximum speed
+    const ai = getAIClient();
     const model = "gemini-3-flash-preview"; 
     
     const response = await ai.models.generateContent({
@@ -29,24 +40,30 @@ export const searchHiddenGems = async (query: string): Promise<{text: string, ch
       contents: `Search for this Mysore heritage gem or artisan: ${query}. Provide a fast, concise summary.`,
       config: {
         systemInstruction: "You are a fast Mysore heritage guide. Use googleSearch for real-time accuracy. Focus on hidden spots away from the palace.",
-        temperature: 0.1, // Faster sampling
-        thinkingConfig: { thinkingBudget: 0 }, // Disable thinking for lowest latency
+        temperature: 0.1,
+        thinkingConfig: { thinkingBudget: 0 },
         tools: [{ googleSearch: {} }],
       }
     });
+
+    if (!response.text && !response.candidates?.[0]?.groundingMetadata?.groundingChunks) {
+      throw new Error("EMPTY_RESPONSE");
+    }
 
     return {
       text: response.text || "Information found. See links below.",
       chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
     };
-  } catch (error) {
-    console.error("Fast Search Error:", error);
-    throw error;
+  } catch (error: any) {
+    console.error("Heritage Search Error:", error);
+    // Rethrow specific errors to be caught by the UI
+    if (error.message === "MISSING_API_KEY") throw error;
+    throw new Error("API_COMMUNICATION_FAILED");
   }
 };
 
 /**
- * Generates a high-quality sustainable itinerary - Optimized for SPEED
+ * Generates a high-quality sustainable itinerary
  */
 export const generateSustainableItinerary = async (
   days: number,
@@ -54,7 +71,7 @@ export const generateSustainableItinerary = async (
   groupType: string
 ): Promise<Itinerary> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = getAIClient();
     const model = "gemini-3-flash-preview"; 
     
     const response = await ai.models.generateContent({
@@ -92,11 +109,13 @@ export const generateSustainableItinerary = async (
     });
 
     return JSON.parse(extractJson(response.text || "{}")) as Itinerary;
-  } catch (error) {
-    console.error("Itinerary Error:", error);
+  } catch (error: any) {
+    console.error("Itinerary Generation Error:", error);
+    if (error.message === "MISSING_API_KEY") throw error;
+    // Return a static fallback if the API fails
     return {
-      title: "Quick Artisan Route",
-      items: [{ time: "10:00 AM", activity: "Rosewood Workshop", location: "Tilak Nagar", notes: "Direct artisan visit.", isSustainable: true, category: "artisan" }]
+      title: "Quick Artisan Route (Offline)",
+      items: [{ time: "10:00 AM", activity: "Rosewood Workshop", location: "Tilak Nagar", notes: "Direct artisan visit. (AI Service currently unavailable)", isSustainable: true, category: "artisan" }]
     };
   }
 };

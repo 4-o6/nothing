@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
 import { searchHiddenGems } from '../services/geminiService';
-import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, ArrowRight, ExternalLink, Globe, AlertCircle, Bookmark } from 'lucide-react';
+import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, ArrowRight, ExternalLink, Globe, AlertCircle, Bookmark, Key } from 'lucide-react';
 
 export const Explore: React.FC = () => {
   const [selectedGem, setSelectedGem] = useState<Place | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiError, setAiError] = useState<{ message: string, type: 'config' | 'network' } | null>(null);
   const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -25,7 +25,17 @@ export const Explore: React.FC = () => {
       const results = await searchHiddenGems(cleanQuery);
       setAiResults(results);
     } catch (error: any) {
-      setAiError("Search unavailable. Please check your connection and try again.");
+      if (error.message === "MISSING_API_KEY") {
+        setAiError({ 
+          message: "API Key not found. Please set the API_KEY variable in Vercel and Redeploy.", 
+          type: 'config' 
+        });
+      } else {
+        setAiError({ 
+          message: "Search unavailable. The AI service is currently busy. Please try again in a moment.", 
+          type: 'network' 
+        });
+      }
     } finally {
       setIsSearching(false);
     }
@@ -68,14 +78,19 @@ export const Explore: React.FC = () => {
           </form>
           
           {aiError && (
-            <div className="mt-4 flex items-center gap-2 text-red-400 text-[10px] font-black uppercase tracking-widest bg-red-950/20 p-4 rounded-2xl border border-red-900/20">
-              <AlertCircle className="w-4 h-4" /> {aiError}
+            <div className={`mt-4 flex items-center gap-3 p-5 rounded-3xl border transition-all animate-app-reveal ${
+              aiError.type === 'config' ? 'bg-amber-950/20 border-amber-500/30 text-amber-500' : 'bg-red-950/20 border-red-900/20 text-red-400'
+            }`}>
+              {aiError.type === 'config' ? <Key className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+              <span className="text-[11px] font-black uppercase tracking-widest leading-relaxed">
+                {aiError.message}
+              </span>
             </div>
           )}
 
           {aiResults && (
             <div className="mt-8 bg-[#141414] border border-amber-600/30 rounded-[2.5rem] p-8 sm:p-12 shadow-3xl relative animate-app-reveal">
-               <button onClick={() => setAiResults(null)} className="absolute top-6 right-6 text-stone-600 hover:text-white"><X className="w-5 h-5" /></button>
+               <button onClick={() => setAiResults(null)} className="absolute top-6 right-6 text-stone-600 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
                <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-6"><Sparkles className="w-4 h-4" /> Instant Insight</div>
                <div className="text-stone-300 text-lg leading-relaxed mb-8 font-light whitespace-pre-wrap">{aiResults.text}</div>
                {aiResults.chunks && aiResults.chunks.length > 0 && (
@@ -84,7 +99,7 @@ export const Explore: React.FC = () => {
                      const link = chunk.web || chunk.maps;
                      if (!link) return null;
                      return (
-                       <a key={i} href={link.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-stone-900 rounded-xl text-[10px] font-bold text-stone-400 hover:text-white border border-white/5">
+                       <a key={i} href={link.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-stone-900 rounded-xl text-[10px] font-bold text-stone-400 hover:text-white border border-white/5 transition-all">
                          {chunk.web ? <Globe className="w-3 h-3 text-blue-500" /> : <MapPin className="w-3 h-3 text-amber-500" />}
                          <span className="truncate max-w-[120px]">{link.title || 'Source'}</span>
                        </a>
