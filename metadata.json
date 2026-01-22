@@ -1,5 +1,7 @@
 {
   "name": "MysuruUnveiled: Beyond the Palace",
   "description": "A sustainable tourism app designed to decentralize tourism in Mysore by connecting travelers with local artisans, hidden gems, and authentic cultural experiences away from the crowds.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "geolocation"
+  ]
 }

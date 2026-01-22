@@ -1,164 +1,167 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Place } from '../types';
 import { HIDDEN_GEMS } from '../constants';
 import { searchHiddenGems } from '../services/geminiService';
-import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, ArrowRight, ExternalLink, Globe, AlertCircle, Bookmark, Key } from 'lucide-react';
+import { MapPin, Star, Search, Loader2, X, Navigation, Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
 
 export const Explore: React.FC = () => {
   const [selectedGem, setSelectedGem] = useState<Place | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [aiError, setAiError] = useState<{ message: string, type: 'config' | 'network' } | null>(null);
   const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
+  const searchTimeoutRef = useRef<number | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanQuery = searchQuery.trim();
-    if (!cleanQuery || isSearching) return;
+    if (!searchQuery.trim() || isSearching) return;
     
     setIsSearching(true);
     setAiResults(null);
-    setAiError(null);
     
     try {
-      const results = await searchHiddenGems(cleanQuery);
-      setAiResults(results);
-    } catch (error: any) {
-      if (error.message === "MISSING_API_KEY") {
-        setAiError({ 
-          message: "API Key not found. Please set the API_KEY variable in Vercel and Redeploy.", 
-          type: 'config' 
-        });
-      } else {
-        setAiError({ 
-          message: "Search unavailable. The AI service is currently busy. Please try again in a moment.", 
-          type: 'network' 
-        });
+      let location = undefined;
+      if (navigator.geolocation) {
+        try {
+          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 2000 });
+          });
+          location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        } catch (locErr) {
+          console.debug("Location services timed out");
+        }
       }
+
+      const results = await searchHiddenGems(searchQuery, location);
+      setAiResults(results);
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsSearching(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] pt-56 pb-24 px-4 selection:bg-amber-600/30">
+    <div className="min-h-screen bg-[#0c0c0c] pt-20 sm:pt-28 pb-24 sm:pb-32 px-4">
       <div className="max-w-7xl mx-auto">
-        
-        <div className="text-center mb-12 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/10 text-amber-500 text-[10px] font-black uppercase tracking-widest mb-6">
-             <Bookmark className="w-3.5 h-3.5" /> Fast Discovery
-          </div>
-          <h2 className="text-5xl sm:text-7xl font-serif font-bold text-white mb-4 tracking-tighter">
-            Hidden <span className="text-amber-500 italic">Mysuru.</span>
-          </h2>
+        <div className="text-center mb-12 sm:mb-16 animate-app-reveal">
+          <h2 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-4 sm:mb-6 tracking-tight">Hidden Gems</h2>
+          <p className="text-stone-500 max-w-2xl mx-auto text-base sm:text-xl font-light leading-relaxed">
+            Avoid the commercial traps. Find stories that define Mysuru's heartbeat, curated by heritage data.
+          </p>
         </div>
 
-        {/* Rapid Search Bar */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <form onSubmit={handleSearch} className="relative">
-            <div className={`absolute -inset-1 bg-amber-600 rounded-[2.5rem] blur-xl opacity-10 transition-opacity ${isSearching ? 'opacity-30' : ''}`}></div>
-            <div className="relative bg-stone-900 border border-white/5 rounded-[2.3rem] flex items-center px-6 shadow-2xl">
-              <Search className={`w-5 h-5 mr-3 ${isSearching ? 'text-amber-500 animate-pulse' : 'text-stone-700'}`} />
+        <div className="max-w-3xl mx-auto mb-16 sm:mb-24 animate-app-reveal group">
+          <form onSubmit={handleSearch} className="relative p-1 rounded-[2.5rem] bg-gradient-to-r from-stone-900 via-amber-900/20 to-stone-900 border border-white/5 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+            <div className="flex items-center bg-[#0c0c0c] rounded-[2.3rem] px-4 md:px-6 py-2 md:py-3 overflow-hidden relative">
+              <Search className={`w-6 h-6 mr-4 transition-colors ${isSearching ? 'text-amber-500 animate-pulse' : 'text-stone-700'}`} />
               <input 
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search anything: 'Rosewood', 'Silk', 'Lakes'..."
-                className="flex-1 bg-transparent text-white border-none outline-none py-5 text-base"
+                placeholder="Search: Find woodcarvers in Agrahara..."
+                className="flex-1 bg-transparent text-white border-none outline-none text-base sm:text-base placeholder:text-stone-600 py-3 md:py-4"
               />
               <button 
                 type="submit"
                 disabled={isSearching}
-                className="text-amber-500 disabled:opacity-30 p-2"
+                className="bg-stone-900 hover:bg-amber-600 hover:text-white transition-all p-3 rounded-2xl border border-white/5 text-stone-400 group-hover:text-white disabled:opacity-50"
               >
-                {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-6 h-6" />}
+                {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
           </form>
           
-          {aiError && (
-            <div className={`mt-4 flex items-center gap-3 p-5 rounded-3xl border transition-all animate-app-reveal ${
-              aiError.type === 'config' ? 'bg-amber-950/20 border-amber-500/30 text-amber-500' : 'bg-red-950/20 border-red-900/20 text-red-400'
-            }`}>
-              {aiError.type === 'config' ? <Key className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-              <span className="text-[11px] font-black uppercase tracking-widest leading-relaxed">
-                {aiError.message}
-              </span>
-            </div>
-          )}
-
           {aiResults && (
-            <div className="mt-8 bg-[#141414] border border-amber-600/30 rounded-[2.5rem] p-8 sm:p-12 shadow-3xl relative animate-app-reveal">
-               <button onClick={() => setAiResults(null)} className="absolute top-6 right-6 text-stone-600 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
-               <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-6"><Sparkles className="w-4 h-4" /> Instant Insight</div>
-               <div className="text-stone-300 text-lg leading-relaxed mb-8 font-light whitespace-pre-wrap">{aiResults.text}</div>
+            <div className="mt-8 bg-[#141414] border border-white/10 rounded-[2.5rem] p-8 animate-app-reveal shadow-2xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4">
+                  <button onClick={() => setAiResults(null)} className="text-stone-600 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><X className="w-5 h-5" /></button>
+               </div>
+               <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">
+                 <Sparkles className="w-3.5 h-3.5" /> AI Heritage Insights
+               </div>
+               <div className="text-stone-300 text-sm md:text-base leading-relaxed mb-8 prose prose-invert font-light max-w-none whitespace-pre-wrap">
+                 {aiResults.text}
+               </div>
+               
                {aiResults.chunks && aiResults.chunks.length > 0 && (
-                 <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5">
-                   {aiResults.chunks.map((chunk: any, i: number) => {
-                     const link = chunk.web || chunk.maps;
-                     if (!link) return null;
-                     return (
-                       <a key={i} href={link.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-stone-900 rounded-xl text-[10px] font-bold text-stone-400 hover:text-white border border-white/5 transition-all">
-                         {chunk.web ? <Globe className="w-3 h-3 text-blue-500" /> : <MapPin className="w-3 h-3 text-amber-500" />}
-                         <span className="truncate max-w-[120px]">{link.title || 'Source'}</span>
-                       </a>
-                     );
-                   })}
+                 <div className="space-y-4 pt-6 border-t border-white/5">
+                   <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest">Grounding Sources</p>
+                   <div className="flex flex-wrap gap-3">
+                     {aiResults.chunks.map((chunk: any, i: number) => (
+                       chunk.maps && (
+                         <a 
+                           key={i} 
+                           href={chunk.maps.uri} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           className="flex items-center gap-3 px-4 py-2 bg-stone-900 border border-white/5 rounded-xl text-[10px] font-bold text-stone-400 hover:text-white hover:border-amber-600/30 transition-all"
+                         >
+                           <MapPin className="w-3.5 h-3.5 text-amber-600" /> {chunk.maps.title || 'Location Found'} <ExternalLink className="w-3 h-3" />
+                         </a>
+                       )
+                     ))}
+                   </div>
                  </div>
                )}
             </div>
           )}
         </div>
 
-        {/* Static Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {HIDDEN_GEMS.map((place) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {HIDDEN_GEMS.map((place, i) => (
             <div 
               key={place.id} 
               onClick={() => setSelectedGem(place)}
-              className="group bg-[#141414] rounded-[2.5rem] overflow-hidden border border-white/5 cursor-pointer flex flex-col hover:border-amber-600/30 transition-all duration-300"
+              className="group bg-[#141414] rounded-2xl sm:rounded-[2rem] overflow-hidden border border-white/5 cursor-pointer shadow-2xl animate-app-reveal flex flex-col h-full card-lift"
+              style={{ animationDelay: `${0.1 * i}s` }}
             >
-              <div className="h-64 overflow-hidden relative">
-                <img src={place.imageUrl} alt={place.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 rounded-full text-[10px] font-black text-amber-400 flex items-center gap-1.5"><Star className="w-3.5 h-3.5 fill-current" /> {place.rating}</div>
+              <div className="h-56 sm:h-64 overflow-hidden relative">
+                <img 
+                  src={place.imageUrl} 
+                  alt={place.name} 
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                />
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 bg-black/70 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black text-amber-400 flex items-center gap-1.5 sm:gap-2 shadow-xl">
+                  <Star className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current" /> {place.rating}
+                </div>
               </div>
-              <div className="p-8 flex flex-col flex-1">
-                <div className="text-[9px] font-black text-amber-600 uppercase mb-3 px-3 py-1 bg-amber-600/10 rounded-full w-fit">{place.category}</div>
-                <h3 className="text-xl font-serif font-bold text-white mb-2 leading-tight">{place.name}</h3>
-                <p className="text-stone-500 text-sm font-light leading-relaxed mb-6 line-clamp-2">{place.description}</p>
-                <div className="flex items-center text-stone-600 text-[10px] font-black uppercase tracking-widest pt-4 border-t border-white/5 mt-auto">
-                  <MapPin className="w-3.5 h-3.5 mr-2 text-amber-600" /> {place.location}
+              <div className="p-6 sm:p-8 flex flex-col flex-1">
+                <div className="text-[8px] sm:text-[9px] font-black tracking-widest text-amber-600 uppercase mb-2 sm:mb-3 px-2 sm:px-3 py-0.5 sm:py-1 bg-amber-600/10 rounded-full w-fit">{place.category}</div>
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-white mb-2 sm:mb-3 tracking-tight">{place.name}</h3>
+                <p className="text-stone-500 text-xs sm:text-sm font-light leading-relaxed mb-4 sm:mb-6 line-clamp-3 flex-1">{place.description}</p>
+                <div className="flex items-center text-stone-600 text-[9px] sm:text-[10px] font-black uppercase tracking-widest pt-4 sm:pt-5 border-t border-white/5">
+                  <MapPin className="w-3.5 h-3.5 mr-1.5 sm:mr-2 text-amber-600" /> {place.location}
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Modal */}
         {selectedGem && (
-          <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center bg-black/90 backdrop-blur-md px-4" onClick={() => setSelectedGem(null)}>
-            <div className="bg-[#141414] w-full max-w-xl rounded-t-[2.5rem] sm:rounded-[3rem] overflow-hidden border border-white/10" onClick={e => e.stopPropagation()}>
-              <div className="h-64 relative">
-                <img src={selectedGem.imageUrl} alt={selectedGem.name} className="w-full h-full object-cover" />
-                <button onClick={() => setSelectedGem(null)} className="absolute top-6 right-6 p-3 bg-black/50 text-white rounded-full"><X className="w-5 h-5" /></button>
+          <div className="fixed inset-0 z-[250] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in px-4" onClick={() => setSelectedGem(null)}>
+            <div className="bg-[#141414] w-full max-w-2xl rounded-t-[2rem] sm:rounded-[3rem] overflow-hidden border-t sm:border border-white/10 animate-app-reveal max-h-[90vh] overflow-y-auto scrollbar-hide" onClick={e => e.stopPropagation()}>
+            <div className="h-64 sm:h-72 relative">
+              <img src={selectedGem.imageUrl} alt={selectedGem.name} className="w-full h-full object-cover" />
+              <button onClick={() => setSelectedGem(null)} className="absolute top-5 sm:top-6 right-5 sm:right-6 p-2 sm:p-3 bg-black/50 text-white rounded-full hover:bg-black transition-colors"><X className="w-5 h-5 sm:w-6 sm:h-6" /></button>
+            </div>
+            <div className="p-8 sm:p-14">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <div className="bg-amber-600 text-[9px] sm:text-[10px] font-black px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-white uppercase tracking-widest shadow-lg">{selectedGem.category}</div>
+                <div className="bg-white/5 text-[9px] sm:text-[10px] font-black px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-stone-500 uppercase tracking-widest border border-white/5">{selectedGem.crowdLevel} Crowd</div>
               </div>
-              <div className="p-10">
-                <div className="flex gap-2 mb-6">
-                  <span className="bg-amber-600 text-[9px] font-black px-4 py-1.5 rounded-full text-white uppercase">{selectedGem.category}</span>
-                </div>
-                <h3 className="text-3xl font-serif font-bold text-white mb-4">{selectedGem.name}</h3>
-                <p className="text-stone-500 text-base font-light leading-relaxed mb-10">{selectedGem.description}</p>
-                <button 
-                  onClick={() => window.open(selectedGem.googleMapsUri, '_blank')}
-                  className="w-full bg-amber-600 hover:bg-amber-500 text-white h-16 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all"
-                >
-                  <Navigation className="w-5 h-5" /> NAVIGATE IN MAPS
-                </button>
-              </div>
+              <h3 className="text-2xl sm:text-4xl font-serif font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">{selectedGem.name}</h3>
+              <p className="text-stone-500 text-base sm:text-lg font-light leading-relaxed mb-8 sm:mb-10">{selectedGem.description}</p>
+              <button 
+                onClick={() => window.open(selectedGem.googleMapsUri, '_blank')}
+                className="w-full bg-amber-600 hover:bg-amber-500 text-white h-14 sm:h-16 rounded-xl sm:rounded-2xl font-black text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 sm:gap-4 shadow-2xl transition-all active:scale-95 mb-4"
+              >
+                <Navigation className="w-4 h-4 sm:w-5 sm:h-5" /> NAVIGATE IN MAPS
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </div>
   );
