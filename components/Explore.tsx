@@ -10,7 +10,28 @@ export const Explore: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [aiResults, setAiResults] = useState<{text: string, chunks: any[]} | null>(null);
-  const searchTimeoutRef = useRef<number | null>(null);
+
+  /**
+   * Simple formatter to handle **bold** text from AI output
+   */
+  const renderFormattedText = (text: string) => {
+    if (!text) return null;
+    
+    // Split text by bold markers (e.g. **text**)
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // Render as bold with a slight amber accent
+        return (
+          <strong key={i} className="font-bold text-amber-500/90">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +41,6 @@ export const Explore: React.FC = () => {
     setAiResults(null);
     
     try {
-      // Location logic removed as per request to stop using location permissions
       const results = await searchHiddenGems(searchQuery);
       setAiResults(results);
     } catch (error) {
@@ -62,34 +82,37 @@ export const Explore: React.FC = () => {
           </form>
           
           {aiResults && (
-            <div className="mt-8 bg-[#141414] border border-white/10 rounded-[2.5rem] p-8 animate-app-reveal shadow-2xl relative overflow-hidden">
+            <div className="mt-8 bg-[#141414] border border-white/10 rounded-[2.5rem] p-8 sm:p-12 animate-app-reveal shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 p-4">
                   <button onClick={() => setAiResults(null)} className="text-stone-600 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><X className="w-5 h-5" /></button>
                </div>
-               <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">
-                 <Sparkles className="w-3.5 h-3.5" /> AI Heritage Insights
+               <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest mb-6">
+                 <Sparkles className="w-4 h-4" /> AI Heritage Insights
                </div>
-               <div className="text-stone-300 text-sm md:text-base leading-relaxed mb-8 prose prose-invert font-light max-w-none whitespace-pre-wrap">
-                 {aiResults.text}
+               <div className="text-stone-300 text-base md:text-lg leading-relaxed mb-8 prose prose-invert font-light max-w-none whitespace-pre-wrap">
+                 {renderFormattedText(aiResults.text)}
                </div>
                
                {aiResults.chunks && aiResults.chunks.length > 0 && (
-                 <div className="space-y-4 pt-6 border-t border-white/5">
-                   <p className="text-[9px] font-black text-stone-600 uppercase tracking-widest">Grounding Sources</p>
+                 <div className="space-y-4 pt-8 border-t border-white/5">
+                   <p className="text-[10px] font-black text-stone-600 uppercase tracking-[0.3em]">Verified Grounding Sources</p>
                    <div className="flex flex-wrap gap-3">
-                     {aiResults.chunks.map((chunk: any, i: number) => (
-                       chunk.maps && (
-                         <a 
-                           key={i} 
-                           href={chunk.maps.uri} 
-                           target="_blank" 
-                           rel="noopener noreferrer"
-                           className="flex items-center gap-3 px-4 py-2 bg-stone-900 border border-white/5 rounded-xl text-[10px] font-bold text-stone-400 hover:text-white hover:border-amber-600/30 transition-all"
-                         >
-                           <MapPin className="w-3.5 h-3.5 text-amber-600" /> {chunk.maps.title || 'Location Found'} <ExternalLink className="w-3 h-3" />
-                         </a>
-                       )
-                     ))}
+                     {aiResults.chunks.map((chunk: any, i: number) => {
+                       const link = chunk.web || chunk.maps;
+                       if (!link) return null;
+                       return (
+                        <a 
+                          key={i} 
+                          href={link.uri} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-5 py-3 bg-stone-900 border border-white/5 rounded-2xl text-[11px] font-bold text-stone-400 hover:text-white hover:border-amber-600/30 transition-all shadow-lg"
+                        >
+                          {chunk.web ? <ExternalLink className="w-4 h-4 text-blue-500" /> : <MapPin className="w-4 h-4 text-amber-600" />} 
+                          {link.title || 'Source Reference'}
+                        </a>
+                       );
+                     })}
                    </div>
                  </div>
                )}
