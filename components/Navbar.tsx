@@ -134,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 sm:p-3 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
+              className="lg:hidden p-2.5 sm:p-3 bg-white/5 border border-white/10 rounded-xl text-amber-500 shadow-xl transition-all active:scale-90"
             >
               {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
